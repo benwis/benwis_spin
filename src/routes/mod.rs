@@ -7,12 +7,13 @@ pub use about::*;
 pub mod portfolio;
 pub use portfolio::*;
 pub mod nedry;
+pub mod notfound;
+pub use notfound::*;
 
 pub use nedry::*;
 
 use crate::error_template::ErrorTemplate;
 use crate::layouts::Default;
-use crate::pages::notfound::NotFound;
 use crate::providers::provide_color_scheme;
 use crate::routes::Blog;
 use leptos::*;
@@ -26,7 +27,7 @@ pub fn AppRouter() -> impl IntoView {
     _ = provide_color_scheme();
 
     view! {
-      <Stylesheet id="leptos" href="/pkg/benwis_leptos.css"/>
+      <Stylesheet id="leptos" href="/benwis-leptos.css"/>
 
       // content for this welcome page
       <Router>
