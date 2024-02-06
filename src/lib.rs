@@ -4,7 +4,6 @@ mod errors;
 mod functions;
 mod layouts;
 mod models;
-mod pages;
 mod providers;
 mod routes;
 
