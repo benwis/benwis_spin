@@ -9,7 +9,7 @@ use std::sync::Arc;
 #[http_component]
 async fn handle_spin_test(req: IncomingRequest, resp_out: ResponseOutparam) {
     let mut conf = leptos::get_configuration(None).await.unwrap();
-    conf.leptos_options.output_name = "pkg/benwis-leptos".to_owned();
+    conf.leptos_options.output_name = "benwis-leptos".to_owned();
 
     // Register server functions
 

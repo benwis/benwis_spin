@@ -27,7 +27,7 @@ pub fn AppRouter() -> impl IntoView {
     _ = provide_color_scheme();
 
     view! {
-      <Stylesheet id="leptos" href="pkg/pkg/benwis-leptos.css"/>
+      <Stylesheet id="leptos" href="/benwis-leptos.css"/>
 
       // content for this welcome page
       <Router>
