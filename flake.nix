@@ -38,6 +38,7 @@
             nativeBuildInputs = with pkgs; [
               rustTarget
               pkg-config
+              tailwindcss
               dart-sass
               binaryen
             ];

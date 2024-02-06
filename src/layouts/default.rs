@@ -3,17 +3,20 @@ use crate::providers::color_scheme::ColorScheme;
 use leptos::nonce::use_nonce;
 use leptos::*;
 use leptos_meta::*;
+use leptos_use::ColorMode;
 
 #[component]
 pub fn Default(children: Children) -> impl IntoView {
     let color_scheme = use_context::<ColorScheme>().expect("Failed to find ColorScheme");
-
+    logging::log!("CS: {color_scheme:#?}");
     view! {
         <Html lang="en-US" class=move || {
             let classes = "h-full";
-            let theme = match color_scheme.prefers_dark.get() {
-                true => "dark",
-                false => "",
+            let theme = match color_scheme.read.get() {
+                ColorMode::Dark => "dark",
+                ColorMode::Light => "",
+                ColorMode::Auto => "",
+                ColorMode::Custom(_) => "",
             };
             format!("{} {}", classes, theme)
         }/>

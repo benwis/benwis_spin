@@ -36,6 +36,7 @@ parking_lot = "0.12.1"
 femark = { version = "0.1.5", optional = true }
 strum = { version = "0.26.1"}
 strum_macros = { version = "0.26.1" }
+leptos-use = { version = "0.10.1"}
 
 [features]
 csr = ["leptos/csr", "leptos_meta/csr", "leptos_router/csr"]
@@ -52,6 +53,7 @@ ssr = [
   "leptos_router/ssr",
   "leptos/spin",
   "leptos-spin-macro/ssr",
+  "leptos-use/ssr",
   "dep:leptos-spin-macro",
   "dep:spin-sdk",
   "dep:leptos-spin",
