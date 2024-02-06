@@ -1,7 +1,5 @@
 use leptos::provide_context;
-use leptos_spin::{
-    render_best_match_to_stream_with_context, server_fn::register_explicit, RouteTable,
-};
+use leptos_spin::{render_best_match_to_stream_with_context, RouteTable};
 use spin_sdk::http::{IncomingRequest, ResponseOutparam};
 use spin_sdk::{http_component, sqlite::Connection};
 use std::sync::Arc;
@@ -10,11 +8,6 @@ use std::sync::Arc;
 async fn handle_spin_test(req: IncomingRequest, resp_out: ResponseOutparam) {
     let mut conf = leptos::get_configuration(None).await.unwrap();
     conf.leptos_options.output_name = "benwis-leptos".to_owned();
-
-    // Register server functions
-
-    // register_explicit::<crate::pages::home::GetCount>();
-    // register_explicit::<crate::pages::home::UpdateCount>();
 
     let app_router = crate::routes::AppRouter;
 
