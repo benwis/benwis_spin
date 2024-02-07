@@ -1,4 +1,5 @@
-use leptos::*;
+use leptos::{use_context, ServerFnError};
+use leptos_spin_macro::server;
 
 #[tracing::instrument(level = "info", fields(error), ret, err)]
 #[server(ToggleDarkMode, "/api")]

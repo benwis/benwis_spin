@@ -9,7 +9,8 @@ pub use portfolio::*;
 pub mod nedry;
 pub mod notfound;
 pub use notfound::*;
-
+pub mod auth;
+pub use auth::*;
 pub use nedry::*;
 
 use crate::error_template::ErrorTemplate;
@@ -90,11 +91,31 @@ pub fn AppRouter() -> impl IntoView {
 
               ssr=SsrMode::Async
             />
+            <Route
+              path="posts/add"
+              view=move || {
+                  view! { <AddPost/> }
+              }
+            />
+
+            <Route
+              path="posts/:slug/edit"
+              view=move || {
+                  view! { <EditPost/> }
+              }
+            />
 
             <Route
               path="nedry"
               view=move || {
                   view! { <Nedry/> }
+              }
+            />
+
+            <Route
+              path="signup"
+              view=move || {
+                  view! { <Join action=auth_context.signup/> }
               }
             />
 

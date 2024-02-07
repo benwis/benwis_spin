@@ -53,7 +53,7 @@ pub struct Post {
 
 cfg_if! {
 if #[cfg(feature = "ssr")] {
-impl Post {
+    impl Post {
     pub fn get_posts(con: &Arc<Connection>) -> Result<Vec<Post>, BenwisAppError>{
         let rowset = con.execute("SELECT * from posts", &[]).map_err( |_| BenwisAppError::InternalServerError)?;
         let mut posts:Vec<Post> = rowset.rows().map(|row| {
@@ -98,6 +98,24 @@ impl Post {
        });
        Ok(post)
     }
+pub async fn add_post(  title: String,
+    slug: String,
+    created_at_pretty: String,
+    excerpt: String,
+    content: String,
+    published: String,
+    preview: String,
+    con: &Arc<Connection>) -> Result<bool, BenwisAppError>{
+
+    let published = published.parse::<bool>().unwrap();
+    let preview = preview.parse::<bool>().unwrap();
+
+    let user = super::user::get_user(cx).await?;
+    let slug = match slug.is_empty() {
+        true => slugify(&title),
+        false => slug,
+    };
+}
 }
 }
     }
