@@ -5,6 +5,7 @@ use miette::Diagnostic;
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumString;
 use thiserror::Error;
+use cfg_if::cfg_if;
 
 #[derive(Debug, Clone, Error, Diagnostic, Serialize, Deserialize, EnumString)]
 pub enum BenwisAppError {
@@ -39,3 +40,13 @@ impl BenwisAppError {
 //        server_fn_error!(err)
 //    }
 //}
+//
+cfg_if! {
+    if #[cfg(feature = "ssr")] {
+        impl From<argon2::password_hash::Error> for BenwisAppError {
+            fn from(error: argon2::password_hash::Error) -> Self {
+                Self::Argon2Error(error.to_string())
+            }
+        }
+    }
+}

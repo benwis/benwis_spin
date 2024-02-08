@@ -6,6 +6,7 @@ mod layouts;
 mod models;
 mod providers;
 mod routes;
+mod session;
 
 #[cfg(feature = "ssr")]
 mod server;
