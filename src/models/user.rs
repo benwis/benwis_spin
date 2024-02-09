@@ -1,5 +1,8 @@
 use cfg_if::cfg_if;
 use serde::{Deserialize, Serialize};
+use std::sync::Arc;
+
+use crate::errors::BenwisAppError;
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct User {
@@ -64,6 +67,10 @@ cfg_if! {
 if #[cfg(feature = "ssr")] {
     use chrono::naive::NaiveDateTime;
 
+use spin_sdk::sqlite::{
+    Connection,
+    Value::{Integer, Text},
+};
 
 #[derive(Debug, Clone)]
 pub struct SqlUser {
@@ -91,50 +98,85 @@ impl SqlUser {
     }
 }
 
-    impl User {
-        #[tracing::instrument(level = "info", fields(error))]
-        pub async fn get(id: i64, pool: &SqlitePool) -> Option<Self> {
-            let sqluser = sqlx::query_as::<_, SqlUser>("SELECT * FROM users WHERE id = ?")
-                .bind(id)
-                .fetch_one(pool)
-                .await
-                .ok()?;
-
-            Some(sqluser.into_user())
-        }
-
-        #[tracing::instrument(level = "info", fields(error))]
-        pub async fn get_from_username(name: String, pool: &SqlitePool) -> Option<Self> {
-            let sqluser = sqlx::query_as::<_, SqlUser>("SELECT * FROM users WHERE username = ?")
-                .bind(name)
-                .fetch_one(pool)
-                .await
-                .ok()?;
-
-            Some(sqluser.into_user())
-        }
-    }
     impl SafeUser {
         #[tracing::instrument(level = "info", fields(error))]
-        pub async fn get(id: i64, pool: &SqlitePool) -> Option<Self> {
-            let sqluser = sqlx::query_as::<_, SqlUser>("SELECT * FROM users WHERE id = ?")
-                .bind(id)
-                .fetch_one(pool)
-                .await
-                .ok()?;
+        pub async fn get(id: i64, con: &Arc<Connection>) -> Result<Option<Self>, BenwisAppError> {
 
-            Some(sqluser.into_user().into())
+            let rowset = con.execute("SELECT * FROM users WHERE id = ?", &[Integer(id)])?;
+            let sqluser = rowset.rows().nth(0).map(|row| SqlUser{
+            id: row.get::<i64>("id").unwrap(),
+            username: row.get::<&str>("name").unwrap().to_string(),
+            display_name: row.get::<&str>("display_name").unwrap().to_string(),
+            password: row.get::<&str>("password").unwrap().to_string(),
+            created_at: row.get::<i64>("created_at").unwrap(),
+            updated_at: row.get::<i64>("updated_at").unwrap()
+            });
+
+            match sqluser{
+            Some(su) => Ok(Some(su.into_user().into())),
+            None => Ok(None),
+            }
+
         }
 
-        pub async fn get_from_username(name: String, pool: &SqlitePool) -> Option<Self> {
-            let sqluser = sqlx::query_as::<_, SqlUser>("SELECT * FROM users WHERE username = ?")
-                .bind(name)
-                .fetch_one(pool)
-                .await
-                .ok()?;
+        pub async fn get_from_username(name: String, con: &Arc<Connection>) -> Result<Option<Self>, BenwisAppError> {
 
-            Some(sqluser.into_user().into())
+            let rowset = con.execute("SELECT * FROM users WHERE username = ?",&[Text(name.to_string())])?;
+
+            let sqluser = rowset.rows().nth(0).map(|row| SqlUser{
+            id: row.get::<i64>("id").unwrap(),
+            username: row.get::<&str>("name").unwrap().to_string(),
+            display_name: row.get::<&str>("display_name").unwrap().to_string(),
+            password: row.get::<&str>("password").unwrap().to_string(),
+            created_at: row.get::<i64>("created_at").unwrap(),
+            updated_at: row.get::<i64>("updated_at").unwrap()
+            });
+
+            match sqluser{
+            Some(su) => Ok(Some(su.into_user().into())),
+            None => Ok(None),
+            }
         }
     }
+
+    impl User {
+        #[tracing::instrument(level = "info", fields(error))]
+        pub async fn get(id: i64, con: &Arc<Connection>) -> Result<Option<Self>, BenwisAppError> {
+            let rowset = con.execute("SELECT * FROM users WHERE id = ?", &[Integer(id)])?;
+            let sqluser = rowset.rows().nth(0).map(|row| SqlUser{
+            id: row.get::<i64>("id").unwrap(),
+            username: row.get::<&str>("name").unwrap().to_string(),
+            display_name: row.get::<&str>("display_name").unwrap().to_string(),
+            password: row.get::<&str>("password").unwrap().to_string(),
+            created_at: row.get::<i64>("created_at").unwrap(),
+            updated_at: row.get::<i64>("updated_at").unwrap()
+            });
+
+            match sqluser{
+            Some(su) => Ok(Some(su.into_user())),
+            None => Ok(None),
+            }
+
+        }
+
+        #[tracing::instrument(level = "info", fields(error))]
+        pub async fn get_from_username(name: &str, con: &Arc<Connection>) -> Result<Option<Self>, BenwisAppError> {
+            let rowset = con.execute("SELECT * FROM users WHERE username = ?",&[Text(name.to_string())])?;
+
+            let sqluser = rowset.rows().nth(0).map(|row| SqlUser{
+            id: row.get::<i64>("id").unwrap(),
+            username: row.get::<&str>("name").unwrap().to_string(),
+            display_name: row.get::<&str>("display_name").unwrap().to_string(),
+            password: row.get::<&str>("password").unwrap().to_string(),
+            created_at: row.get::<i64>("created_at").unwrap(),
+            updated_at: row.get::<i64>("updated_at").unwrap()
+            });
+
+            match sqluser{
+            Some(su) => Ok(Some(su.into_user())),
+            None => Ok(None),
+            }
+        }
+}
 }
 }

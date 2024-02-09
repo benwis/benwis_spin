@@ -1,3 +1,7 @@
+use cfg_if::cfg_if;
+
+cfg_if! {
+if #[cfg(feature = "ssr")] {
 use async_session::{Session,Result,chrono::Utc, SessionStore};
 use spin_sdk::sqlite::{Connection, Value::{Integer,Text, Null}};
 use async_trait::async_trait;
@@ -159,3 +163,4 @@ impl SessionStore for SqliteStore{
         Ok(())
     }
 }
+}}

@@ -15,7 +15,7 @@ pub use nedry::*;
 
 use crate::error_template::ErrorTemplate;
 use crate::layouts::Default;
-use crate::providers::provide_color_scheme;
+use crate::providers::{provide_auth, provide_color_scheme, AuthContext};
 use crate::routes::Blog;
 use leptos::*;
 use leptos_meta::*;
@@ -25,6 +25,8 @@ use leptos_router::*;
 pub fn AppRouter() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
+    provide_auth();
+    let auth_context = use_context::<AuthContext>().expect("Failed to get AuthContext");
     _ = provide_color_scheme();
 
     view! {

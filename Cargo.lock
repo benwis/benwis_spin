@@ -231,6 +231,7 @@ dependencies = [
  "leptos_router",
  "miette",
  "parking_lot",
+ "rand_core",
  "serde",
  "serde_json",
  "slug",
