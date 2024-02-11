@@ -21,12 +21,18 @@ pub enum BenwisAppError {
     TomlError(String),
     #[error("Argon2Error: {0}")]
     Argon2Error(String),
+    #[error("SessionError: {0}")]
+    SessionError(String),
+    #[error("JsonError: {0}")]
+    JsonError(String),
     #[error("DBError: {0}")]
     DBError(String),
     #[error("Invalid Date or Time")]
     InvalidDateTime,
     #[error("Missing or Invalid Frontmatter")]
     MissingOrInvalidFrontmatter,
+    #[error("Bad Request: {0}")]
+    BadRequest(String),
 }
 
 impl BenwisAppError {
@@ -35,9 +41,12 @@ impl BenwisAppError {
             BenwisAppError::NotFound => StatusCode::NOT_FOUND,
             BenwisAppError::InternalServerError => StatusCode::INTERNAL_SERVER_ERROR,
             BenwisAppError::Argon2Error(_) => StatusCode::INTERNAL_SERVER_ERROR,
+            BenwisAppError::SessionError(_) => StatusCode::INTERNAL_SERVER_ERROR,
+            BenwisAppError::JsonError(_) => StatusCode::INTERNAL_SERVER_ERROR,
             BenwisAppError::DBError(_) => StatusCode::INTERNAL_SERVER_ERROR,
             BenwisAppError::DBConnectionNotFound => StatusCode::INTERNAL_SERVER_ERROR,
             BenwisAppError::InvalidDateTime => StatusCode::BAD_REQUEST,
+            BenwisAppError::BadRequest(_) => StatusCode::BAD_REQUEST,
             BenwisAppError::AuthError => StatusCode::BAD_REQUEST,
             BenwisAppError::MissingOrInvalidFrontmatter => StatusCode::INTERNAL_SERVER_ERROR,
             BenwisAppError::TomlError(_) => StatusCode::INTERNAL_SERVER_ERROR,
@@ -58,9 +67,18 @@ cfg_if! {
             }
         }
         impl From<spin_sdk::sqlite::Error> for BenwisAppError{
-
             fn from(error: spin_sdk::sqlite::Error) -> Self {
                 Self::DBError(error.to_string())
+            }
+        }
+        impl From<async_session::Error> for BenwisAppError{
+            fn from(error: async_session::Error) -> Self {
+                Self::SessionError(error.to_string())
+            }
+        }
+        impl From<serde_json::Error> for BenwisAppError{
+            fn from(error: serde_json::Error) -> Self {
+                Self::JsonError(error.to_string())
             }
         }
     }

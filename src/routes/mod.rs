@@ -121,6 +121,13 @@ pub fn AppRouter() -> impl IntoView {
               }
             />
 
+            <Route
+              path="login"
+              view=move || {
+                  view! { <Login action=auth_context.login/> }
+              }
+            />
+
             <Route path="/*any" view=NotFound/>
           </Route>
         </Routes>

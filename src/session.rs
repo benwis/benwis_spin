@@ -53,7 +53,7 @@ impl SqliteStore {
     pub async fn migrate(&self) -> Result<()> {
         info!("migrating sessions on `{}`", self.table_name);
 
-        &self.connection.execute(&self.substitute_table_name(
+        let _ = &self.connection.execute(&self.substitute_table_name(
             r#"
             CREATE TABLE IF NOT EXISTS %%TABLE_NAME%% (
                 id TEXT PRIMARY KEY NOT NULL,
@@ -61,7 +61,7 @@ impl SqliteStore {
                 session TEXT NOT NULL
             )
             "#,
-        ), &[]);
+        ), &[])?;
         Ok(())
     }
     // private utility function because sqlite does not support
@@ -74,12 +74,12 @@ impl SqliteStore {
  /// Performs a one-time cleanup task that clears out stale
     /// (expired) sessions. You may want to call this from cron.
     pub async fn cleanup(&self) -> Result<()> {
-        self.connection.execute(&self.substitute_table_name(
+        let _ = self.connection.execute(&self.substitute_table_name(
             r#"
             DELETE FROM %%TABLE_NAME%%
             WHERE expires < ?
             "#
-        ),&[Integer(Utc::now().timestamp())]);
+        ),&[Integer(Utc::now().timestamp())])?;
 
         Ok(())
     }
@@ -105,7 +105,7 @@ impl SessionStore for SqliteStore{
             SELECT session FROM %%TABLE_NAME%%
               WHERE id = ? AND (expires IS NULL OR expires > ?)
             "#,
-        ), &[Text((&id).to_string()), Integer(Utc::now().timestamp())])?;
+        ), &[Text(id.to_string()), Integer(Utc::now().timestamp())])?;
 
         let session_row = rowset.rows().nth(0).map(|row| SessionRow{
             id: row.get::<&str>("id").unwrap().to_string(),
@@ -127,9 +127,9 @@ impl SessionStore for SqliteStore{
         let string = serde_json::to_string(&session)?;
         let expiry = match session.expiry().map(|expiry| expiry.timestamp()) {
         Some(e) => Integer(e),
-        None => Null 
+        None => Null
         };
-        &self.connection.execute(&self.substitute_table_name(
+        let _ = &self.connection.execute(&self.substitute_table_name(
             r#"
             INSERT INTO %%TABLE_NAME%%
               (id, session, expires) VALUES (?, ?, ?)
@@ -137,28 +137,28 @@ impl SessionStore for SqliteStore{
               expires = excluded.expires,
               session = excluded.session
             "#,
-        ),&[Text((&id).to_string()),Text((&string).to_string()),expiry ]);
+        ),&[Text((&id).to_string()),Text(string),expiry ])?;
 
         Ok(session.into_cookie_value())
     }
 
     async fn destroy_session(&self, session: Session) -> Result {
         let id = session.id();
-        &self.connection.execute(&self.substitute_table_name(
+        let _ = &self.connection.execute(&self.substitute_table_name(
             r#"
             DELETE FROM %%TABLE_NAME%% WHERE id = ?
             "#,
-        ), &[Text(id.to_string())]);
+        ), &[Text(id.to_string())])?;
 
         Ok(())
     }
 
     async fn clear_store(&self) -> Result {
-        &self.connection.execute(&self.substitute_table_name(
+        let _ = &self.connection.execute(&self.substitute_table_name(
             r#"
             DELETE FROM %%TABLE_NAME%%
             "#,
-        ), &[]);
+        ), &[])?;
 
         Ok(())
     }

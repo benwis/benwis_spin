@@ -5,6 +5,8 @@ use spin_sdk::http::{IncomingRequest, ResponseOutparam};
 use spin_sdk::{http_component, sqlite::Connection};
 use std::sync::Arc;
 
+use crate::session::SqliteStore;
+
 #[http_component]
 async fn handle_benwis_leptos(req: IncomingRequest, resp_out: ResponseOutparam) {
     let mut conf = leptos::get_configuration(None).await.unwrap();
@@ -16,6 +18,9 @@ async fn handle_benwis_leptos(req: IncomingRequest, resp_out: ResponseOutparam) 
     routes.add_server_fn_prefix("/api").unwrap();
 
     let con = Arc::new(Connection::open("default").expect("Failed to open benwis_leptos db"));
+    // Setup up Store for user sessions
+
+    let store = SqliteStore::from_connection(con.clone());
 
     // Register server functions
     //register_explicit::<crate::functions::post::AddPost>();
@@ -32,6 +37,7 @@ async fn handle_benwis_leptos(req: IncomingRequest, resp_out: ResponseOutparam) 
         app_router,
         move || {
             provide_context(con.clone());
+            provide_context(store.clone());
         },
         &conf.leptos_options,
     )

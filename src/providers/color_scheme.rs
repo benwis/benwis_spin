@@ -17,8 +17,8 @@ fn initial_prefers_dark() -> bool {
     use_context::<leptos_spin::RequestParts>().is_some_and(|req| {
         req.headers()
             .iter()
-            .filter(|(k, v)| k.contains("Set-Cookie"))
-            .any(|(k, v)| String::from_utf8_lossy(v).contains("darkmode=true"))
+            .filter(|(k, _v)| k.contains("Set-Cookie"))
+            .any(|(_k, v)| String::from_utf8_lossy(v).contains("darkmode=true"))
     })
 }
 
