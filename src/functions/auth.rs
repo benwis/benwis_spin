@@ -1,7 +1,9 @@
 use std::borrow::Cow;
 
 use cfg_if::cfg_if;
-use leptos::*;
+use leptos::{use_context, expect_context, ServerFnError};
+use crate::models::User;
+use leptos_spin_macro::server;
 
 cfg_if! {
 if #[cfg(feature = "ssr")] {
@@ -10,17 +12,16 @@ if #[cfg(feature = "ssr")] {
         Argon2,
     };
     use crate::functions::{con};
-    use crate::models::User;
     use crate::errors::BenwisAppError;
     use rand_core::OsRng;
     use spin_sdk::sqlite::{Connection, Value::{Text, Integer}};
     use std::sync::Arc;
+    use tracing::info;
     use async_session::{Session, SessionStore};
     use crate::session::{SqliteStore};
     use leptos_spin::ResponseOptions;
     use cookie::Cookie;
     use leptos_spin::RequestParts;
-    
     /// Hash Argon2 password
     pub fn hash_password(password: &[u8]) -> Result<String, BenwisAppError> {
         let argon2 = Argon2::default();
@@ -30,15 +31,17 @@ if #[cfg(feature = "ssr")] {
     }
     /// Verify Password
     pub fn verify_password(password: &str, stored_password_hash: &str) -> Result<(), BenwisAppError> {
+        println!("VERIFYING");
         let argon2 = Argon2::default();
         // Verify password against PHC string
-        let parsed_hash = PasswordHash::new(password)?;
-        Ok(argon2.verify_password(stored_password_hash.as_bytes(), &parsed_hash)?)
+        let parsed_hash = PasswordHash::new(stored_password_hash)?;
+        Ok(argon2.verify_password(password.as_bytes(), &parsed_hash)?)
     }
 
     /// Verify the user is who they say they are
     pub async fn auth_user(name: &str, password: &str, con: &Arc<Connection>) -> Result<User, BenwisAppError>{
         // Does the user exist
+        println!("AUTHING USER");
         let Ok(Some(user)) = User::get_from_username(name, con).await else{
             return Err(BenwisAppError::AuthError);
         };
@@ -46,15 +49,14 @@ if #[cfg(feature = "ssr")] {
         // Check that password is correct
         match verify_password(password, &user.password){
             Ok(_) => Ok(user),
-            Err(_) => Err(BenwisAppError::AuthError),
+            Err(e) => {println!("Verify Failed: {e}"); Err(BenwisAppError::AuthError)},
         }
     }
     pub fn get_session_cookie_value(req_parts: &RequestParts)-> Result<Option<String>, BenwisAppError>{
-
     let cookies: Vec<(&String, Cow<'_, str>)> = req_parts
         .headers()
         .iter()
-        .filter(|(k, _v)| k == "Cookie")
+        .filter(|(k, _v)| k == "cookie")
         .map(|(k, v)| (k, String::from_utf8_lossy(v)))
         .collect();
     let cookie_string = cookies.first().map(|(k, v)| v);
@@ -131,14 +133,13 @@ pub async fn login(
         return Ok(());
     };
     let con = con()?;
-
     let user = auth_user(&username, &password, &con).await?;
     let session_cookie = create_session(user.id).await?;
 
     let res_options = expect_context::<ResponseOptions>();
     res_options.insert_header(
         "Set-Cookie",
-        format!("benwis_session={session_cookie}").as_bytes(),
+        format!("benwis_session={session_cookie};Path=/;Secure=true;").as_bytes(),
     );
 
     leptos_spin::redirect("/");
@@ -158,7 +159,6 @@ pub async fn signup(
         return Ok(());
     };
     let con = con()?;
-
     if password != password_confirmation {
         return Err(ServerFnError::ServerError(
             "Passwords did not match.".to_string(),
@@ -166,6 +166,7 @@ pub async fn signup(
     }
     // Don't want anyone signing up but me!
     if username != "benwis" {
+        println!("AH AH AH, YOU DIDN'T SAY THE MAGIC WORD");
         leptos_spin::redirect("/nedry");
         return Ok(());
     }
@@ -174,9 +175,9 @@ pub async fn signup(
     con.execute(
         "INSERT INTO users (username, display_name, password) VALUES (?,?, ?)",
         &[
-            Text(username.to_string()),
-            Text(display_name.to_string()),
-            Text(password_hashed.to_string()),
+            Text(username.clone()),
+            Text(display_name),
+            Text(password_hashed),
         ],
     )
     .map_err(|e| ServerFnError::<BenwisAppError>::ServerError(e.to_string()))?;
@@ -197,6 +198,7 @@ pub async fn signup(
 #[tracing::instrument(level = "info", fields(error), ret, err)]
 #[server(Logout, "/api")]
 pub async fn logout() -> Result<(), ServerFnError> {
+    println!("LOGGING OUT");
     let Some(req) = use_context::<leptos_spin::RequestParts>() else {
         return Ok(());
     };
@@ -204,6 +206,7 @@ pub async fn logout() -> Result<(), ServerFnError> {
     let Some(session) = get_session_cookie_value(&req)? else{
         return Ok(());
     };
+    println!("SESSION: {session:#?}");
     logout_session(&session).await?;
     leptos_spin::redirect("/");
 

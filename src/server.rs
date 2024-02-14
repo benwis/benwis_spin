@@ -18,16 +18,21 @@ async fn handle_benwis_leptos(req: IncomingRequest, resp_out: ResponseOutparam) 
     routes.add_server_fn_prefix("/api").unwrap();
 
     let con = Arc::new(Connection::open("default").expect("Failed to open benwis_leptos db"));
+    
     // Setup up Store for user sessions
-
     let store = SqliteStore::from_connection(con.clone());
+    store.migrate().await.expect("Failed to migrate sessions!");
 
     // Register server functions
-    //register_explicit::<crate::functions::post::AddPost>();
-    //register_explicit::<crate::functions::post::EditPost>();
-    //register_explicit::<crate::functions::post::UpdatePost>();
-    //register_explicit::<crate::functions::post::DeletePost>();
+    register_explicit::<crate::functions::post::AddPost>();
+    register_explicit::<crate::functions::post::UpdatePost>();
+    register_explicit::<crate::functions::post::DeletePost>();
     register_explicit::<crate::functions::post::GetPost>();
+    register_explicit::<crate::functions::auth::Login>();
+    register_explicit::<crate::functions::auth::Logout>();
+    register_explicit::<crate::functions::auth::Signup>();
+    register_explicit::<crate::functions::user::GetUser>();
+    register_explicit::<crate::functions::user::GetSafeUser>();
     register_explicit::<crate::functions::post::GetPosts>();
     register_explicit::<crate::functions::dark_mode::ToggleDarkMode>();
     render_best_match_to_stream_with_context(

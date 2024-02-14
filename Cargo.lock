@@ -1201,6 +1201,7 @@ dependencies = [
  "futures-util",
  "http 1.0.0",
  "leptos",
+ "leptos-spin-macro",
  "leptos_integration_utils",
  "leptos_meta",
  "leptos_router",

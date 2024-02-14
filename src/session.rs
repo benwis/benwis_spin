@@ -16,7 +16,7 @@ pub struct SqliteStore{
 #[derive(Debug, Clone)]
 pub struct SessionRow{
     id: String,
-    expires: Option<i64>,
+    expiry: Option<i64>,
     session: String,
 }
 impl SqliteStore {
@@ -57,7 +57,7 @@ impl SqliteStore {
             r#"
             CREATE TABLE IF NOT EXISTS %%TABLE_NAME%% (
                 id TEXT PRIMARY KEY NOT NULL,
-                expires INTEGER NULL,
+                expiry INTEGER NULL,
                 session TEXT NOT NULL
             )
             "#,
@@ -77,7 +77,7 @@ impl SqliteStore {
         let _ = self.connection.execute(&self.substitute_table_name(
             r#"
             DELETE FROM %%TABLE_NAME%%
-            WHERE expires < ?
+            WHERE expiry < ?
             "#
         ),&[Integer(Utc::now().timestamp())])?;
 
@@ -99,19 +99,20 @@ impl SqliteStore {
 impl SessionStore for SqliteStore{
  async fn load_session(&self, cookie_value: String) -> Result<Option<Session>> {
         let id = Session::id_from_cookie_value(&cookie_value)?;
-
+        println!("Got Session ID: {id}");
         let rowset = &self.connection.execute(&self.substitute_table_name(
             r#"
-            SELECT session FROM %%TABLE_NAME%%
-              WHERE id = ? AND (expires IS NULL OR expires > ?)
+            SELECT * FROM %%TABLE_NAME%%
+              WHERE id = ? AND (expiry IS NULL OR expiry > ?)
             "#,
         ), &[Text(id.to_string()), Integer(Utc::now().timestamp())])?;
-
+        println!("ROWSET: {rowset:?}");
         let session_row = rowset.rows().nth(0).map(|row| SessionRow{
             id: row.get::<&str>("id").unwrap().to_string(),
-        expires: row.get::<i64>("expires"),
+        expiry: row.get::<i64>("expiry"),
         session: row.get::<&str>("session").unwrap().to_string(),
         });
+        println!("SESSION ROW {session_row:?}");
         let session: Option<String> = match session_row{
         Some(s) => Some(s.session),
         None => None
@@ -132,9 +133,9 @@ impl SessionStore for SqliteStore{
         let _ = &self.connection.execute(&self.substitute_table_name(
             r#"
             INSERT INTO %%TABLE_NAME%%
-              (id, session, expires) VALUES (?, ?, ?)
+              (id, session, expiry) VALUES (?, ?, ?)
             ON CONFLICT(id) DO UPDATE SET
-              expires = excluded.expires,
+              expiry = excluded.expiry,
               session = excluded.session
             "#,
         ),&[Text((&id).to_string()),Text(string),expiry ])?;
@@ -143,7 +144,9 @@ impl SessionStore for SqliteStore{
     }
 
     async fn destroy_session(&self, session: Session) -> Result {
+        println!("DESTROYING SESSION");
         let id = session.id();
+        println!("ID: {id}");
         let _ = &self.connection.execute(&self.substitute_table_name(
             r#"
             DELETE FROM %%TABLE_NAME%% WHERE id = ?

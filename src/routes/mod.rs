@@ -128,6 +128,13 @@ pub fn AppRouter() -> impl IntoView {
               }
             />
 
+            <Route
+              path="logout"
+              view=move || {
+                  view! { <Logout action=auth_context.logout/> }
+              }
+            />
+
             <Route path="/*any" view=NotFound/>
           </Route>
         </Routes>

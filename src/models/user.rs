@@ -145,7 +145,7 @@ impl SqlUser {
             let rowset = con.execute("SELECT * FROM users WHERE id = ?", &[Integer(id)])?;
             let sqluser = rowset.rows().nth(0).map(|row| SqlUser{
             id: row.get::<i64>("id").unwrap(),
-            username: row.get::<&str>("name").unwrap().to_string(),
+            username: row.get::<&str>("username").unwrap().to_string(),
             display_name: row.get::<&str>("display_name").unwrap().to_string(),
             password: row.get::<&str>("password").unwrap().to_string(),
             created_at: row.get::<i64>("created_at").unwrap(),
@@ -165,13 +165,12 @@ impl SqlUser {
 
             let sqluser = rowset.rows().nth(0).map(|row| SqlUser{
             id: row.get::<i64>("id").unwrap(),
-            username: row.get::<&str>("name").unwrap().to_string(),
+            username: row.get::<&str>("username").unwrap().to_string(),
             display_name: row.get::<&str>("display_name").unwrap().to_string(),
             password: row.get::<&str>("password").unwrap().to_string(),
             created_at: row.get::<i64>("created_at").unwrap(),
             updated_at: row.get::<i64>("updated_at").unwrap()
             });
-
             match sqluser{
             Some(su) => Ok(Some(su.into_user())),
             None => Ok(None),
