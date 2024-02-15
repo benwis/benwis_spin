@@ -44,6 +44,7 @@ pub async fn get_post(slug: String) -> Result<Option<Post>, ServerFnError<Benwis
 pub async fn add_post(slug: String, title: String, author_id: String, excerpt: String, content: String, hero: String, hero_alt: String, hero_caption: String, tags: String,  preview: String, published: String) -> Result<bool, ServerFnError<BenwisAppError>> {
     let con = con()?;
 
+    println!("ADDING POST");
     let hero = match hero.is_empty(){
         true => None,
         false => Some(hero),
@@ -83,7 +84,7 @@ pub async fn add_post(slug: String, title: String, author_id: String, excerpt: S
         updated_at: Default::default(),
         author_id, 
         preview, 
-        published: published.into(), 
+        published, 
         hero, 
         hero_caption, 
         hero_alt, 

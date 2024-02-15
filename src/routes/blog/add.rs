@@ -1,17 +1,17 @@
-use crate::functions::post::AddPost;
+use crate::{functions::post::AddPost, providers::AuthContext};
 use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
 #[component]
 pub fn AddPost() -> impl IntoView {
     let add_post = create_server_action::<AddPost>();
+    let auth = use_context::<AuthContext>();
 
     view! {
       <Meta property="og:title" content="Add Post"/>
       <Title text="Add Post"/>
       <Meta name="description" content="Add a post"/>
       <Meta property="og:description" content="Add a post"/>
-
       <div class="flex min-h-full w-full flex-col justify-center">
         <div class="mx-auto w-full px-8">
           <h1 class="mb-4 text-3xl text-center font-bold tracking-tight text-black dark:text-white md:text-5xl">
@@ -39,6 +39,23 @@ pub fn AddPost() -> impl IntoView {
               <input
                 type="text"
                 name="hero"
+                class="w-full rounded border border-gray-500 px-2 py-1 text-lg text-black bg-white"
+              />
+            </p>
+            <p>
+              <label>"Hero Alt:"</label>
+              <input
+                type="text"
+                name="hero_alt"
+                class="w-full rounded border border-gray-500 px-2 py-1 text-lg text-black bg-white"
+              />
+
+            </p>
+            <p>
+              <label>"Hero Caption:"</label>
+              <input
+                type="text"
+                name="hero_caption"
                 class="w-full rounded border border-gray-500 px-2 py-1 text-lg text-black bg-white"
               />
             </p>

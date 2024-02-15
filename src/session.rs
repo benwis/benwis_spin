@@ -99,20 +99,17 @@ impl SqliteStore {
 impl SessionStore for SqliteStore{
  async fn load_session(&self, cookie_value: String) -> Result<Option<Session>> {
         let id = Session::id_from_cookie_value(&cookie_value)?;
-        println!("Got Session ID: {id}");
         let rowset = &self.connection.execute(&self.substitute_table_name(
             r#"
             SELECT * FROM %%TABLE_NAME%%
               WHERE id = ? AND (expiry IS NULL OR expiry > ?)
             "#,
         ), &[Text(id.to_string()), Integer(Utc::now().timestamp())])?;
-        println!("ROWSET: {rowset:?}");
         let session_row = rowset.rows().nth(0).map(|row| SessionRow{
             id: row.get::<&str>("id").unwrap().to_string(),
         expiry: row.get::<i64>("expiry"),
         session: row.get::<&str>("session").unwrap().to_string(),
         });
-        println!("SESSION ROW {session_row:?}");
         let session: Option<String> = match session_row{
         Some(s) => Some(s.session),
         None => None
@@ -144,7 +141,6 @@ impl SessionStore for SqliteStore{
     }
 
     async fn destroy_session(&self, session: Session) -> Result {
-        println!("DESTROYING SESSION");
         let id = session.id();
         println!("ID: {id}");
         let _ = &self.connection.execute(&self.substitute_table_name(

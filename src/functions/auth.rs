@@ -31,7 +31,6 @@ if #[cfg(feature = "ssr")] {
     }
     /// Verify Password
     pub fn verify_password(password: &str, stored_password_hash: &str) -> Result<(), BenwisAppError> {
-        println!("VERIFYING");
         let argon2 = Argon2::default();
         // Verify password against PHC string
         let parsed_hash = PasswordHash::new(stored_password_hash)?;
@@ -41,7 +40,6 @@ if #[cfg(feature = "ssr")] {
     /// Verify the user is who they say they are
     pub async fn auth_user(name: &str, password: &str, con: &Arc<Connection>) -> Result<User, BenwisAppError>{
         // Does the user exist
-        println!("AUTHING USER");
         let Ok(Some(user)) = User::get_from_username(name, con).await else{
             return Err(BenwisAppError::AuthError);
         };
@@ -139,7 +137,7 @@ pub async fn login(
     let res_options = expect_context::<ResponseOptions>();
     res_options.insert_header(
         "Set-Cookie",
-        format!("benwis_session={session_cookie};Path=/;Secure=true;").as_bytes(),
+        format!("benwis_session={session_cookie};Path=/;SameSite=Strict;").as_bytes(),
     );
 
     leptos_spin::redirect("/");
@@ -188,6 +186,7 @@ pub async fn signup(
     {
         Some(u) => u,
         None => return Err(BenwisAppError::AuthError.into()),
+
     };
 
     leptos_spin::redirect("/");
@@ -206,8 +205,11 @@ pub async fn logout() -> Result<(), ServerFnError> {
     let Some(session) = get_session_cookie_value(&req)? else{
         return Ok(());
     };
-    println!("SESSION: {session:#?}");
     logout_session(&session).await?;
+
+    // Delete session cookie by expiring it
+    let res_parts = expect_context::<ResponseOptions>();
+    res_parts.insert_header("Set-Cookie","benwis_session=no;Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;");
     leptos_spin::redirect("/");
 
     Ok(())
