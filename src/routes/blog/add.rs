@@ -1,11 +1,10 @@
-use crate::{functions::post::AddPost, providers::AuthContext};
+use crate::functions::post::AddPost;
 use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
 #[component]
-pub fn AddPost() -> impl IntoView {
+pub fn AddPostForm() -> impl IntoView {
     let add_post = create_server_action::<AddPost>();
-    let auth = use_context::<AuthContext>();
 
     view! {
       <Meta property="og:title" content="Add Post"/>
@@ -18,6 +17,7 @@ pub fn AddPost() -> impl IntoView {
             "Add Post"
           </h1>
           <ActionForm action=add_post class="w-full text-black dark:text-white">
+            <input type="hidden" name="author_id" value=1/>
             <p>
               <label>"Post Title:"</label>
               <input
