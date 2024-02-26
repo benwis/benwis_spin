@@ -21,6 +21,8 @@ pub enum BenwisAppError {
     TomlError(String),
     #[error("Argon2Error: {0}")]
     Argon2Error(String),
+    #[error("CompilationError: {0}")]
+    CompilationError(String),
     #[error("SessionError: {0}")]
     SessionError(String),
     #[error("JsonError: {0}")]
@@ -41,6 +43,7 @@ impl BenwisAppError {
             BenwisAppError::NotFound => StatusCode::NOT_FOUND,
             BenwisAppError::InternalServerError => StatusCode::INTERNAL_SERVER_ERROR,
             BenwisAppError::Argon2Error(_) => StatusCode::INTERNAL_SERVER_ERROR,
+            BenwisAppError::CompilationError(_) => StatusCode::INTERNAL_SERVER_ERROR,
             BenwisAppError::SessionError(_) => StatusCode::INTERNAL_SERVER_ERROR,
             BenwisAppError::JsonError(_) => StatusCode::INTERNAL_SERVER_ERROR,
             BenwisAppError::DBError(_) => StatusCode::INTERNAL_SERVER_ERROR,
@@ -52,6 +55,16 @@ impl BenwisAppError {
             BenwisAppError::TomlError(_) => StatusCode::INTERNAL_SERVER_ERROR,
         }
     }
+}
+
+cfg_if! {
+    if #[cfg(not(feature = "ssr"))] {
+impl From<serde_wasm_bindgen::Error> for BenwisAppError {
+    fn from(error: serde_wasm_bindgen::Error) -> Self {
+        Self::CompilationError(error.to_string())
+    }
+}
+}
 }
 //impl From<ServerFnError> for ServerFnError<BenwisAppError> {
 //    fn from(err: BenwisAppError) -> Self {

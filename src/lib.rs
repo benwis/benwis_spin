@@ -11,6 +11,9 @@ mod session;
 #[cfg(feature = "ssr")]
 mod server;
 
+#[cfg(not(feature = "ssr"))]
+mod js;
+
 use cfg_if::cfg_if;
 
 cfg_if! {

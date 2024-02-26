@@ -1,8 +1,11 @@
 use cfg_if::cfg_if;
 use serde::{Deserialize, Serialize};
-use std::sync::Arc;
 
+cfg_if! {
+    if #[cfg(feature = "ssr")] {
 use crate::errors::BenwisAppError;
+use std::sync::Arc;
+    }}
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct User {

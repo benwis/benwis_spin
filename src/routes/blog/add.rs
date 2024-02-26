@@ -107,10 +107,18 @@ pub fn AddPostForm() -> impl IntoView {
                 name="content"
               ></textarea>
             </p>
+            <p>
+              <label>"Tags:"</label>
+              <input
+                type="text"
+                name="tags"
+                class="w-full rounded border border-gray-500 px-2 py-1 text-lg text-black bg-white"
+              />
+            </p>
             <p class="text-right flex w-full justify-between">
               <button
                 type="submit"
-                class="rounded bg-blue-500 py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400 disabled:bg-blue-300"
+                class="rounded bg-blue-500 py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400"
               >
                 "Add Post"
               </button>
