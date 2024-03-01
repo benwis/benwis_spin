@@ -1,19 +1,28 @@
+export interface OwnedCodeBlock {
+  language?: string,
+  source: string,
+}
+export interface OwnedFrontmatter {
+  title?: string,
+  codeBlock?: OwnedCodeBlock,
+}
 export interface HtmlOutput {
   toc?: string,
   content: string,
+  frontmatter?: OwnedFrontmatter,
 }
-export type HighlighterError = HighlighterErrorNolang | HighlighterErrorNohighlighter | HighlighterErrorCouldNotBuildHighlighter | HighlighterErrorStringGenerationError;
-export interface HighlighterErrorNolang {
+export type HighlightError = HighlightErrorNolang | HighlightErrorNohighlighter | HighlightErrorCouldNotBuildHighlighter | HighlightErrorStringGenerationError;
+export interface HighlightErrorNolang {
   tag: 'nolang',
 }
-export interface HighlighterErrorNohighlighter {
+export interface HighlightErrorNohighlighter {
   tag: 'nohighlighter',
 }
-export interface HighlighterErrorCouldNotBuildHighlighter {
+export interface HighlightErrorCouldNotBuildHighlighter {
   tag: 'could-not-build-highlighter',
   val: string,
 }
-export interface HighlighterErrorStringGenerationError {
+export interface HighlightErrorStringGenerationError {
   tag: 'string-generation-error',
   val: string,
 }
@@ -35,3 +44,4 @@ import { WasiIoError } from './interfaces/wasi-io-error.js';
 import { WasiIoStreams } from './interfaces/wasi-io-streams.js';
 import { WasiRandomRandom } from './interfaces/wasi-random-random.js';
 export function processMarkdownToHtml(input: string): HtmlOutput;
+export function processMarkdownToHtmlWithFrontmatter(input: string): HtmlOutput;

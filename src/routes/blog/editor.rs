@@ -34,7 +34,7 @@ pub fn PostEditor() -> impl IntoView {
                   cfg_if! {
                       if #[cfg(not(feature = "ssr"))] { let new_value =
                       event_target_value(& ev); let output =
-                      js::process_markdown_to_html(new_value.into()); match output
+                      js::process_markdown_to_html_with_frontmatter(new_value.into()); match output
                       { Ok(o) => write_content.set(o.content), Err(e) =>
                       leptos::logging::log!("{}", e) } }
                   }
@@ -52,9 +52,9 @@ pub fn PostEditor() -> impl IntoView {
             </p>
           </ActionForm>
         </div>
-        <section class="border-solid border-gray-500 border-4 ">
+        <section class="shadow-md rounded">
           <div
-            class="prose text-black prose lg:prose-xl dark:prose-invert dark:text-white text-base p-4"
+            class="prose text-black prose lg:prose-xl dark:prose-invert dark:text-white text-base p-4 bg-slate-200 dark:bg-gray-800 w-full h-full rounded"
             inner_html=move || content.get()
           ></div>
         </section>
