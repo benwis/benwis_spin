@@ -19,8 +19,8 @@ pub fn PostEditor() -> impl IntoView {
 
       <div class="grid min-h-full w-full grid-cols-2">
         <section class="text-left flex-col w-full justify-between col-span-2 gap-4 dark:bg-gray-900 bg-slate-50 rounded mb-4">
-          <div on:click=|_e| {
-              show_post_metadata.set(show_post_metadata.get());
+          <div on:click=move |_e| {
+              show_post_metadata.update(|b| *b = !*b);
           }>
             <Show
               when=move || show_post_metadata.get()
