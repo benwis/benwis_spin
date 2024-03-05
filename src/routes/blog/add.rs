@@ -39,7 +39,7 @@ pub fn AddPost() -> impl IntoView {
     }
 }
 
-#[component]
+#[island]
 pub fn AddPostForm(user: Option<SafeUser>) -> impl IntoView {
     let add_post = create_server_action::<AddPost>();
     let content = create_rw_signal(String::new());
@@ -299,7 +299,7 @@ pub fn AddPostForm(user: Option<SafeUser>) -> impl IntoView {
           </div>
           <section class="shadow-md rounded">
             <div
-              class="prose text-black prose lg:prose-xl dark:prose-invert dark:text-white text-base p-4 bg-slate-200 dark:bg-gray-800 w-full h-full rounded"
+              class="prose text-black prose dark:prose-invert dark:text-white text-base p-4 bg-slate-200 dark:bg-gray-800 w-full h-full rounded"
               inner_html=move || content.get()
             ></div>
           </section>

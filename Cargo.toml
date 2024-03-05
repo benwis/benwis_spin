@@ -22,8 +22,8 @@ leptos-spin = { path="../leptos-spin/leptos-spin", features=["experimental-islan
 leptos-spin-macro = { path="../leptos-spin/leptos-spin-macro", optional = true}
 serde = { version = "1.0", features = ["derive"] }
 spin-sdk = { version = "2.1", optional = true }
-wasm-bindgen = { version = "0.2", optional = true }
-serde-wasm-bindgen = { version = "0.6", optional = true }
+wasm-bindgen = { version = "=0.2.92", optional = true }
+serde-wasm-bindgen = { version = "=0.6.5", optional = true }
 serde_json = "1.0.113"
 tracing = "0.1.40"
 indexmap = { version = "2.2.2", features = ["serde"] }
