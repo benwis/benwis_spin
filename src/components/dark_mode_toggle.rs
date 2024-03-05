@@ -1,7 +1,7 @@
 use crate::providers::ColorScheme;
 use leptos::*;
 use leptos_router::ActionForm;
-#[island]
+#[component]
 pub fn DarkModeToggle() -> impl IntoView {
     let color_scheme = use_context::<ColorScheme>().expect("Failed to find ColorSchemeProvider");
 
