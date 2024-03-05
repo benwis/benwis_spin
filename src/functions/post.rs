@@ -41,10 +41,9 @@ pub async fn get_post(slug: String) -> Result<Option<Post>, ServerFnError<Benwis
 
 #[tracing::instrument(level = "info", fields(error), err)]
 #[server(AddPost, "/api")]
-pub async fn add_post(slug: String, title: String, author_id: String, excerpt: String, content: String, hero: String, hero_alt: String, hero_caption: String, tags: String,  preview: String, published: String) -> Result<bool, ServerFnError<BenwisAppError>> {
+pub async fn add_post(slug: String, title: String, author_id: String, created_at_pretty: String, excerpt: String, content: String,toc: String, hero: String, hero_alt: String, hero_caption: String, tags: String,  preview: String, published: String) -> Result<bool, ServerFnError<BenwisAppError>> {
     let con = con()?;
 
-    println!("ADDING POST");
     let hero = match hero.is_empty(){
         true => None,
         false => Some(hero),
@@ -58,39 +57,57 @@ pub async fn add_post(slug: String, title: String, author_id: String, excerpt: S
         false => Some(hero_caption),
     };
 
+    let toc = match toc.is_empty(){
+        true => None,
+        false => Some(toc),
+    };
     let excerpt = match excerpt.is_empty(){
         true => None,
         false => Some(excerpt),
     };
     let author_id = author_id.parse().map_err(|_| BenwisAppError::BadRequest("Invalid Author ID".to_string()))?;
-    let tags = serde_json::from_str(&tags).map_err(|e| BenwisAppError::BadRequest(e.to_string()))?;
+    let processed_tags: Vec<String> = {
+        if tags.is_empty(){
+            Default::default()
+        } 
+        else{
+            serde_json::from_str(&tags).map_err(|e| BenwisAppError::BadRequest(e.to_string()))?
+        }
+    };
+    let preview: bool = match preview.as_ref(){
+    "true" => true,
+    "false" => false,
+    _ => return Err(BenwisAppError::BadRequest("Invalid string for bool conversion".to_string()).into())
+    };
 
-    let preview: bool = match preview.parse::<i32>().map_err(|e| BenwisAppError::BadRequest(e.to_string()))?{
-    0 => false,
-    1 => true,
-    _ => return Err(BenwisAppError::BadRequest("Invalid number for bool conversion".to_string()).into())
+    let published: bool = match published.as_ref(){
+    "true" => true,
+    "false" => false,
+    _ => return Err(BenwisAppError::BadRequest("Invalid string for bool conversion".to_string()).into())
     };
-    let published: bool = match published.parse::<i32>().map_err(|e| BenwisAppError::BadRequest(e.to_string()))?{
-    0 => false,
-    1 => true,
-    _ => return Err(BenwisAppError::BadRequest("Invalid number for bool conversion".to_string()).into())
-    };
+
+    let created_at: DateTime<Utc> = match DateTime::parse_from_rfc3339(&created_at_pretty){
+        Ok(d) => d.into(),
+        Err(e) => return Err(BenwisAppError::BadRequest("Invalid Date Format. Use RFC3339".to_string()).into())
+    }; 
+
     let new_post = NewPost{
         slug,
+        toc,
         title,
         excerpt, 
         content, 
-        created_at: Default::default(),
-        updated_at: Default::default(),
+        created_at: created_at.timestamp(),
+        updated_at: created_at.timestamp(),
         author_id, 
         preview, 
         published, 
         hero, 
         hero_caption, 
         hero_alt, 
-        tags, 
+        tags: processed_tags, 
     };
-    // Get user id from session cookie
+    //TODO: Get user id from session cookie
 
 
     let post = Post::add_post(new_post, &con).await?;
@@ -99,7 +116,7 @@ pub async fn add_post(slug: String, title: String, author_id: String, excerpt: S
 
 #[tracing::instrument(level = "info", fields(error), err)]
 #[server(UpdatePost, "/api")]
-pub async fn update_post(id: i64, slug: String, title: String, author_id: String, excerpt: String, content: String, hero: String, hero_alt: String, hero_caption: String,toc: String,created_at: String, updated_at: String,  tags: String,  preview: String, published: String) -> Result<(), ServerFnError<BenwisAppError>> {
+pub async fn update_post(id: i64, slug: String, title: String, author_id: String, excerpt: String, content: String, hero: String, hero_alt: String, hero_caption: String,toc: String,created_at_pretty: String, updated_at_pretty: String,  tags: String,  preview: String, published: String) -> Result<(), ServerFnError<BenwisAppError>> {
     let con = con()?;
 
     let hero = match hero.is_empty(){
@@ -120,28 +137,38 @@ pub async fn update_post(id: i64, slug: String, title: String, author_id: String
         false => Some(excerpt),
     };
     let author_id = author_id.parse().map_err(|_| BenwisAppError::BadRequest("Invalid Author ID".to_string()))?;
-    let tags = serde_json::from_str(&tags).map_err(|e| BenwisAppError::BadRequest(e.to_string()))?;
-
+    
+    let processed_tags: Vec<String> = {
+        if tags.is_empty(){
+            Default::default()
+        } 
+        else{
+            serde_json::from_str(&tags).map_err(|e| BenwisAppError::BadRequest(e.to_string()))?
+        }
+    };
+    
     let toc = match toc.is_empty(){
         true => None,
         false => Some(toc),
     };
-    let preview: bool = match preview.parse::<i32>().map_err(|e| BenwisAppError::BadRequest(e.to_string()))?{
-    0 => false,
-    1 => true,
-    _ => return Err(BenwisAppError::BadRequest("Invalid number for bool conversion".to_string()).into())
+
+    let preview: bool = match preview.as_ref(){
+    "true" => true,
+    "false" => false,
+    _ => return Err(BenwisAppError::BadRequest("Invalid string for bool conversion".to_string()).into())
     };
-    let published: bool = match published.parse::<i32>().map_err(|e| BenwisAppError::BadRequest(e.to_string()))?{
-    0 => false,
-    1 => true,
-    _ => return Err(BenwisAppError::BadRequest("Invalid number for bool conversion".to_string()).into())
+
+    let published: bool = match published.as_ref(){
+    "true" => true,
+    "false" => false,
+    _ => return Err(BenwisAppError::BadRequest("Invalid string for bool conversion".to_string()).into())
     };
-    let created_at: DateTime<Utc> = match DateTime::parse_from_rfc3339(&created_at){
+    let created_at: DateTime<Utc> = match DateTime::parse_from_rfc3339(&created_at_pretty){
         Ok(d) => d.into(),
         Err(e) => return Err(BenwisAppError::BadRequest("Invalid Date Format. Use RFC3339".to_string()).into())
     }; 
 
-    let updated_at: DateTime<Utc> = match DateTime::parse_from_rfc3339(&updated_at){
+    let updated_at: DateTime<Utc> = match DateTime::parse_from_rfc3339(&updated_at_pretty){
         Ok(d) => d.into(),
         Err(e) => return Err(BenwisAppError::BadRequest("Invalid Date Format. Use RFC3339".to_string()).into())
     }; 
@@ -155,7 +182,7 @@ pub async fn update_post(id: i64, slug: String, title: String, author_id: String
     hero,
     hero_alt,
     hero_caption,
-    tags,
+    tags: processed_tags,
     preview,
     published, 
     toc, 

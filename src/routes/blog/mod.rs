@@ -6,5 +6,3 @@ pub mod add;
 pub use add::*;
 pub mod edit;
 pub use edit::*;
-pub mod editor;
-pub use editor::*;

@@ -35,6 +35,7 @@ pub fn Nav() -> impl IntoView {
                     None => None,
                 };
                 view! {
+                  // logging::log!("USER: {:#?}", user());
                   <Show
                     when=move || user().is_none()
                     fallback=|| {

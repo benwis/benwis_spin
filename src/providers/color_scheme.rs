@@ -14,12 +14,12 @@ fn initial_prefers_dark() -> bool {
 
 #[cfg(feature = "ssr")]
 fn initial_prefers_dark() -> bool {
-    use_context::<leptos_spin::RequestParts>().is_some_and(|req| {
+    let initial = use_context::<leptos_spin::RequestParts>().is_some_and(|req| {
         req.headers()
             .iter()
-            .filter(|(k, _v)| k.contains("Set-Cookie"))
             .any(|(_k, v)| String::from_utf8_lossy(v).contains("darkmode=true"))
-    })
+    });
+    initial
 }
 
 #[derive(Clone)]

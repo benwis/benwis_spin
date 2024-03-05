@@ -31,6 +31,7 @@ pub struct NewPost {
     pub author_id: i64,
     pub hero: Option<String>,
     pub hero_caption: Option<String>,
+    pub toc: Option<String>,
     pub hero_alt: Option<String>,
     pub excerpt: Option<String>,
     pub content: String,
@@ -68,10 +69,10 @@ if #[cfg(feature = "ssr")] {
         Post{
 
             id: row.get::<i64>("id").unwrap().to_owned(),
-            author_id: row.get::<i64>("user_id").unwrap().to_owned(),
+            author_id: row.get::<i64>("author_id").unwrap().to_owned(),
             slug: row.get::<&str>("slug").unwrap().to_owned(),
             title: row.get::<&str>("title").unwrap().to_owned(),
-            excerpt: row.get::<&str>("title").map(str::to_string),
+            excerpt: row.get::<&str>("excerpt").map(str::to_string),
             toc: row.get::<&str>("toc").map(str::to_string),
             content: row.get::<&str>("content").unwrap().to_owned(),
             created_at: DateTime::from_timestamp(row.get::<i64>("created_at").unwrap_or(0), 0).expect("Failed to create time"),
@@ -93,10 +94,10 @@ if #[cfg(feature = "ssr")] {
         let post = rowset.rows().nth(0).map(|row| {
         Post{
             id: row.get::<i64>("id").unwrap().to_owned(),
-            author_id: row.get::<i64>("user_id").unwrap().to_owned(),
+            author_id: row.get::<i64>("author_id").unwrap().to_owned(),
             slug: row.get::<&str>("slug").unwrap().to_owned(),
             title: row.get::<&str>("title").unwrap().to_owned(),
-            excerpt: row.get::<&str>("title").map(str::to_string),
+            excerpt: row.get::<&str>("excerpt").map(str::to_string),
             toc: row.get::<&str>("toc").map(str::to_string),
             content: row.get::<&str>("content").unwrap().to_owned(),
             created_at: DateTime::from_timestamp(row.get::<i64>("created_at").unwrap_or(0), 0).expect("Failed to create time"),
@@ -117,10 +118,10 @@ if #[cfg(feature = "ssr")] {
         let post = rowset.rows().nth(0).map(|row| {
         Post{
             id: row.get::<i64>("id").unwrap().to_owned(),
-            author_id: row.get::<i64>("user_id").unwrap().to_owned(),
+            author_id: row.get::<i64>("author_id").unwrap().to_owned(),
             slug: row.get::<&str>("slug").unwrap().to_owned(),
             title: row.get::<&str>("title").unwrap().to_owned(),
-            excerpt: row.get::<&str>("title").map(str::to_string),
+            excerpt: row.get::<&str>("excerpt").map(str::to_string),
             toc: row.get::<&str>("toc").map(str::to_string),
             content: row.get::<&str>("content").unwrap().to_owned(),
             created_at: DateTime::from_timestamp(row.get::<i64>("created_at").unwrap_or(0), 0).expect("Failed to create time"),
@@ -165,12 +166,16 @@ pub async fn add_post(
     None => Null,
     };
 
+    let toc = match post.toc{
+    Some(e) => Text(e),
+    None => Null,
+    };
 
     let Ok(tags) = serde_json::to_string(&post.tags) else{
     return Err(BenwisAppError::JsonError("Failed to serialize tags".to_string()));
     };
 
-    con.execute("INSERT INTO posts (title, slug, excerpt, content, published, preview, author_id, hero, hero_alt, hero_caption, tags) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", &[Text(post.title), Text(slug), excerpt, Text(post.content), Integer(post.published.into()), Integer(post.preview.into()), Integer(post.author_id), hero, hero_alt, hero_caption, Text(tags)])?;
+    con.execute("INSERT INTO posts (title, slug, excerpt, toc, content, published, preview, author_id, hero, hero_alt, hero_caption, tags) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", &[Text(post.title), Text(slug), excerpt,toc, Text(post.content), Integer(post.published.into()), Integer(post.preview.into()), Integer(post.author_id), hero, hero_alt, hero_caption, Text(tags)])?;
     Ok(true)
 }
     pub async fn delete_post(id: i64, con: &Arc<Connection>)-> Result<(), BenwisAppError>{

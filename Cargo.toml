@@ -13,12 +13,12 @@ anyhow = "1"
 cfg-if = "1"
 console_error_panic_hook = "0.1"
 http = "0.2"
-leptos = "0.6.9"
+leptos = {version="0.6.9", features=["experimental-islands"]}
 leptos_integration_utils = { version = "0.6.9", optional = true }
 leptos_meta = "0.6.9"
 leptos_router = "0.6.9"
 
-leptos-spin = { path="../leptos-spin/leptos-spin", optional = true}
+leptos-spin = { path="../leptos-spin/leptos-spin", features=["experimental-islands"], optional = true}
 leptos-spin-macro = { path="../leptos-spin/leptos-spin-macro", optional = true}
 serde = { version = "1.0", features = ["derive"] }
 spin-sdk = { version = "2.1", optional = true }
@@ -81,9 +81,9 @@ lib-default-features = false
 assets-dir = "public"
 
 [patch.crates-io]
-#leptos = { path = '../../leptos/leptos' }
-#leptos_config = { path = '../../leptos/leptos_config' }
-#leptos_meta = { path = '../../leptos/meta' }
-#leptos_router = { path = '../../leptos/router' }
-#leptos_integration_utils = { path = '../../leptos/integrations/utils' }
+leptos = { path = '../../leptos/leptos' }
+leptos_config = { path = '../../leptos/leptos_config' }
+leptos_meta = { path = '../../leptos/meta' }
+leptos_router = { path = '../../leptos/router' }
+leptos_integration_utils = { path = '../../leptos/integrations/utils' }
 

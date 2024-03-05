@@ -96,14 +96,7 @@ pub fn AppRouter() -> impl IntoView {
             <Route
               path="posts/add"
               view=move || {
-                  view! { <AddPostForm/> }
-              }
-            />
-
-            <Route
-              path="posts/editor"
-              view=move || {
-                  view! { <PostEditor/> }
+                  view! { <AddPost/> }
               }
             />
 

@@ -40,6 +40,14 @@ pub fn EditPostForm(post: post::Post) -> impl IntoView {
       <Meta name="description" content="Edit a Post"/>
       <Meta property="og:description" content="Edit a Post"/>
       <ActionForm action=update_post class="text-black dark:text-white w-full">
+        <input type="hidden" name="id" id="id" value=post.id/>
+
+        <input
+          type="hidden"
+          name="author_id"
+          id="author_id"
+          value=post.author_id
+        />
         <p>
           <label>"Post Title:"</label>
           <input
@@ -67,14 +75,55 @@ pub fn EditPostForm(post: post::Post) -> impl IntoView {
             value=post.hero
           />
         </p>
+
+        <p>
+          <label>"Hero Alt:"</label>
+          <input
+            type="text"
+            name="hero_alt"
+            class="w-full rounded border border-gray-500 px-2 py-1 text-lg text-black bg-white"
+            value=post.hero_alt
+          />
+        </p>
+
+        <p>
+          <label>"Hero Caption:"</label>
+          <input
+            type="text"
+            name="hero_caption"
+            class="w-full rounded border border-gray-500 px-2 py-1 text-lg text-black bg-white"
+            value=post.hero_caption
+          />
+        </p>
         <p>
           <label>"Created At:"</label>
           <input
             type="text"
             name="created_at_pretty"
-            placeholder="1970-01-01 00:00:00"
+            placeholder="1970-01-01 00:00:00-00:00"
             class="w-full rounded border border-gray-500 px-2 py-1 text-lg text-black bg-white"
-            value=post.created_at.to_string()
+            value=post.created_at.to_rfc3339()
+          />
+        </p>
+
+        <p>
+          <label>"Updated At:"</label>
+          <input
+            type="text"
+            name="updated_at_pretty"
+            placeholder="1970-01-01 00:00:00-00:00"
+            class="w-full rounded border border-gray-500 px-2 py-1 text-lg text-black bg-white"
+            value=post.updated_at.to_rfc3339()
+          />
+        </p>
+        <p>
+          <label>"Tags:"</label>
+          <input
+            type="text"
+            name="tags"
+            placeholder=" "
+            class="w-full rounded border border-gray-500 px-2 py-1 text-lg text-black bg-white"
+            value=serde_json::to_string(&post.tags).unwrap()
           />
         </p>
         <p>
@@ -104,6 +153,18 @@ pub fn EditPostForm(post: post::Post) -> impl IntoView {
               "True"
             </option>
           </select>
+        </p>
+
+        <p>
+          <label>"Toc:"</label>
+          <textarea
+            id="toc"
+            rows=5
+            name="toc"
+            class="w-full text-black border border-gray-500"
+          >
+            {post.toc}
+          </textarea>
         </p>
         <p>
           <label>"Excerpt:"</label>

@@ -26,8 +26,8 @@ if #[cfg(feature = "hydrate")] {
       use routes::*;
 
       console_error_panic_hook::set_once();
-
-      leptos::mount_to_body(AppRouter);
+      leptos::leptos_dom::HydrationCtx::stop_hydrating();
+      //leptos::mount_to_body(AppRouter);
     }
 }
 }
