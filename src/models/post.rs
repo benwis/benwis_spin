@@ -34,6 +34,7 @@ pub struct NewPost {
     pub toc: Option<String>,
     pub hero_alt: Option<String>,
     pub excerpt: Option<String>,
+    pub raw_content: String,
     pub content: String,
     pub created_at: i64,
     pub updated_at: i64,
@@ -51,6 +52,7 @@ pub struct Post {
     pub hero_caption: Option<String>,
     pub hero_alt: Option<String>,
     pub excerpt: Option<String>,
+    pub raw_content: String,
     pub content: String,
     pub toc: Option<String>,
     pub created_at: DateTime<Utc>,
@@ -74,6 +76,7 @@ if #[cfg(feature = "ssr")] {
             title: row.get::<&str>("title").unwrap().to_owned(),
             excerpt: row.get::<&str>("excerpt").map(str::to_string),
             toc: row.get::<&str>("toc").map(str::to_string),
+            raw_content: row.get::<&str>("raw_content").unwrap().to_owned(),
             content: row.get::<&str>("content").unwrap().to_owned(),
             created_at: DateTime::from_timestamp(row.get::<i64>("created_at").unwrap_or(0), 0).expect("Failed to create time"),
             updated_at: DateTime::from_timestamp(row.get::<i64>("updated_at").unwrap_or(0), 0).expect("Failed to create time"),
@@ -99,6 +102,7 @@ if #[cfg(feature = "ssr")] {
             title: row.get::<&str>("title").unwrap().to_owned(),
             excerpt: row.get::<&str>("excerpt").map(str::to_string),
             toc: row.get::<&str>("toc").map(str::to_string),
+            raw_content: row.get::<&str>("raw_content").unwrap().to_owned(),
             content: row.get::<&str>("content").unwrap().to_owned(),
             created_at: DateTime::from_timestamp(row.get::<i64>("created_at").unwrap_or(0), 0).expect("Failed to create time"),
             updated_at: DateTime::from_timestamp(row.get::<i64>("updated_at").unwrap_or(0), 0).expect("Failed to create time"),
@@ -123,6 +127,7 @@ if #[cfg(feature = "ssr")] {
             title: row.get::<&str>("title").unwrap().to_owned(),
             excerpt: row.get::<&str>("excerpt").map(str::to_string),
             toc: row.get::<&str>("toc").map(str::to_string),
+            raw_content: row.get::<&str>("raw_content").unwrap().to_owned(),
             content: row.get::<&str>("content").unwrap().to_owned(),
             created_at: DateTime::from_timestamp(row.get::<i64>("created_at").unwrap_or(0), 0).expect("Failed to create time"),
             updated_at: DateTime::from_timestamp(row.get::<i64>("updated_at").unwrap_or(0), 0).expect("Failed to create time"),
@@ -175,7 +180,8 @@ pub async fn add_post(
     return Err(BenwisAppError::JsonError("Failed to serialize tags".to_string()));
     };
 
-    con.execute("INSERT INTO posts (title, slug, excerpt, toc, content, published, preview, author_id, hero, hero_alt, hero_caption, tags) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", &[Text(post.title), Text(slug), excerpt,toc, Text(post.content), Integer(post.published.into()), Integer(post.preview.into()), Integer(post.author_id), hero, hero_alt, hero_caption, Text(tags)])?;
+
+    con.execute("INSERT INTO posts (title, slug, excerpt, toc, raw_content, content, published, preview, author_id, hero, hero_alt, hero_caption, tags, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", &[Text(post.title), Text(slug), excerpt,toc, Text(post.raw_content), Text(post.content), Integer(post.published.into()), Integer(post.preview.into()), Integer(post.author_id), hero, hero_alt, hero_caption, Text(tags), Integer(post.created_at)])?;
     Ok(true)
 }
     pub async fn delete_post(id: i64, con: &Arc<Connection>)-> Result<(), BenwisAppError>{
@@ -214,11 +220,14 @@ pub async fn add_post(
     None => Null,
     };
 
+    println!("created_at: {}", post.created_at);
+    let created_at = post.created_at.timestamp();
+
     let Ok(tags) = serde_json::to_string(&post.tags) else{
     return Err(BenwisAppError::JsonError("Failed to serialize tags".to_string()));
     };
 
-    con.execute("UPDATE posts SET title=?,slug=?,excerpt=?,content=?,published=?,preview=?, author_id=?, hero=?, hero_alt=?, hero_caption=?, tags=?, toc=? WHERE id = ?",&[Text(post.title), Text(slug), excerpt, Text(post.content), Integer(post.published.into()), Integer(post.preview.into()), Integer(post.author_id), hero, hero_alt, hero_caption, Text(tags), toc, Integer(post.id)])?;
+    con.execute("UPDATE posts SET title=?,slug=?,excerpt=?,raw_content=?,content=?,published=?,preview=?, author_id=?, hero=?, hero_alt=?, hero_caption=?, tags=?, toc=?, created_at=?  WHERE id = ?",&[Text(post.title), Text(slug), excerpt, Text(post.raw_content), Text(post.content), Integer(post.published.into()), Integer(post.preview.into()), Integer(post.author_id), hero, hero_alt, hero_caption, Text(tags), toc, Integer(created_at), Integer(post.id) ])?;
     Ok(())
     }
 }

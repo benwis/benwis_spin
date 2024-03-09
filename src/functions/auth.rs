@@ -210,6 +210,8 @@ pub async fn logout() -> Result<(), ServerFnError> {
     // Delete session cookie by expiring it
     let res_parts = expect_context::<ResponseOptions>();
     res_parts.insert_header("Set-Cookie","benwis_session=no;Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;");
+
+    res_parts.insert_header("Set-Cookie","sessionid=no;Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;");
     leptos_spin::redirect("/");
 
     Ok(())

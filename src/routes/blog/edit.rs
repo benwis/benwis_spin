@@ -1,9 +1,14 @@
 use crate::functions::post::{get_post, UpdatePost};
-use crate::models::post;
+#[cfg(not(feature = "ssr"))]
+use crate::js;
+use crate::models::{Post, SafeUser};
+use crate::providers::AuthContext;
 use crate::routes::blog::PostParams;
+use cfg_if::cfg_if;
 use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
+
 #[component]
 pub fn EditPost() -> impl IntoView {
     let params = use_params::<PostParams>();
@@ -11,192 +16,331 @@ pub fn EditPost() -> impl IntoView {
         move || params.get().map(|params| params.slug).unwrap().unwrap(),
         move |slug| get_post(slug),
     );
-    view! {
-      <Transition fallback=move || {
-          view! { <p>"Loading..."</p> }
-      }>
 
+    let auth_context = use_context::<AuthContext>().expect("Failed to get AuthContext");
+    view! {
+      <Transition fallback=move || ()>
         {move || {
-            post.get()
-                .map(|p| match p {
-                    Ok(Some(post)) => {
-                        view! { <EditPostForm post=post/> }.into_view()
-                    }
-                    Ok(None) => view! { <p>"Post Not Found"</p> }.into_view(),
-                    Err(_) => view! { <p>"Server Fn Error"</p> }.into_view(),
-                })
+            let user = move || {
+                match auth_context.user.get() {
+                    Some(Ok(Some(user))) => Some(user),
+                    Some(Ok(None)) => None,
+                    Some(Err(_)) => None,
+                    None => None,
+                }
+            };
+            view! {
+              <Transition fallback=move || {
+                  view! { <p>"Loading..."</p> }
+              }>
+
+                {move || {
+                    post.get()
+                        .map(|p| match p {
+                            Ok(Some(post)) => {
+                                view! { <EditPostForm user=user() post=post/> }.into_view()
+                            }
+                            Ok(None) => view! { <p>"Post Not Found"</p> }.into_view(),
+                            Err(_) => view! { <p>"Server Fn Error"</p> }.into_view(),
+                        })
+                }}
+
+              </Transition>
+            }
         }}
 
       </Transition>
     }
 }
 
-#[component]
-pub fn EditPostForm(post: post::Post) -> impl IntoView {
+#[island]
+pub fn EditPostForm(user: Option<SafeUser>, post: Post) -> impl IntoView {
     let update_post = create_server_action::<UpdatePost>();
+    let content = create_rw_signal(String::new());
+    let toc = create_rw_signal::<Option<String>>(None);
+    let show_post_metadata = create_rw_signal(false);
     view! {
-      <Meta property="og:title" content="Edit Post"/>
-      <Title text="Edit Post"/>
-      <Meta name="description" content="Edit a Post"/>
-      <Meta property="og:description" content="Edit a Post"/>
-      <ActionForm action=update_post class="text-black dark:text-white w-full">
-        <input type="hidden" name="id" id="id" value=post.id/>
+      <ActionForm action=update_post class="w-full text-black dark:text-white">
+        <div class="grid min-h-full w-full grid-cols-2">
+          <section class="text-left flex-col w-full justify-between col-span-2 gap-4 dark:bg-gray-900 bg-slate-50 rounded mb-4 border-2 dark:border-yellow-400 border-gray-300 ">
+            <div on:click=move |_e| {
+                show_post_metadata.update(|b| *b = !*b);
+            }>
 
-        <input
-          type="hidden"
-          name="author_id"
-          id="author_id"
-          value=post.author_id
-        />
-        <p>
-          <label>"Post Title:"</label>
-          <input
-            type="text"
-            name="title"
-            class="w-full rounded border border-gray-500 px-2 py-1 text-lg text-black bg-white"
-            value=post.title
-          />
-        </p>
-        <p>
-          <label>"Post Slug:"</label>
-          <input
-            type="text"
-            name="slug"
-            class="w-full rounded border border-gray-500 px-2 py-1 text-lg text-black bg-white"
-            value=post.slug
-          />
-        </p>
-        <p>
-          <label>"Hero:"</label>
-          <input
-            type="text"
-            name="hero"
-            class="w-full rounded border border-gray-500 px-2 py-1 text-lg text-black bg-white"
-            value=post.hero
-          />
-        </p>
+              <Show
+                when=move || show_post_metadata.get()
+                fallback=move || {
+                    view! {
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 448 512"
+                        class="w-6 inline dark:stroke-white dark:fill-white px-2"
+                      >
+                        <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"></path>
+                      </svg>
+                    }
+                }
+              >
 
-        <p>
-          <label>"Hero Alt:"</label>
-          <input
-            type="text"
-            name="hero_alt"
-            class="w-full rounded border border-gray-500 px-2 py-1 text-lg text-black bg-white"
-            value=post.hero_alt
-          />
-        </p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 448 512"
+                  class="inline w-6 dark:stroke-white dark:fill-white px-2"
+                >
+                  <path d="M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z"></path>
+                </svg>
+              </Show>
+              <h1 class="inline dark:text-white">Post Metadata</h1>
+            </div>
+            <Show
+              when=move || show_post_metadata.get()
+              fallback=|| ().into_view()
+            >
+              <div>
+                <div class="relative my-2 mx-4">
 
-        <p>
-          <label>"Hero Caption:"</label>
-          <input
-            type="text"
-            name="hero_caption"
-            class="w-full rounded border border-gray-500 px-2 py-1 text-lg text-black bg-white"
-            value=post.hero_caption
-          />
-        </p>
-        <p>
-          <label>"Created At:"</label>
-          <input
-            type="text"
-            name="created_at_pretty"
-            placeholder="1970-01-01 00:00:00-00:00"
-            class="w-full rounded border border-gray-500 px-2 py-1 text-lg text-black bg-white"
-            value=post.created_at.to_rfc3339()
-          />
-        </p>
+                  <input type="hidden" name="id" id="id" value=post.id/>
+                  <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-2 border-gray-300 appearance-none dark:text-white dark:border-yellow-400 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    placeholder=" "
+                    value=post.title.clone()
+                  />
+                  <label
+                    for="title"
+                    class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
+                  >
+                    Post Title
+                  </label>
+                </div>
 
-        <p>
-          <label>"Updated At:"</label>
-          <input
-            type="text"
-            name="updated_at_pretty"
-            placeholder="1970-01-01 00:00:00-00:00"
-            class="w-full rounded border border-gray-500 px-2 py-1 text-lg text-black bg-white"
-            value=post.updated_at.to_rfc3339()
-          />
-        </p>
-        <p>
-          <label>"Tags:"</label>
-          <input
-            type="text"
-            name="tags"
-            placeholder=" "
-            class="w-full rounded border border-gray-500 px-2 py-1 text-lg text-black bg-white"
-            value=serde_json::to_string(&post.tags).unwrap()
-          />
-        </p>
-        <p>
-          <label>"Published:"</label>
-          <select
-            name="published"
-            class="w-full rounded border border-gray-500 px-2 py-1 text-lg text-black bg-white"
-          >
-            <option value="false" selected=post.published.to_string()>
-              "False"
-            </option>
-            <option value="true" selected=post.published.to_string()>
-              "True"
-            </option>
-          </select>
-        </p>
-        <p>
-          <label>"Preview:"</label>
-          <select
-            name="preview"
-            class="w-full rounded border border-gray-500 px-2 py-1 text-lg text-black bg-white"
-          >
-            <option value="false" selected=post.preview.to_string()>
-              "False"
-            </option>
-            <option value="true" selected=post.preview.to_string()>
-              "True"
-            </option>
-          </select>
-        </p>
+                <div class="relative mb-2 mx-4">
+                  <input
+                    type="text"
+                    id="slug"
+                    name="slug"
+                    class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent  rounded-lg border-2 border-gray-300 appearance-none dark:text-white dark:border-yellow-400 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    placeholder=" "
+                    value=post.slug.clone()
+                  />
+                  <label
+                    for="slug"
+                    class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
+                  >
+                    Post Slug
+                  </label>
+                </div>
 
-        <p>
-          <label>"Toc:"</label>
-          <textarea
-            id="toc"
-            rows=5
-            name="toc"
-            class="w-full text-black border border-gray-500"
-          >
-            {post.toc}
-          </textarea>
-        </p>
-        <p>
-          <label>"Excerpt:"</label>
-          <textarea
-            id="excerpt"
-            rows=5
-            name="excerpt"
-            class="w-full text-black border border-gray-500"
-          >
-            {post.excerpt}
-          </textarea>
-        </p>
-        <p>
-          <label for="content">"Content:"</label>
-          <br/>
-          <textarea
-            id="content"
-            rows=20
-            name="content"
-            class="w-full text-black border border-gray-500"
-          >
-            {post.content}
-          </textarea>
-        </p>
-        <p class="text-right flex w-full justify-between">
-          <button
-            type="submit"
-            class="rounded bg-blue-500 py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400 disabled:bg-blue-300"
-          >
-            "Edit Post"
-          </button>
-        </p>
+                <div class="relative mb-2 mx-4">
+                  <input
+                    type="text"
+                    id="created_at_pretty"
+                    name="created_at_pretty"
+                    class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent  rounded-lg border-2 border-gray-300 appearance-none dark:text-white dark:border-yellow-400 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    placeholder="1970-01-01T00:00:00-00:00"
+                    value=post.created_at.to_rfc3339()
+                  />
+                  <label
+                    for="created_at_pretty"
+                    class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
+                  >
+                    Post Date
+                  </label>
+                </div>
+                <input
+                  type="hidden"
+                  name="updated_at_pretty"
+                  value=post.updated_at.to_rfc3339()
+                />
+                <div class="relative my-2 mx-4">
+                  <textarea
+                    type="text"
+                    id="excerpt"
+                    name="excerpt"
+                    rows=10
+                    class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-2 border-gray-300 appearance-none dark:text-white dark:border-yellow-400 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    placeholder=" "
+                  >
+                    {post.excerpt.clone().unwrap_or_default()}
+                  </textarea>
+                  <label
+                    for="excerpt"
+                    class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
+                  >
+                    Excerpt
+                  </label>
+                </div>
+                <div class="relative mb-2 mx-4">
+                  <input
+                    type="text"
+                    id="hero"
+                    name="hero"
+                    class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent  rounded-lg border-2 border-gray-300 appearance-none dark:text-white dark:border-yellow-400 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    placeholder=" "
+                    value=post.hero.clone()
+                  />
+                  <label
+                    for="hero"
+                    class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
+                  >
+                    Hero
+                  </label>
+                </div>
+
+                <div class="relative mb-2 mx-4">
+                  <input
+                    type="text"
+                    id="hero_alt"
+                    name="hero_alt"
+                    class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent  rounded-lg border-2 border-gray-300 appearance-none dark:text-white dark:border-yellow-400 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    placeholder=" "
+                    value=post.hero_alt.clone()
+                  />
+                  <label
+                    for="hero_alt"
+                    class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
+                  >
+                    Hero Alt
+                  </label>
+                </div>
+
+                <div class="relative mb-2 mx-4">
+                  <input
+                    type="text"
+                    id="hero_caption"
+                    name="hero_caption"
+                    class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent  rounded-lg border-2 border-gray-300 appearance-none dark:text-white dark:border-yellow-400 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    placeholder=" "
+                    value=post.hero_caption.clone()
+                  />
+                  <label
+                    for="hero_caption"
+                    class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
+                  >
+                    Hero Caption
+                  </label>
+                </div>
+
+                <div class="relative mb-2 mx-4">
+                  <input
+                    type="text"
+                    id="tags"
+                    name="tags"
+                    class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent  rounded-lg border-2 border-gray-300 appearance-none dark:text-white dark:border-yellow-400 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    placeholder=" "
+                    value=serde_json::to_string(&post.tags).unwrap_or_default()
+                  />
+                  <label
+                    for="tags"
+                    class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
+                  >
+                    Post Tags
+                  </label>
+                </div>
+                <div class="relative mb-2 mx-4">
+                  <label
+                    for="preview"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Preview
+                  </label>
+                  <select
+                    id="preview"
+                    name="preview"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    value=post.preview.to_string()
+                  >
+
+                    <option selected=post.preview.to_string() value="false">
+                      False
+                    </option>
+                    <option selected=post.preview.to_string() value="true">
+                      "True"
+                    </option>
+                  </select>
+                </div>
+
+                <div class="relative mb-2 mx-4">
+                  <label
+                    for="published"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Published
+                  </label>
+                  <select
+                    id="published"
+                    name="published"
+                    class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  >
+                    <option selected=post.published.to_string() value="false">
+                      False
+                    </option>
+                    <option selected=post.published.to_string() value="true">
+                      "True"
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </Show>
+          </section>
+          <section class="flex flex-row-reverse w-full justify-between justify-items-end align-items-end col-span-2 bg-transparent rounded border-1 dark:border-yellow-400 border-gray-300">
+            <button
+              type="submit"
+              class="rounded bg-yellow-400 py-2 px-4 m-2 text-black hover:bg-yellow-300 focus:bg-yellow-300"
+            >
+              "Update Post"
+            </button>
+          </section>
+          <div class="w-full h-full pr-4">
+            <input
+              type="hidden"
+              name="author_id"
+              value=match user {
+                  Some(u) => u.id,
+                  None => -1,
+              }
+            />
+
+            <input type="hidden" name="toc" id="toc" value=move || toc.get()/>
+            <label for="content" class="hidden">
+              "Content:"
+            </label>
+            <textarea
+              type="text"
+              id="raw_content"
+              name="raw_content"
+              rows=50
+              class="w-full text-black border border-gray-500"
+              on:input=move |ev| {
+                  cfg_if! {
+                      if #[cfg(not(feature = "ssr"))] { let new_value =
+                      event_target_value(& ev); let output =
+                      js::process_markdown_to_html_with_frontmatter(new_value
+                      .into()); match output { Ok(o) => { content.set(o.content);
+                      toc.set(o.toc); }, Err(e) => leptos::logging::log!("{}", e)
+                      } }
+                  }
+              }
+            >
+
+              {post.raw_content.clone()}
+            </textarea>
+            <input
+              type="hidden"
+              name="content"
+              id="content"
+              value=move || content.get()
+            />
+          </div>
+          <section class="shadow-md rounded">
+            <div
+              class="prose text-black prose dark:prose-invert dark:text-white text-base p-4 bg-slate-200 dark:bg-gray-800 w-full h-full rounded"
+              inner_html=move || content.get()
+            ></div>
+          </section>
+        </div>
       </ActionForm>
     }
 }

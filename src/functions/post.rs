@@ -5,6 +5,10 @@ use chrono::Duration;
 use indexmap::IndexMap;
 use leptos::{expect_context, ServerFnError};
 use leptos_spin_macro::server;
+use serde::{Serialize, Deserialize};
+use serde_with::{serde_as, DisplayFromStr};
+use super::user::get_user;
+
 cfg_if! {
 if #[cfg(feature = "ssr")] {
     use crate::functions::con;
@@ -39,10 +43,43 @@ pub async fn get_post(slug: String) -> Result<Option<Post>, ServerFnError<Benwis
     Ok(post)
 }
 
+
+#[serde_as]
+#[derive(Deserialize, Serialize, Debug, PartialEq)]
+struct AddPostParams {
+    slug: String,
+    title: String,
+    #[serde_as(as = "DisplayFromStr")]
+    author_id: i64,
+    created_at_pretty: String,
+    excerpt: String,
+    raw_content: String,
+    content: String,
+    toc: String,
+    hero: String,
+    hero_alt: String,
+    hero_caption: String,
+    tags: String,
+    #[serde_as(as = "DisplayFromStr")]
+    preview: bool,
+    #[serde_as(as = "DisplayFromStr")]
+    published: bool,
+
+
+}
+
 #[tracing::instrument(level = "info", fields(error), err)]
 #[server(AddPost, "/api")]
-pub async fn add_post(slug: String, title: String, author_id: String, created_at_pretty: String, excerpt: String, content: String,toc: String, hero: String, hero_alt: String, hero_caption: String, tags: String,  preview: String, published: String) -> Result<bool, ServerFnError<BenwisAppError>> {
+pub async fn add_post(slug: String, title: String, author_id: String, created_at_pretty: String, excerpt: String, raw_content: String, content: String,toc: String, hero: String, hero_alt: String, hero_caption: String, tags: String,  preview: String, published: String) -> Result<bool, ServerFnError<BenwisAppError>> {
     let con = con()?;
+
+
+    // Check if User is logged in
+    let user = match get_user().await {
+    Ok(Some(u)) => u,
+    Ok(None) => return Err(BenwisAppError::AuthError.into()),
+    Err(e) => return Err(BenwisAppError::ServerError(e.to_string()).into()),
+    };
 
     let hero = match hero.is_empty(){
         true => None,
@@ -85,10 +122,16 @@ pub async fn add_post(slug: String, title: String, author_id: String, created_at
     "false" => false,
     _ => return Err(BenwisAppError::BadRequest("Invalid string for bool conversion".to_string()).into())
     };
-
-    let created_at: DateTime<Utc> = match DateTime::parse_from_rfc3339(&created_at_pretty){
-        Ok(d) => d.into(),
-        Err(e) => return Err(BenwisAppError::BadRequest("Invalid Date Format. Use RFC3339".to_string()).into())
+    println!("CREATED AT: {created_at_pretty}");
+    let created_at: DateTime<Utc> = {
+        if !created_at_pretty.is_empty() {
+            match DateTime::parse_from_rfc3339(&created_at_pretty){
+                Ok(d) => d.into(),
+                Err(e) => return Err(BenwisAppError::BadRequest("Invalid Date Format. Use RFC3339".to_string()).into())
+            }
+        } else{
+            Utc::now()
+        }
     }; 
 
     let new_post = NewPost{
@@ -96,6 +139,7 @@ pub async fn add_post(slug: String, title: String, author_id: String, created_at
         toc,
         title,
         excerpt, 
+        raw_content,
         content, 
         created_at: created_at.timestamp(),
         updated_at: created_at.timestamp(),
@@ -116,8 +160,16 @@ pub async fn add_post(slug: String, title: String, author_id: String, created_at
 
 #[tracing::instrument(level = "info", fields(error), err)]
 #[server(UpdatePost, "/api")]
-pub async fn update_post(id: i64, slug: String, title: String, author_id: String, excerpt: String, content: String, hero: String, hero_alt: String, hero_caption: String,toc: String,created_at_pretty: String, updated_at_pretty: String,  tags: String,  preview: String, published: String) -> Result<(), ServerFnError<BenwisAppError>> {
+pub async fn update_post(id: i64, slug: String, title: String, author_id: String, excerpt: String, raw_content: String, content: String, hero: String, hero_alt: String, hero_caption: String,toc: String,created_at_pretty: String, updated_at_pretty: String,  tags: String,  preview: String, published: String) -> Result<(), ServerFnError<BenwisAppError>> {
     let con = con()?;
+
+
+    // Check if User is logged in
+    let user = match get_user().await {
+    Ok(Some(u)) => u,
+    Ok(None) => return Err(BenwisAppError::AuthError.into()),
+    Err(e) => return Err(BenwisAppError::ServerError(e.to_string()).into()),
+    };
 
     let hero = match hero.is_empty(){
         true => None,
@@ -178,6 +230,7 @@ pub async fn update_post(id: i64, slug: String, title: String, author_id: String
     slug,
     author_id,
     excerpt,
+    raw_content,
     content,
     hero,
     hero_alt,
@@ -190,7 +243,7 @@ pub async fn update_post(id: i64, slug: String, title: String, author_id: String
     updated_at,
     };
 
-    let post = Post::update_post(updated_post, &con).await?;
+    Post::update_post(updated_post, &con).await?;
     Ok(())
 }
 
@@ -199,6 +252,12 @@ pub async fn update_post(id: i64, slug: String, title: String, author_id: String
 pub async fn delete_post(id: i64) -> Result<(), ServerFnError<BenwisAppError>> {
     let con = con()?;
 
-    let post = Post::delete_post(id, &con).await?;
+    // Check if User is logged in
+    let user = match get_user().await {
+    Ok(Some(u)) => u,
+    Ok(None) => return Err(BenwisAppError::AuthError.into()),
+    Err(e) => return Err(BenwisAppError::ServerError(e.to_string()).into()),
+    };
+    Post::delete_post(id, &con).await?;
     Ok(())
 }

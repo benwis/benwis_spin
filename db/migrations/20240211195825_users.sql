@@ -1,4 +1,3 @@
--- migrate:up
 CREATE TABLE IF NOT EXISTS users (
   id         INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   username   TEXT NOT NULL UNIQUE,
@@ -31,8 +30,3 @@ CREATE TABLE IF NOT EXISTS users (
       UPDATE user_permissions SET updated_at = unixepoch() WHERE id = OLD.id;
   END;
 
--- migrate:down
---DROP TABLE users;
---DROP TABLE user_permissions;
---DROP TRIGGER Trg_User_Updated;
---DROP TRIGGER Trg_Permission_Updated;

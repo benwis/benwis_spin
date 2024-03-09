@@ -1,10 +1,10 @@
--- migrate:up
 CREATE TABLE IF NOT EXISTS posts (
   id         INTEGER PRIMARY KEY AUTOINCREMENT,
   author_id    INTEGER NOT NULL,
   title      TEXT NOT NULL,
   excerpt    TEXT,
   content    TEXT NOT NULL,
+  raw_content    TEXT NOT NULL,
   tags       TEXT,
   slug       TEXT NOT NULL,
   published  INTEGER DEFAULT 0 NOT NULL,
@@ -25,6 +25,3 @@ BEGIN
     UPDATE posts SET updated_at = unixepoch() WHERE id = OLD.id;
 END;
 
--- migrate:down
---DROP TABLE posts;
---DROP TRIGGER Trg_Post_Updated;

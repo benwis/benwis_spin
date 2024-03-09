@@ -17,6 +17,8 @@ pub enum BenwisAppError {
     DBConnectionNotFound,
     #[error("Internal Server Error")]
     InternalServerError,
+    #[error("Server Error: {0}")]
+    ServerError(String),
     #[error("TomlError: {0}")]
     TomlError(String),
     #[error("Argon2Error: {0}")]
@@ -42,6 +44,7 @@ impl BenwisAppError {
         match self {
             BenwisAppError::NotFound => StatusCode::NOT_FOUND,
             BenwisAppError::InternalServerError => StatusCode::INTERNAL_SERVER_ERROR,
+            BenwisAppError::ServerError(_) => StatusCode::INTERNAL_SERVER_ERROR,
             BenwisAppError::Argon2Error(_) => StatusCode::INTERNAL_SERVER_ERROR,
             BenwisAppError::CompilationError(_) => StatusCode::INTERNAL_SERVER_ERROR,
             BenwisAppError::SessionError(_) => StatusCode::INTERNAL_SERVER_ERROR,
