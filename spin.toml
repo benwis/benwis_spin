@@ -7,6 +7,14 @@ authors = ["benwis <ben@celcyon.com>"]
 description = ""
 
 [[trigger.http]]
+route = "/favicon.ico"
+component = "favicon"
+
+[component.favicon]
+source = "target/site/components/spin-fileserver/spin_static_fs.wasm"
+files = [{ source = "target/site/", destination = "/" }]
+
+[[trigger.http]]
 route = "/..."
 component = "benwis-leptos"
 
@@ -25,7 +33,8 @@ route = "/pkg/..."
 component = "ui"
 
 [component.ui]
-source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.1.0/spin_static_fs.wasm", digest = "sha256:96c76d9af86420b39eb6cd7be5550e3cb5d4cc4de572ce0fd1f6a29471536cb4" }
+#source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.1.0/spin_static_fs.wasm", digest = "sha256:96c76d9af86420b39eb6cd7be5550e3cb5d4cc4de572ce0fd1f6a29471536cb4" }
+source = "target/site/components/spin-fileserver/spin_static_fs.wasm"
 files = [{ source = "target/site/pkg", destination = "/" }]
 
 
@@ -34,7 +43,8 @@ route = "/fonts/..."
 component = "fonts"
 
 [component.fonts]
-source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.1.0/spin_static_fs.wasm", digest = "sha256:96c76d9af86420b39eb6cd7be5550e3cb5d4cc4de572ce0fd1f6a29471536cb4" }
+#source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.1.0/spin_static_fs.wasm", digest = "sha256:96c76d9af86420b39eb6cd7be5550e3cb5d4cc4de572ce0fd1f6a29471536cb4" }
+source = "target/site/components/spin-fileserver/spin_static_fs.wasm"
 files = [{ source = "target/site/fonts", destination = "/" }]
 
 
@@ -43,7 +53,8 @@ route = "/img/..."
 component = "images"
 
 [component.images]
-source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.1.0/spin_static_fs.wasm", digest = "sha256:96c76d9af86420b39eb6cd7be5550e3cb5d4cc4de572ce0fd1f6a29471536cb4" }
+#source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.1.0/spin_static_fs.wasm", digest = "sha256:96c76d9af86420b39eb6cd7be5550e3cb5d4cc4de572ce0fd1f6a29471536cb4" }
+source = "target/site/components/spin-fileserver/spin_static_fs.wasm"
 files = [{ source = "target/site/img", destination = "/" }]
 
 [[trigger.http]]
@@ -51,5 +62,8 @@ route = "/components/..."
 component = "components"
 
 [component.components]
-source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.1.0/spin_static_fs.wasm", digest = "sha256:96c76d9af86420b39eb6cd7be5550e3cb5d4cc4de572ce0fd1f6a29471536cb4" }
+#source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.1.0/spin_static_fs.wasm", digest = "sha256:96c76d9af86420b39eb6cd7be5550e3cb5d4cc4de572ce0fd1f6a29471536cb4" }
+source = "target/site/components/spin-fileserver/spin_static_fs.wasm"
 files = [{ source = "target/site/components", destination = "/" }]
+
+
