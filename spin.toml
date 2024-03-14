@@ -11,8 +11,10 @@ route = "/favicon.ico"
 component = "favicon"
 
 [component.favicon]
-source = "target/site/components/spin-fileserver/spin_static_fs.wasm"
-files = [{ source = "target/site/", destination = "/" }]
+source = "wasi/spin-fileserver/spin_static_fs.wasm"
+files = [{ source = "target/site/favicon.ico", destination = "/favicon.ico" }]
+#files = ["target/site/favicon.ico"]
+#environment = { FILE_ROOT = "/target/site" }
 
 [[trigger.http]]
 route = "/..."
@@ -34,7 +36,7 @@ component = "ui"
 
 [component.ui]
 #source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.1.0/spin_static_fs.wasm", digest = "sha256:96c76d9af86420b39eb6cd7be5550e3cb5d4cc4de572ce0fd1f6a29471536cb4" }
-source = "target/site/components/spin-fileserver/spin_static_fs.wasm"
+source = "wasi/spin-fileserver/spin_static_fs.wasm"
 files = [{ source = "target/site/pkg", destination = "/" }]
 
 
@@ -44,7 +46,7 @@ component = "fonts"
 
 [component.fonts]
 #source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.1.0/spin_static_fs.wasm", digest = "sha256:96c76d9af86420b39eb6cd7be5550e3cb5d4cc4de572ce0fd1f6a29471536cb4" }
-source = "target/site/components/spin-fileserver/spin_static_fs.wasm"
+source = "wasi/spin-fileserver/spin_static_fs.wasm"
 files = [{ source = "target/site/fonts", destination = "/" }]
 
 
@@ -54,7 +56,7 @@ component = "images"
 
 [component.images]
 #source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.1.0/spin_static_fs.wasm", digest = "sha256:96c76d9af86420b39eb6cd7be5550e3cb5d4cc4de572ce0fd1f6a29471536cb4" }
-source = "target/site/components/spin-fileserver/spin_static_fs.wasm"
+source = "wasi/spin-fileserver/spin_static_fs.wasm"
 files = [{ source = "target/site/img", destination = "/" }]
 
 [[trigger.http]]
@@ -63,7 +65,7 @@ component = "components"
 
 [component.components]
 #source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.1.0/spin_static_fs.wasm", digest = "sha256:96c76d9af86420b39eb6cd7be5550e3cb5d4cc4de572ce0fd1f6a29471536cb4" }
-source = "target/site/components/spin-fileserver/spin_static_fs.wasm"
-files = [{ source = "target/site/components", destination = "/" }]
+source = "wasi/spin-fileserver/spin_static_fs.wasm"
+files = [{ source = "public/components", destination = "/" }]
 
 

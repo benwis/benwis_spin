@@ -11,6 +11,9 @@ mod session;
 #[cfg(feature = "ssr")]
 mod server;
 
+#[cfg(feature = "ssr")]
+mod rss;
+
 #[cfg(not(feature = "ssr"))]
 mod js;
 
@@ -23,11 +26,9 @@ if #[cfg(feature = "hydrate")] {
 
     #[wasm_bindgen]
     pub fn hydrate() {
-      use routes::*;
 
       console_error_panic_hook::set_once();
       leptos::leptos_dom::HydrationCtx::stop_hydrating();
-      //leptos::mount_to_body(AppRouter);
     }
 }
 }

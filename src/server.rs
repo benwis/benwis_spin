@@ -1,3 +1,4 @@
+use http::Uri;
 use leptos::provide_context;
 use leptos_spin::server_fn::register_explicit;
 use leptos_spin::{render_best_match_to_stream_with_context, RouteTable};
@@ -5,6 +6,7 @@ use spin_sdk::http::{IncomingRequest, ResponseOutparam};
 use spin_sdk::{http_component, sqlite::Connection};
 use std::sync::Arc;
 
+use crate::rss::rss_page;
 use crate::session::SqliteStore;
 
 #[http_component]
@@ -35,6 +37,15 @@ async fn handle_benwis_leptos(req: IncomingRequest, resp_out: ResponseOutparam) 
     register_explicit::<crate::functions::user::GetSafeUser>();
     register_explicit::<crate::functions::post::GetPosts>();
     register_explicit::<crate::functions::dark_mode::ToggleDarkMode>();
+    
+    // Render the rss.xml file page here because it's not handled by Leptos
+    let req_uri = req.uri();
+    let uri = req_uri.parse::<Uri>().expect("Invalid URI");
+    let path = uri.path();
+
+    if path == "/rss.xml"{
+        return rss_page(resp_out, &con).await
+    }
     render_best_match_to_stream_with_context(
         req,
         resp_out,

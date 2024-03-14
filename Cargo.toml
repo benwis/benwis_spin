@@ -9,7 +9,6 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-anyhow = "1"
 cfg-if = "1"
 console_error_panic_hook = "0.1"
 http = "0.2"
@@ -44,6 +43,8 @@ async-trait = "0.1.77"
 rand_core = { version = "0.6.4", optional = true }
 cookie = "0.18.0"
 serde_with = "3.6.1"
+xml = "0.8.10"
+futures-util = "0.3.30"
 
 [features]
 csr = ["leptos/csr", "leptos_meta/csr", "leptos_router/csr"]
