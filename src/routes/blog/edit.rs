@@ -59,6 +59,24 @@ pub fn EditPostForm(user: Option<SafeUser>, post: Post) -> impl IntoView {
     let content = create_rw_signal(String::new());
     let toc = create_rw_signal::<Option<String>>(None);
     let show_post_metadata = create_rw_signal(false);
+
+    let content_ref = create_node_ref::<leptos::html::Textarea>();
+    create_effect(move |_| {
+        cfg_if! {
+            if #[cfg(not(feature = "ssr"))] {
+                let content_node = content_ref.get().expect("This should have loaded");
+                let markdown = content_node.value();
+                
+                let output = js::process_markdown_to_html_with_frontmatter(markdown.into());
+                match output {
+                    Ok(o) => {
+                        content.set(o.content);
+                        toc.set(o.toc);
+                    }
+                    Err(e) => leptos::logging::log!("{}", e),
+                }
+        }}
+    });
     view! {
       <ActionForm action=update_post class="w-full text-black dark:text-white">
         <div class="grid min-h-full w-full grid-cols-2">
@@ -250,7 +268,6 @@ pub fn EditPostForm(user: Option<SafeUser>, post: Post) -> impl IntoView {
                     id="preview"
                     name="preview"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    value=post.preview.to_string()
                   >
 
                     <option selected=post.preview.to_string() value="false">
@@ -310,9 +327,11 @@ pub fn EditPostForm(user: Option<SafeUser>, post: Post) -> impl IntoView {
             <textarea
               type="text"
               id="raw_content"
+              _ref=content_ref
               name="raw_content"
               rows=50
               class="w-full text-black border border-gray-500"
+
               on:input=move |ev| {
                   cfg_if! {
                       if #[cfg(not(feature = "ssr"))] { let new_value =
