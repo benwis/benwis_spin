@@ -1,12 +1,27 @@
-use crate::functions::post::get_posts;
+use crate::functions::post::{get_posts, AddPost, DeletePost, UpdatePost};
+use crate::providers::AuthContext;
 use leptos::*;
 use leptos_meta::*;
+use leptos_router::{ActionForm, A};
 
 #[component]
 pub fn Blog() -> impl IntoView {
+    let add_post = create_server_multi_action::<AddPost>();
+    let update_post = create_server_action::<UpdatePost>();
+    let delete_post = create_server_action::<DeletePost>();
     // list of posts is loaded from the server in reaction to changes
-    let posts = create_resource(move || {}, move |_| get_posts(None));
+    let posts = create_resource(
+        move || {
+            (
+                add_post.version().get(),
+                update_post.version().get(),
+                delete_post.version().get(),
+            )
+        },
+        move |_| get_posts(None),
+    );
 
+    let auth_context = use_context::<AuthContext>().expect("Failed to get AuthContext");
     view! {
       <Meta property="og:title" content="benwis Blog"/>
       <Title text="benwis Blog"/>
@@ -38,7 +53,7 @@ pub fn Blog() -> impl IntoView {
                                 ]
                             }
                             Ok(posts) => {
-                                if posts.len() == 0 {
+                                if posts.is_empty() {
                                     vec![
                                         view! {
                                           <p class="text-black dark:text-white">
@@ -52,6 +67,9 @@ pub fn Blog() -> impl IntoView {
                                         .into_iter()
                                         .filter(|post| { post.published })
                                         .map(move |post| {
+                                            let post_slug: StoredValue<String> = store_value(
+                                                post.slug.clone(),
+                                            );
                                             view! {
                                               <section>
                                                 <a
@@ -70,6 +88,29 @@ pub fn Blog() -> impl IntoView {
                                                     <p class="text-gray-500">{post.excerpt}</p>
                                                   </li>
                                                 </a>
+                                                <Transition fallback=move || ()>
+                                                  {move || {
+                                                      let user = move || match auth_context.user.get() {
+                                                          Some(Ok(Some(user))) => Some(user),
+                                                          Some(Ok(None)) => None,
+                                                          Some(Err(_)) => None,
+                                                          None => None,
+                                                      };
+                                                      view! {
+                                                        <Show when=move || user().is_some() fallback=|| ()>
+                                                          <A href=format!(
+                                                              "{}/edit",
+                                                              post_slug.get_value(),
+                                                          )>"Edit Post"</A>
+                                                          <ActionForm action=delete_post>
+                                                            <input type="hidden" name="id" value=post.id/>
+                                                            <input type="submit" value="Delete Post"/>
+                                                          </ActionForm>
+                                                        </Show>
+                                                      }
+                                                  }}
+
+                                                </Transition>
                                               </section>
                                             }
                                                 .into_any()

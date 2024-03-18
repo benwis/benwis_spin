@@ -16,7 +16,6 @@ pub fn Post() -> impl IntoView {
         move || params.get().map(|params| params.slug).ok().unwrap(),
         move |slug| get_post(slug.unwrap_or_default()),
     );
-
     view! {
       <Transition fallback=move || {
           view! { <p>"Loading..."</p> }

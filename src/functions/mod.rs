@@ -1,8 +1,10 @@
 #![allow(unused_variables)]
 #![allow(unused_imports)]
+pub mod auth;
 pub mod dark_mode;
 pub mod file;
 pub mod post;
+pub mod user;
 use crate::errors::BenwisAppError;
 use cfg_if::cfg_if;
 use leptos::server_fn::server_fn_error;

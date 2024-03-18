@@ -384,10 +384,14 @@ pre {
 	/* label */ 
 	color: var(--red)
 }
+leptos-island{
+    display: contents;
+}
 /* Table of Contents Styling */
-.dark .table-of-contents-parent {
+/*.dark .table-of-contents-parent {
  background-color: var(--dark-bg);
 }
+*/
  .table-of-contents-parent {
 	background-color: var(--light-bg);
 }

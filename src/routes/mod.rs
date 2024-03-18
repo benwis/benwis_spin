@@ -9,12 +9,13 @@ pub use portfolio::*;
 pub mod nedry;
 pub mod notfound;
 pub use notfound::*;
-
+pub mod auth;
+pub use auth::*;
 pub use nedry::*;
 
 use crate::error_template::ErrorTemplate;
 use crate::layouts::Default;
-use crate::providers::provide_color_scheme;
+use crate::providers::{provide_auth, provide_color_scheme, AuthContext};
 use crate::routes::Blog;
 use leptos::*;
 use leptos_meta::*;
@@ -24,6 +25,8 @@ use leptos_router::*;
 pub fn AppRouter() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
+    provide_auth();
+    let auth_context = use_context::<AuthContext>().expect("Failed to get AuthContext");
     _ = provide_color_scheme();
 
     view! {
@@ -90,11 +93,45 @@ pub fn AppRouter() -> impl IntoView {
 
               ssr=SsrMode::Async
             />
+            <Route
+              path="posts/add"
+              view=move || {
+                  view! { <AddPost/> }
+              }
+            />
+
+            <Route
+              path="posts/:slug/edit"
+              view=move || {
+                  view! { <EditPost/> }
+              }
+            />
 
             <Route
               path="nedry"
               view=move || {
                   view! { <Nedry/> }
+              }
+            />
+
+            <Route
+              path="signup"
+              view=move || {
+                  view! { <Join action=auth_context.signup/> }
+              }
+            />
+
+            <Route
+              path="login"
+              view=move || {
+                  view! { <Login action=auth_context.login/> }
+              }
+            />
+
+            <Route
+              path="logout"
+              view=move || {
+                  view! { <Logout action=auth_context.logout/> }
               }
             />
 
