@@ -4,11 +4,11 @@ use cfg_if::cfg_if;
 use chrono::Duration;
 use indexmap::IndexMap;
 use leptos::{expect_context, ServerFnError};
-use leptos_spin_macro::server;
 use serde::{Serialize, Deserialize};
 use serde_with::{serde_as, DisplayFromStr};
 use super::user::get_user;
 use chrono::{DateTime, Utc};
+use leptos::server;
 
 cfg_if! {
 if #[cfg(feature = "ssr")] {

@@ -83,9 +83,9 @@ lib-default-features = false
 assets-dir = "public"
 
 [patch.crates-io]
-leptos = { path = '../../leptos/leptos' }
-leptos_config = { path = '../../leptos/leptos_config' }
-leptos_meta = { path = '../../leptos/meta' }
-leptos_router = { path = '../../leptos/router' }
-leptos_integration_utils = { path = '../../leptos/integrations/utils' }
+leptos = { path = '../leptos/leptos' }
+leptos_config = { path = '../leptos/leptos_config' }
+leptos_meta = { path = '../leptos/meta' }
+leptos_router = { path = '../leptos/router' }
+leptos_integration_utils = { path = '../leptos/integrations/utils' }
 

@@ -3,7 +3,7 @@ use std::borrow::Cow;
 use cfg_if::cfg_if;
 use leptos::{use_context, expect_context, ServerFnError};
 use crate::models::User;
-use leptos_spin_macro::server;
+use leptos::server;
 
 cfg_if! {
 if #[cfg(feature = "ssr")] {
