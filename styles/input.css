@@ -795,6 +795,10 @@ leptos-island{
             letter-spacing: var(--heading-small-letter-spacing);
         }
 
+        #site-nav__dark-mode-toggle-trigger {
+            border: 0;
+            background: none;
+        }
 
         #site-nav__dark-mode-toggle-input {
             display: none;
