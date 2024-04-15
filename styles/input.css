@@ -681,6 +681,8 @@ leptos-island{
         #site-layout {
             display: flex;
             flex-direction: column;
+            align-items: stretch;
+            justify-content: space-between;
             min-height: 100vh;
             width: 100%;
         }
@@ -1376,11 +1378,12 @@ leptos-island{
             display: flex;
             flex-direction: column;
             justify-items: center;
+            flex-grow: 1;
             gap: var(--frame-padding);
             max-width: var(--max-content-width);
             padding: 0 var(--frame-padding);
             margin: 0 auto;
-            flex: 1;
+
         }
 
         #page__header {
@@ -1557,6 +1560,7 @@ leptos-island{
             display: flex;
             flex-direction: column;
             justify-items: center;
+            flex-grow: 1;
             gap: var(--frame-padding);
             max-width: var(--max-content-width);
             padding: 0 var(--frame-padding);
