@@ -21,6 +21,14 @@ pub fn Default(children: Children) -> impl IntoView {
       />
 
       <Body class="h-screen bg-slate-50 dark:bg-gray-900 max-w-7xl mx-auto flex flex-col"/>
+
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Orbitron:wght@400..900&display=swap"
+          rel="stylesheet">
+
       <Link rel="shortcut icon" type_="image/ico" href="/favicon.ico"/>
       <Link
         rel="alternate"
