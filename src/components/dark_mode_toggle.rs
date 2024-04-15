@@ -18,6 +18,7 @@ pub fn DarkModeToggle() -> impl IntoView {
                     value=move || (!(color_scheme.prefers_dark).get()).to_string()
                 />
                 <button
+                    id="site-nav__dark-mode-toggle-trigger"
                     type="submit"
                     aria-label="toggle between dark and light mode"
                     class=""
