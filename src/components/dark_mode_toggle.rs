@@ -9,8 +9,6 @@ pub fn DarkModeToggle() -> impl IntoView {
         <li id="site-nav__dark-mode-toggle">
 
             <ActionForm action=color_scheme.action>
-                <input id="site-nav__dark-mode-toggle-input" type="radio" name="dark-mode"/>
-
                 <input
                     id="site-nav__dark-mode-toggle-input"
                     type="hidden"
