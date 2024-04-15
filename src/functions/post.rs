@@ -24,8 +24,10 @@ if #[cfg(feature = "ssr")] {
 #[server(GetPosts, "/api", "GetJson")]
 pub async fn get_posts(num: Option<usize>) -> Result<Vec<Post>, ServerFnError<BenwisAppError>> {
     let con = con()?;
-    let posts = Post::get_posts(&con)?;
-
+    let mut posts = Post::get_posts(&con)?;
+    if let Some(count) = num{
+        posts.truncate(count);
+    }
     // Set Cache-Control headers
     let res = expect_context::<ResponseOptions>();
     res.append_header("Cache-Control", "private, max-age=3600".as_bytes());

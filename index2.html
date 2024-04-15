@@ -1,0 +1,2250 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ben Wishovic</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Orbitron:wght@400..900&display=swap"
+          rel="stylesheet">
+
+    <style>
+        /**
+         * Three main body templates are laid out in this html doc.
+         */
+        #home {
+            display: none !important;
+        }
+        #page {
+             /* display: none !important; */
+        }
+
+        #archive {
+             display: none !important;
+        }
+
+        :root {
+            --default-font-family: "Archivo", "sans-serif";
+            --accent-font-family: "Orbitron", "sans-serif";
+
+
+            --heading-large-font-family: var(--accent-font-family);
+            --heading-large-font-size: clamp(2rem, 6vw, 5rem);
+            --heading-large-font-weight: 600;
+            --heading-large-letter-spacing: 0.025em;
+
+            --heading-medium-font-family: var(--accent-font-family);
+            --heading-medium-font-size: 1.625rem;
+            --heading-medium-font-weight: 600;
+            --heading-medium-letter-spacing: 0.05em;
+
+            --heading-small-font-family: var(--accent-font-family);
+            --heading-small-font-size: 1rem;
+            --heading-small-font-weight: 800;
+            --heading-small-letter-spacing: 0.1em;
+
+            --heading-tiny-font-family: var(--accent-font-family);
+            --heading-tiny-font-size: 0.825rem;
+            --heading-tiny-font-weight: 700;
+            --heading-tiny-letter-spacing: 0.05em;
+
+
+            --text-regular-font-family: var(--default-font-family);
+            --text-regular-font-size: clamp(1.125rem, 1.5vw, 1.325rem);
+            --text-regular-font-weight: 400;
+            --text-regular-font-weight-emphasis: 600;
+            --text-regular-letter-spacing: 0em;
+            --text-regular-line-height: 1.5;
+
+            --text-small-font-family: var(--default-font-family);
+            --text-small-font-size: clamp(0.75rem, 1.125vw, 1rem);
+            --text-small-font-weight: 400;
+            --text-small-font-weight-emphasis: 600;
+            --text-small-letter-spacing: 0em;
+            --text-small-line-height: 1.3;
+
+            --max-content-width: 1600px;
+            --sidebar-width: 15rem;
+            --spacing-medium: 2.5rem;
+            --spacing-regular: 1rem;
+            --spacing-small: 0.5rem;
+            --spacing-tiny: 0.25rem;
+
+            --frame-padding: var(--spacing-medium);
+            --button-padding-vert: 0.5rem;
+            --button-padding-horz: 2.5rem;
+
+            --brand-color-1: #64a6b1;
+            --brand-color-2: #22315c;
+            --accent-color-1: #ebd119;
+            --accent-color-2: #000030;
+            --framework-color: #e4f2e5;
+            --paper-color: #FFFFFF;
+        }
+
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --brand-color-1: #64a6b1;
+                --brand-color-2: white;
+                --accent-color-1: #000030;
+                --accent-color-2: #ebd119;
+                --framework-color: #151520;
+                --paper-color: #1f2433;
+            }
+        }
+
+        /** mappings **/
+        html {
+            --heading-color: var(--brand-color-2);
+            --link-color: var(--brand-color-1);
+            --meta-color: var(--brand-color-2);
+            --text-color: var(--brand-color-2);
+
+        }
+
+        @media (prefers-color-scheme: dark) {
+            html {
+                --heading-color: white;
+                --link-color: var(--brand-color-1);
+                --meta-color: white;
+                --text-color: #a8c5ce;
+            }
+        }
+
+        /**
+         * Light reset
+         * ----------------------------------------------------------------
+         */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            min-width: 375px;
+            font-family: var(--default-font-family);
+            background-color: var(--paper-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            overflow-y: scroll;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--accent-font-family);
+            color: var(--heading-color);
+            margin: 0;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /**
+         * Styled Content
+         * ----------------------------------------------------------------
+         */
+        .content {
+            font-family: var(--text-regular-font-family);
+            font-size: var(--text-regular-font-size);
+            font-weight: var(--text-regular-font-weight);
+            letter-spacing: var(--text-regular-letter-spacing);
+            line-height: var(--text-regular-line-height);
+        }
+
+        .content h1 {
+            font-size: 2em;
+        }
+
+        .content h2 {
+            font-size: 1.625em;
+        }
+
+        .content h2:not(:first-child) {
+            margin-top: 1em;
+        }
+
+        .content h3 {
+            font-size: 1.325em;
+        }
+
+        .content h3:not(:first-child) {
+            margin-top: 1em;
+        }
+
+        .content h4 {
+            font-size: 1.25em;
+        }
+
+        .content h4:not(:first-child) {
+            margin-top: 1em;
+        }
+
+        .content h5 {
+            font-size: 1.125em;
+        }
+
+        .content h5:not(:first-child) {
+            margin-top: 1em;
+        }
+
+        .content h6 {
+            font-size: 1em;
+        }
+
+        .content h6:not(:first-child) {
+            margin-top: 1em;
+        }
+
+        .content p {
+            margin-bottom: 1em;
+        }
+
+        .content ul,
+        .content ol {
+            margin-bottom: 1em;
+        }
+
+        .content a {
+            color: var(--brand-color-1);
+            border-bottom: 1px dashed;
+        }
+
+        .content hr {
+            background-color: var(--framework-color);
+            border: 0;
+            height: 2px;
+            margin: 1.5em 0;
+        }
+
+        .content blockquote {
+            position: relative;
+            padding: 2em;
+            margin-left: 0;
+            margin-right: 0;
+            border-left: 0.25em solid var(--accent-color-1)
+        }
+
+        .content blockquote::before {
+            content: " ";
+            background-color: var(--accent-color-1);
+            opacity: 0.1;
+            position: absolute;
+            z-index: -1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .content img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .content input[type="email"],
+        .content input[type="number"],
+        .content input[type="password"],
+        .content input[type="search"],
+        .content input[type="tel"],
+        .content input[type="text"],
+        .content input[type="date"],
+        .content input[type="datetime"],
+        .content input[type="datetime-local"],
+        .content input[type="month"],
+        .content input[type="week"],
+        .content input[type="time"],
+        .content select,
+        .content textarea {
+            padding: 0.25em;
+            border: 2px solid var(--framework-color);
+            font-family: var(--text-regular-font-family);
+            font-size: var(--text-regular-font-size);
+            font-weight: var(--text-regular-font-weight);
+            color: var(--brand-color-1);
+        }
+
+        .content textarea {
+
+        }
+
+        .content legend {
+            font-weight: var(--text-regular-font-weight-emphasis);
+        }
+
+        .content fieldset {
+            border: 2px solid var(--framework-color);
+            margin-bottom: 1.5em;
+        }
+
+        .content input[type="button"],
+        .content input[type="submit"],
+        .content input[type="reset"],
+        .content button {
+            background-color: transparent;
+            color: var(--brand-color-1);
+            border: 2px solid var(--brand-color-1);
+            padding: var(--button-padding-vert) var(--button-padding-horz);
+            font-family: var(--heading-small-font-family);
+            font-size: var(--heading-small-font-size);
+            font-weight: var(--heading-small-font-weight);
+            letter-spacing: var(--heading-small-letter-spacing);
+            display: inline-block;
+        }
+
+        /* fix margin collapse */
+        .content *:last-child {
+            margin-bottom: 0;
+        }
+
+        .content caption {
+            margin: var(--spacing-regular) 0;
+            font-style: italic;
+            font-weight: lighter;
+            font-family: var(--text-small-font-family);
+            font-size: var(--text-small-font-size);
+            font-weight: var(--text-small-font-weight);
+            letter-spacing: var(--text-small-letter-spacing);
+        }
+
+        .content table {
+            border-collapse: collapse;
+        }
+
+        .content tr {
+            overflow: hidden;
+        }
+        .content th {
+            color: var(--brand-color-1);
+            font-family: var(--heading-small-font-family);
+            font-size: var(--heading-small-font-size);
+            font-weight: var(--heading-small-font-weight);
+            letter-spacing: var(--heading-small-letter-spacing);
+        }
+        .content td {
+            position: relative;
+            border-top: 1px solid var(--framework-color);
+            padding: var(--spacing-small);
+        }
+        .content tr:nth-child(odd) td:before{
+
+            position: absolute;
+            opacity: 0.325;
+            background-color: var(--framework-color);
+            width: calc( 100% + (var(--spacing-small) * 2));
+            height: 100%;
+            content: "";
+            top: 0;
+            left: 0;
+            z-index: -1;
+
+
+        }
+
+        /**
+         * Site
+         * ----------------------------------------------------------------
+         */
+
+        #site-viewport {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 100vw;
+            width: 100%;
+            min-height: 100vh;
+            justify-content: center;
+
+        }
+
+        #site-layout {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        #site-header,
+        #site-footer {
+            flex-shrink: 1;
+            width: 100%;
+        }
+
+        #site-body {
+            flex-grow: 1;
+            width: 100%;
+            position: relative;
+        }
+
+
+        /**
+         * Site Header
+         * ----------------------------------------------------------------
+         */
+
+        #site-header {
+            display: flex;
+            justify-content: center;
+        }
+
+        #site-header__row {
+            width: 100%;
+            max-width: var(--max-content-width);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--frame-padding);
+            gap: var(--spacing-regular);
+        }
+
+        @media screen and (min-width: 768px) {
+            #site-header__row {
+                flex-direction: row;
+            }
+        }
+
+        #site-header__site-title {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--spacing-regular);
+        }
+
+        @media screen and (min-width: 450px) {
+            #site-header__site-title {
+                flex-direction: row;
+            }
+        }
+
+        #site-header__site-logo-type {
+            display: block;
+            width: auto;
+            height: var(--spacing-regular);
+        }
+
+        #site-header__site-logo-type .st0 {
+            fill: var(--brand-color-1);
+        }
+
+        #site-header__site-logo-type .st1 {
+            fill: var(--brand-color-2);
+        }
+
+        #site-header__site-logo-mark {
+            display: block;
+            width: auto;
+            height: var(--spacing-medium);
+        }
+
+        #site-header__site-logo-mark .st0 {
+            fill: var(--brand-color-1);
+        }
+
+        #site-header__site-logo-mark .st1 {
+            fill: var(--brand-color-2);
+        }
+
+
+        /**
+         * Site Nav
+         * ----------------------------------------------------------------
+         */
+
+        #site-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #site-nav__menu {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            gap: 1rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        .site-nav__link {
+            text-decoration: none;
+            font-family: var(--heading-small-font-family);
+            font-size: var(--heading-small-font-size);
+            font-weight: var(--heading-small-font-weight);
+            letter-spacing: var(--heading-small-letter-spacing);
+        }
+
+
+        #site-nav__dark-mode-toggle-input {
+            display: none;
+        }
+
+        #site-nav__dark-mode-toggle-label:hover {
+            cursor: pointer;
+        }
+
+        #site-nav__dark-mode-toggle-light {
+            fill: var(--link-color);
+        }
+
+        #site-nav__dark-mode-toggle-dark {
+            fill: var(--link-color);
+        }
+
+        @media (prefers-color-scheme: light) {
+            #site-nav__dark-mode-toggle-light {
+                display: none;
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            #site-nav__dark-mode-toggle-dark {
+                display: none;
+            }
+        }
+
+
+        /**
+         * Site Footer
+         * ----------------------------------------------------------------
+         */
+
+        #site-footer {
+            display: flex;
+            justify-content: center;
+        }
+
+        #site-footer__row {
+            width: 100%;
+            max-width: var(--max-content-width);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--frame-padding);
+        }
+
+        #site-footer__details {
+            display: flex;
+            list-style: none;
+            flex-direction: column;
+            gap: var(--spacing-small);
+            margin: 0;
+            padding: 0;
+        }
+
+        @media (min-width: 768px) {
+            #site-footer__details {
+                flex-direction: row;
+                gap: 0;
+            }
+        }
+
+        .site-footer__detail {
+            text-align: center;
+        }
+
+        .site-footer__detail {
+            font-family: var(--heading-tiny-font-family);
+            font-size: var(--heading-tiny-font-size);
+            font-weight: var(--heading-tiny-font-weight);
+            letter-spacing: var(--heading-tiny-letter-spacing);
+        }
+
+        @media (min-width: 768px) {
+            .site-footer__detail + .site-footer__detail:before {
+                content: "|";
+                padding: 0 var(--spacing-small);
+                color: var(--framework-color)
+            }
+        }
+
+        .site-footer__detail a {
+            color: var(--brand-color-1);
+        }
+
+
+        /**
+         * Components
+         * ----------------------------------------------------------------
+         */
+
+        .button {
+            border: 2px solid;
+            padding: var(--button-padding-vert) var(--button-padding-horz);
+            font-family: var(--heading-small-font-family);
+            font-size: var(--heading-small-font-size);
+            font-weight: var(--heading-small-font-weight);
+            letter-spacing: var(--heading-small-letter-spacing);
+            display: inline-block;
+        }
+
+        .post-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            width: 100%;
+            position: relative;
+        }
+        .post-card__underlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -0;
+            mix-blend-mode: luminosity;
+            opacity: 0.25;
+            object-fit: cover;
+        }
+        .post-card__layout {
+            padding: var(--frame-padding);
+            display: flex;
+            flex-direction: column;
+            align-content: flex-end;
+            z-index: 1;
+        }
+
+        .post-card__image {
+            aspect-ratio: 16/9;
+            display: block;
+            object-fit: cover;
+            width: 100%;
+            height: auto;
+            margin-bottom: var(--spacing-regular);
+        }
+
+        .post-card__heading {
+            font-family: var(--heading-medium-font-family);
+            font-size: var(--heading-medium-font-size);
+            font-weight: var(--heading-medium-font-weight);
+            letter-spacing: var(--heading-medium-letter-spacing);
+            color: var(--heading-color);
+        }
+
+        .post-card__meta {
+            margin-top: var(--spacing-tiny);
+            font-family: var(--text-small-font-family);
+            font-size: var(--text-small-font-size);
+            font-weight: var(--text-small-font-weight-emphasis);
+            letter-spacing: var(--text-small-letter-spacing);
+            line-height: var(--text-small-line-height);
+            color: var(--meta-color);
+        }
+
+        .post-card__excerpt {
+            margin-top: var(--spacing-regular);
+            font-family: var(--text-small-font-family);
+            font-size: var(--text-small-font-size);
+            font-weight: var(--text-small-font-weight);
+            letter-spacing: var(--text-small-letter-spacing);
+            line-height: var(--text-small-line-height);
+        }
+
+
+        /**
+         * Home
+         * ----------------------------------------------------------------
+         */
+
+        /**
+            NOTE: the id `home-template` needs to be added to the body tag for this template so
+                  that we can hide the heading logo and present it in the middle of the screen.
+        **/
+        @media screen and (min-width: 1024px) {
+            #home-template #site-header__site-logo-mark,
+            #home-template #site-header__site-logo-type {
+                display: none;
+            }
+        }
+
+        #home-template #site-body {
+            display: flex;
+        }
+
+        #home {
+            display: grid;
+        }
+
+        @media screen and (min-width: 768px) {
+            #home {
+                grid-template-columns: 1fr 4fr;
+                width: 100%;
+            }
+        }
+
+        @media screen and (min-width: 768px) and (max-width: 1023px) {
+            #home__header {
+                grid-column-start: 1;
+                grid-row-start: 1;
+            }
+
+            #home__about {
+                grid-column-start: 1;
+                grid-row: 1 / span 2;
+            }
+
+
+            #home__blog {
+                grid-column-start: 2;
+                grid-row-start: 1;
+            }
+
+            #home__portfolio {
+                grid-column-start: 2;
+                grid-row-start: 2;
+            }
+        }
+
+        @media screen and (min-width: 1024px) {
+            #home {
+                display: grid;
+                grid-template-columns: 2fr 3fr;
+            }
+
+            #home__about {
+                grid-column-start: 1;
+                grid-row-start: 2;
+            }
+        }
+
+        #home__header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-end;
+        }
+        @media screen and (max-width: 1023px) {
+            #home__header {
+                display: none;
+            }
+        }
+
+        #home__header-body {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 2rem;
+            padding: var(--frame-padding);
+            flex-direction: row;
+        }
+
+        #home__site-logo-type-wrap {
+            flex-grow: 2;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        #home__site-logo-type {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        @media screen and (min-width: 640px)  and (max-width: 1023px) {
+            #home__site-logo-type {
+                width: 12rem;
+                height: auto;
+                position: absolute;
+                top: 1.625rem;
+                left: 8rem;
+            }
+        }
+
+        #home__site-logo-type .st0 {
+            fill: var(--brand-color-1);
+        }
+
+        #home__site-logo-type .st1 {
+            fill: var(--brand-color-2);
+        }
+
+        #home__site-logo-mark {
+            display: block;
+            width: 75%;
+            height: auto;
+        }
+
+        @media screen and (min-width: 640px)  and (max-width: 1023px) {
+            #home__site-logo-mark {
+                width: auto;
+                height: 2rem;
+                position: absolute;
+                top: 1rem;
+                left: 2rem;
+            }
+        }
+
+        @media screen and (min-width: 1024px) {
+            #home__site-logo-mark {
+                width: 244px;
+                max-width: 244px;
+            }
+        }
+
+        #home__site-logo-mark .st0 {
+            fill: var(--brand-color-1);
+        }
+
+        #home__site-logo-mark .st1 {
+            fill: var(--brand-color-2);
+        }
+
+        #home__about {
+            display: flex;
+            justify-content: flex-end;
+            position: relative;
+        }
+        #home__about-body {
+            width: 100%;
+        }
+        @media screen and (min-width: 1024px) {
+            #home__about-body {
+                width: 325px;
+            }
+        }
+
+        #home__about-rule {
+            height: 0.5rem;
+            width: 100%;
+            right: 0;
+            background-color: var(--brand-color-1);
+            position: absolute;
+        }
+        @media screen and (min-width: 1024px) {
+            #home__about-rule {
+                width: 75%;
+            }
+        }
+        #home__about-layout {
+            padding: var(--frame-padding);
+            display: flex;
+            flex-direction: column;
+            gap: var(--frame-padding);
+            align-items:flex-end;
+        }
+        @media screen and (min-width:640px) {
+            #home__about-layout {
+                flex-direction: row;
+                align-items:flex-start;
+            }
+        }
+        @media screen and (min-width: 1280px) {
+            #home__about-layout {
+                flex-direction: column;
+                }
+        }
+        #home__about-summary {
+            flex-grow: 1;
+            width: 100%;
+        }
+        #home__about-pagination {
+
+            display: flex;
+            justify-content: flex-end;
+        }
+        @media (min-width: 640px) and (max-width: 1279px) {
+            #home__about-pagination .button {
+                writing-mode: vertical-lr;
+                padding: var(--button-padding-horz) var(--button-padding-vert);
+            }
+        }
+
+
+        /** Home > Blog Section ------------------------- **/
+
+        #home__blog {
+            position: relative;
+            display: flex;
+            align-items: stretch;
+        }
+
+        @media screen and (max-width: 1023px) {
+            #home__blog-posts-wrapper {
+                background-color: var(--brand-color-2);
+                display: flex;
+                height: 100%;
+                align-items: flex-start;
+            }
+        }
+
+        @media screen and (min-width: 768px) and (max-width: 1023px) {
+            #home__blog {
+                align-items: stretch;
+            }
+        }
+
+
+        #home__blog-rule {
+            height: 0.5rem;
+            width: 100vw;
+            background-color: var(--brand-color-2);
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        @media screen and (min-width: 1024px) {
+            #home__blog-rule {
+                display: none;
+            }
+        }
+
+        #home__blog-layout {
+            display: flex;
+            width: 100%;
+            align-items: flex-end;
+            flex-direction: column;
+        }
+
+        @media screen and (max-width: 639px) {
+            #home__blog-layout {
+                background-color: var(--brand-color-2);
+            }
+        }
+
+
+        @media screen and (min-width: 640px) {
+            #home__blog-layout {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+        }
+
+        @media screen and (min-width: 768px) and (max-width: 1023px) {
+            #home__blog-layout {
+                align-items: flex-start;
+
+            }
+        }
+
+        @media screen and (min-width: 1024px) {
+            #home__blog-layout {
+                align-items: flex-end;
+            }
+        }
+
+        #home__blog-posts {
+            display: grid;
+            width: 100%;
+            height: 100%;
+            grid-template-columns: 1fr;
+            background-color: var(--brand-color-2);
+            --heading-color: var(--paper-color);
+
+        }
+
+        @media (min-width: 1280px) {
+            #home__blog-posts {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        #home__blog-posts .post-card {
+            aspect-ratio: 1;
+        }
+
+        @media (max-width: 1279px) {
+            #home__blog-posts .post-card {
+                aspect-ratio: unset;
+            }
+        }
+
+        #home__blog-posts .post-card__meta {
+            color: var(--brand-color-1);
+        }
+
+        #home__blog-pagination {
+            margin: var(--frame-padding);
+            display: flex;
+            justify-content: flex-end;
+
+        }
+
+        @media (max-width: 639px) {
+            #home__blog-pagination .button {
+                color: var(--accent-color-1);
+                border-color: var(--accent-color-1);
+            }
+        }
+
+        @media (min-width: 640px) and (max-width: 1279px) {
+            #home__blog-pagination .button {
+                writing-mode: vertical-lr;
+                padding: var(--button-padding-horz) var(--button-padding-vert);
+            }
+        }
+
+        /** Home > Portfolio Section ------------------------- **/
+
+        #home__portfolio {
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        #home__portfolio-rule {
+            height: 0.5rem;
+            width: 100vw;
+            background-color: var(--accent-color-1);
+            position: absolute;
+        }
+
+        #home__portfolio-layout {
+            display: flex;
+            width: 100%;
+            align-items: flex-end;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media screen and (min-width: 640px) {
+            #home__portfolio-layout {
+                flex-direction: row;
+                align-items: flex-start;
+
+            }
+        }
+
+        #home__portfolio-posts {
+            display: grid;
+            width: 100%;
+            heigth: 100%;
+            grid-template-columns: 1fr;
+            background-color: var(--accent-color-1);
+            --heading-color: var(--brand-color-2);
+        }
+
+        @media (min-width: 1280px) {
+            #home__portfolio-posts {
+                max-width: 650px;
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        #home__portfolio-posts .post-card {
+            aspect-ratio: 4/2;
+        }
+
+        @media (max-width: 1279px) {
+
+            #home__portfolio-posts .post-card {
+                aspect-ratio: unset;
+            }
+        }
+
+        #home__portfolio-pagination {
+            margin: var(--frame-padding);
+        }
+
+        @media (max-width: 639px) {
+            #home__portfolio-pagination .button {
+                color: var(--brand-color-2);
+                border-color: var(--brand-color-2);
+            }
+        }
+
+        @media (min-width: 640px) and (max-width: 1279px) {
+            #home__portfolio-pagination .button {
+                writing-mode: vertical-lr;
+                padding: var(--button-padding-horz) var(--button-padding-vert);
+            }
+        }
+
+
+        /**
+         * Page
+         * ----------------------------------------------------------------
+         */
+        #page {
+            display: flex;
+            flex-direction: column;
+            justify-items: center;
+            gap: var(--frame-padding);
+            max-width: var(--max-content-width);
+            padding: 0 var(--frame-padding);
+            margin: 0 auto;
+        }
+
+        #page__header {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-small);
+        }
+
+        #page__heading {
+            font-family: var(--heading-large-font-family);
+            font-size: var(--heading-large-font-size);
+            font-weight: var(--heading-large-font-weight);
+            letter-spacing: var(--heading-large-letter-spacing);
+            color: var(--heading-color);
+        }
+
+        #page__meta {
+            font-family: var(--text-small-font-family);
+            font-size: var(--text-small-font-size);
+            font-weight: var(--text-small-font-weight);
+            letter-spacing: var(--text-small-letter-spacing);
+            color: var(--meta-color);
+        }
+
+        #page__body {
+            display: flex;
+            flex-direction: column;
+            gap: var(--frame-padding);
+        }
+
+        @media screen and (min-width: 960px) {
+            #page__body {
+                display: flex;
+                flex-direction: row;
+                gap: var(--frame-padding);
+            }
+        }
+
+        @media screen and (min-width: 960px) {
+            #page__toc {
+                width: var(--sidebar-width);
+                min-width: var(--sidebar-width);
+                flex-shrink: 0;
+            }
+        }
+
+        #page__nav {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            flex-direction: column;
+            display: flex;
+            gap: var(--spacing-regular);
+        }
+
+        @media screen and (min-width: 960px) {
+            #page__toc-sticky {
+                position: sticky;
+                top: var(--frame-padding);
+            }
+        }
+
+        .page__nav-item {
+            margin: 0;
+        }
+
+        .page__nav-link {
+            color: var(--link-color);
+            font-weight: var(--text-regular-font-weight-emphasis);
+        }
+
+        @media screen and (min-width: 960px) {
+            #page__header {
+                padding-left: calc(var(--sidebar-width) + var(--frame-padding));
+            }
+        }
+
+        @media screen and (min-width: 1280px) {
+            #page__header {
+                padding-right: calc(var(--sidebar-width) + var(--frame-padding));
+            }
+        }
+
+
+        #page__layout {
+            display: flex;
+            flex-direction: column;
+            gap: var(--frame-padding);
+        }
+
+        @media screen and (min-width: 1280px) {
+            #page__layout {
+                display: flex;
+                flex-direction: row;
+                gap: var(--frame-padding);
+            }
+        }
+
+        @media screen and (max-width: 1279px) {
+            #page__sidebar {
+                border-top: 2px solid var(--framework-color);
+                padding-top: var(--frame-padding)
+            }
+        }
+
+        @media screen and (min-width: 1280px) {
+            #page__sidebar {
+                flex-shrink: 0;
+                min-width: var(--sidebar-width);
+                width: var(--sidebar-width);
+                border-left: 2px solid var(--framework-color);
+                padding-left: var(--frame-padding)
+            }
+
+            #page__sidebar-sticky {
+                position: sticky;
+                top: var(--frame-padding);
+            }
+        }
+
+        #page__sidebar-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-gap: var(--frame-padding);
+        }
+
+        @media screen and (min-width: 768px) and (max-width: 1279px) {
+            #page__sidebar-layout {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .page__sidebar-section {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-regular);
+        }
+
+        .page__sidebar-section-heading {
+            font-family: var(--heading-small-font-family);
+            font-size: var(--heading-small-font-size);
+            font-weight: var(--heading-small-font-weight);
+            letter-spacing: var(--heading-small-letter-spacing);
+        }
+
+        /**
+         * Archive
+         * ----------------------------------------------------------------
+         */
+        #archive {
+            display: flex;
+            flex-direction: column;
+            justify-items: center;
+            gap: var(--frame-padding);
+            max-width: var(--max-content-width);
+            padding: 0 var(--frame-padding);
+            margin: 0 auto;
+
+        }
+
+        #archive-background {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            left: 0;
+            z-index: -1;
+            font-size: 50vh;
+            background-color: var(--paper-color);
+            font-family: var(--accent-font-family);
+            letter-spacing: 0.5em;
+            opacity: 0.1;
+            background-position: center center;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='80' viewBox='0 0 100 199'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M0 199V0h1v1.99L100 199h-1.12L1 4.22V199H0zM100 2h-.12l-1-2H100v2z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
+            mix-blend-mode: multiply;
+        }
+
+        #archive__header,
+        #archive__footer {
+            display: flex;
+            width: 100%;
+            flex-wrap: nowrap;
+            padding: var(--frame-padding) 0;
+        }
+
+        #archive__heading {
+            flex-grow: 1;
+            align-items: center;
+            font-family: var(--heading-small-font-family);
+            font-size: var(--heading-small-font-size);
+            font-weight: var(--heading-small-font-weight);
+            letter-spacing: var(--heading-small-letter-spacing);
+        }
+
+
+        .archive__pagination-link {
+            font-family: var(--heading-small-font-family);
+            font-size: var(--heading-small-font-size);
+            font-weight: var(--heading-small-font-weight);
+            letter-spacing: var(--heading-small-letter-spacing);
+            display: flex;
+            flex-direction: row;
+            gap: var(--spacing-tiny);
+        }
+
+        .archive__pagination-icon {
+            display: block;
+            height: 1em;
+            position: relative;
+            bottom: -0.125em;
+            fill: currentColor;
+        }
+
+        #archive__footer-numbers {
+            display: flex;
+            flex-direction: row;
+            flex-grow: 1;
+            justify-content: center;
+            gap: var(--spacing-regular);
+        }
+
+        .archive__pagination-page-link {
+            font-family: var(--heading-small-font-family);
+            font-size: var(--heading-small-font-size);
+            font-weight: var(--heading-small-font-weight);
+            letter-spacing: var(--heading-small-letter-spacing);
+        }
+
+        #archive__heading {
+            text-align: center;
+        }
+
+        #archive__posts {
+            display: grid;
+            max-width: var(--max-content-width);
+            width: 100%;
+
+            grid-row-gap: var(--frame-padding);
+            grid-column-gap: var(--frame-padding);
+            position: relative;
+        }
+
+        @media screen and (min-width: 768px) and (max-width: 939px) {
+            #archive__posts {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            #archive__posts .post-card:nth-child(1),
+            #archive__posts .post-card:nth-child(4) {
+                grid-row: span 2;
+                grid-column: span 2;
+            }
+        }
+
+        @media screen and (min-width: 940px) and (max-width: 1279px) {
+            #archive__posts {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+
+            #archive__posts .post-card:nth-child(1) {
+                grid-row: span 2;
+                grid-column: span 2;
+            }
+
+            #archive__posts .post-card:nth-child(1) .post-card__image {
+                aspect-ratio: 6/5;
+            }
+
+            #archive__posts .post-card:nth-child(8) {
+                grid-row: span 2;
+                grid-column: span 2;
+            }
+
+            #archive__posts .post-card:nth-child(8) .post-card__image {
+                aspect-ratio: 3/1;
+            }
+
+            #archive__posts .post-card:nth-child(4),
+            #archive__posts .post-card:nth-child(5),
+            #archive__posts .post-card:nth-child(6),
+            #archive__posts .post-card:nth-child(7),
+            #archive__posts .post-card:nth-child(8) {
+                margin-top: var(--spacing-medium);
+            }
+        }
+
+        @media screen and (min-width: 1280px) {
+            #archive__posts {
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+            }
+
+            #archive__posts .post-card:nth-child(1) {
+                grid-row: span 2;
+                grid-column: span 2;
+            }
+
+            #archive__posts .post-card:nth-child(1) .post-card__image {
+                aspect-ratio: 6/5;
+            }
+
+            #archive__posts .post-card:nth-child(8) {
+                grid-row: span 2;
+                grid-column: span 2;
+            }
+
+            #archive__posts .post-card:nth-child(8) .post-card__image {
+                aspect-ratio: 3/1;
+            }
+
+            #archive__posts .post-card:nth-child(6),
+            #archive__posts .post-card:nth-child(7),
+            #archive__posts .post-card:nth-child(8) {
+                margin-top: var(--spacing-medium);
+            }
+        }
+
+
+    </style>
+</head>
+<body id="home-template">
+
+<div id="site-viewport">
+
+    <div id="site-layout">
+
+        <div id="site-header">
+            <div id="site-header__row">
+                <a id="site-header__site-title" href="/">
+                    <svg id="site-header__site-logo-mark" xmlns="http://www.w3.org/2000/svg"
+                         xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+                         y="0px"
+                         viewBox="0 0 2265.2 864" style="enable-background:new 0 0 2265.2 864;" xml:space="preserve">
+                                        <polygon class="st0" points="1023.2,0 663.2,0 924.2,864 1132.9,363.1 "/>
+                        <polygon class="st0" points="1644.2,0 1435.5,500.9 1545.2,864 1753.9,363.1 "/>
+                        <path class="st0" d="M569.6,391.7c26.6-40,42.2-87.9,42.2-139.6C611.8,113,499.1,0.3,360,0.2V0H0v864h96h264h96v-0.4
+                        c135.1-4.6,243.2-115.5,243.2-251.7C699.2,517.2,646.9,434.7,569.6,391.7z M304.1,718C245.5,718,198,670.5,198,611.9
+                        s47.5-106.1,106.1-106.1s106.1,47.5,106.1,106.1S362.7,718,304.1,718z M410.2,252.1c0,58.6-47.5,106.1-106.1,106.1
+                        c-58.6,0-106.1-47.5-106.1-106.1c0-58.6,47.5-106.1,106.1-106.1C362.7,146,410.2,193.5,410.2,252.1z"/>
+                        <ellipse transform="matrix(0.9979 -6.525722e-02 6.525722e-02 0.9979 -39.284 21.1501)"
+                                 class="st1"
+                                 cx="304.1" cy="611.9" rx="106.1" ry="106.1"/>
+                        <ellipse class="st1" cx="304.1" cy="252.1" rx="106.1" ry="106.1"/>
+                        <polygon class="st1" points="1905.2,0 1753.9,363.1 1545.2,864 1905.2,864 2265.2,0 "/>
+                        <polygon class="st1"
+                                 points="1284.2,0 1132.9,363.1 924.2,864 1284.2,864 1435.5,500.9 1644.2,0 "/>
+                    </svg>
+
+                    <svg version="1.1" id="site-header__site-logo-type" xmlns="http://www.w3.org/2000/svg"
+                         xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                         viewBox="0 0 2205.8 143.7" style="enable-background:new 0 0 2205.8 143.7;"
+                         xml:space="preserve">
+
+                                            <g class="st0">
+                        <path class="st1" d="M121.6,107.9c0,23.7-18.8,33.4-47.7,33.4H0V2.9h68.8c29.7,0,48.7,9.4,48.7,32.3v8.4c0,13.9-7.2,22.1-19.4,26.2
+                            c14.7,3.7,23.5,12.7,23.5,29.9V107.9z M87.8,40.5c0-11.5-10-13.5-23.7-13.5H29.9V60h34c13.7,0,23.9-1.4,23.9-12.7V40.5z M91.9,95.8
+                            C91.9,83.1,81,81,68.6,81H29.9v35.6h38.9c13.1,0,23.1-2.7,23.1-14.3V95.8z"/>
+                                                <path class="st1" d="M185.6,141.2V2.9H292c1,7,1,17.2,0,24.1h-76.5v32.5H290c1,7,1,17,0,23.7h-74.5v33.8H292c1,6.8,1,17.4,0,24.1
+                            H185.6z"/>
+                                                <path class="st1" d="M385.6,45.2v96c-9.4,1-20.3,1-29.9,0V2.9C365.9,2,378,2,388.2,2.9l69,98.2V2.9c10.6-0.8,20.1-0.8,29.9,0v138.3
+                            c-11.1,0.8-22.3,0.8-33.4,0L385.6,45.2z"/>
+                                                <path class="st1" d="M739.4,41.3l-31.3,99.9c-9.2,0.8-20.3,0.8-29.3,0.4l-45-138.8c8.6-0.8,22.3-0.8,30.5,0l29.9,99.9l29.1-99.9
+                            c8.8-0.8,24.6-0.8,32.9,0l28.7,99.5l30.3-99.5c8.6-0.8,21.3-0.8,29.7,0l-45.2,138.3c-9,0.8-19.9,0.8-28.9,0L739.4,41.3z"/>
+                    </g>
+                        <g class="st0">
+                        <path class="st2" d="M878.4,107.2c7.4-1,21.9-1,29.3,0v34c-7.4,1-21.9,1-29.3,0V107.2z"/>
+                    </g>
+                        <g class="st0">
+                        <path class="st1" d="M970.1,2.9c8.8-0.8,21.5-0.8,29.9,0v138.3c-8.4,0.8-21.1,0.8-29.9,0V2.9z"/>
+                            <path class="st1" d="M1176.4,110.7c0,23.9-22.7,32.9-60.4,32.9c-15.3,0-34.8-0.8-52.6-3.3c-1.2-6.8-1.2-17.8,0-24.8
+                            c20.3,2.3,36.8,3.3,52.2,3.3c17.2,0,31.3-1.6,31.3-12.7v-7.2c0-7.6-3.3-8.2-19.9-12.3l-35.6-8.6c-17-4.1-28.4-11.5-28.4-31.9V32.9
+                            c0-24.1,25-32.9,61.2-32.9c16.8,0,31.3,0.8,50.8,4.3c1.2,6.8,1.2,17.2,0,23.9c-20.1-2.7-33.6-3.5-49.9-3.5
+                            c-18.8,0-32.5,1.4-32.5,12.5v5.5c0,8,4.9,9.8,24.6,14.7l31.1,7.6c17.8,4.5,28.2,10,28.2,30.7V110.7z"/>
+                    </g>
+                        <g class="st0">
+                        <path class="st2" d="M1339.1,83.7h-69v57.5c-8.4,0.8-21.1,0.8-29.9,0V2.9c9.2-0.8,21.3-0.8,29.9,0v54.6h69V2.9
+                            c8.6-0.8,21.5-0.8,29.9,0v138.3c-8.4,0.8-20.9,0.8-29.9,0V83.7z"/>
+                            <path class="st2" d="M1565,104.6c0,29.3-26.2,39.1-65.5,39.1c-39.5,0-65.5-9.8-65.5-39.1V39.1C1434,10,1460,0,1499.5,0
+                            c39.3,0,65.5,10,65.5,39.1V104.6z M1535.1,44.8c0-17.8-16-19.9-35.6-19.9s-35.6,2-35.6,19.9v53.6c0,17.6,16,19.9,35.6,19.9
+                            s35.6-2.3,35.6-19.9V44.8z"/>
+                            <path class="st2" d="M1610.3,2.9c9-0.8,22.3-0.8,31.1,0l39.9,100.3l39.3-100.3c8.6-0.8,21.9-0.8,30.1,0l-55.5,138.3
+                            c-8.8,0.8-19.4,0.8-28,0L1610.3,2.9z"/>
+                            <path class="st2"
+                                  d="M1800.8,2.9c8.8-0.8,21.5-0.8,29.9,0v138.3c-8.4,0.8-21.1,0.8-29.9,0V2.9z"/>
+                            <path class="st2" d="M1896.8,38.5c0-29.1,26.2-38.5,66.5-38.5c15.3,0,30.1,1,47.9,3.9c1,6.8,1,17,0,23.7c-15.1-1.8-28.7-2.7-43-2.7
+                            c-23.5,0-41.8,1.4-41.8,19.6v54c0,18,18.2,19.6,41.8,19.6c14.1,0,29.9-2,43.4-4.5c1.8,7.2,2.7,15.8,2.7,23.7
+                            c-18.4,4.1-37,6.1-51,6.1c-40.3,0-66.5-9.2-66.5-38.3V38.5z"/>
+                            <path class="st2" d="M2175.9,83.7h-69v57.5c-8.4,0.8-21.1,0.8-29.9,0V2.9c9.2-0.8,21.3-0.8,29.9,0v54.6h69V2.9
+                            c8.6-0.8,21.5-0.8,29.9,0v138.3c-8.4,0.8-20.9,0.8-29.9,0V83.7z"/>
+                    </g>
+                    </svg>
+
+
+                </a>
+
+                <nav id="site-nav">
+                    <ul id="site-nav__menu">
+                        <li><a class="site-nav__link" href="/about.html">About</a></li>
+                        <li><a class="site-nav__link" href="/blog.html">Blog</a></li>
+                        <li><a class="site-nav__link" href="/portfolio.html">Portfolio</a></li>
+                        <li id="site-nav__dark-mode-toggle">
+                            <input id="site-nav__dark-mode-toggle-input" type="radio" name="dark-mode">
+                            <label id="site-nav__dark-mode-toggle-label" for="site-nav__dark-mode-toggle-input">
+                                <svg id="site-nav__dark-mode-toggle-dark" xmlns="http://www.w3.org/2000/svg" width="24"
+                                     height="24" viewBox="0 0 24 24">
+                                    <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.685 21.965c3.205-2.154 5.315-5.813 5.315-9.965s-2.11-7.811-5.315-9.965c5.202.353 9.315 4.673 9.315 9.965s-4.113 9.612-9.315 9.965z"/>
+                                </svg>
+                                <svg id="site-nav__dark-mode-toggle-light" xmlns="http://www.w3.org/2000/svg" width="24"
+                                     height="24" viewBox="0 0 24 24">
+                                    <path d="M4.069 13h-4.069v-2h4.069c-.041.328-.069.661-.069 1s.028.672.069 1zm3.034-7.312l-2.881-2.881-1.414 1.414 2.881 2.881c.411-.529.885-1.003 1.414-1.414zm11.209 1.414l2.881-2.881-1.414-1.414-2.881 2.881c.528.411 1.002.886 1.414 1.414zm-6.312-3.102c.339 0 .672.028 1 .069v-4.069h-2v4.069c.328-.041.661-.069 1-.069zm0 16c-.339 0-.672-.028-1-.069v4.069h2v-4.069c-.328.041-.661.069-1 .069zm7.931-9c.041.328.069.661.069 1s-.028.672-.069 1h4.069v-2h-4.069zm-3.033 7.312l2.88 2.88 1.415-1.414-2.88-2.88c-.412.528-.886 1.002-1.415 1.414zm-11.21-1.415l-2.88 2.88 1.414 1.414 2.88-2.88c-.528-.411-1.003-.885-1.414-1.414zm2.312-4.897c0 2.206 1.794 4 4 4s4-1.794 4-4-1.794-4-4-4-4 1.794-4 4zm10 0c0 3.314-2.686 6-6 6s-6-2.686-6-6 2.686-6 6-6 6 2.686 6 6z"/>
+                                </svg>
+                            </label>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+        </div>
+
+        <div id="site-body">
+
+            <div id="home">
+
+                <div id="home__header">
+                    <div id="home__header-body">
+                        <div id="home__site-logo-type-wrap">
+                        <svg id="home__site-logo-type" xmlns="http://www.w3.org/2000/svg"
+                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                             viewBox="0 0 2205.8 143.7" style="enable-background:new 0 0 2205.8 143.7;"
+                             xml:space="preserve">
+
+                        <g class="st0">
+	<path class="st1" d="M121.6,107.9c0,23.7-18.8,33.4-47.7,33.4H0V2.9h68.8c29.7,0,48.7,9.4,48.7,32.3v8.4c0,13.9-7.2,22.1-19.4,26.2
+		c14.7,3.7,23.5,12.7,23.5,29.9V107.9z M87.8,40.5c0-11.5-10-13.5-23.7-13.5H29.9V60h34c13.7,0,23.9-1.4,23.9-12.7V40.5z M91.9,95.8
+		C91.9,83.1,81,81,68.6,81H29.9v35.6h38.9c13.1,0,23.1-2.7,23.1-14.3V95.8z"/>
+                            <path class="st1" d="M185.6,141.2V2.9H292c1,7,1,17.2,0,24.1h-76.5v32.5H290c1,7,1,17,0,23.7h-74.5v33.8H292c1,6.8,1,17.4,0,24.1
+		H185.6z"/>
+                            <path class="st1" d="M385.6,45.2v96c-9.4,1-20.3,1-29.9,0V2.9C365.9,2,378,2,388.2,2.9l69,98.2V2.9c10.6-0.8,20.1-0.8,29.9,0v138.3
+		c-11.1,0.8-22.3,0.8-33.4,0L385.6,45.2z"/>
+                            <path class="st1" d="M739.4,41.3l-31.3,99.9c-9.2,0.8-20.3,0.8-29.3,0.4l-45-138.8c8.6-0.8,22.3-0.8,30.5,0l29.9,99.9l29.1-99.9
+		c8.8-0.8,24.6-0.8,32.9,0l28.7,99.5l30.3-99.5c8.6-0.8,21.3-0.8,29.7,0l-45.2,138.3c-9,0.8-19.9,0.8-28.9,0L739.4,41.3z"/>
+</g>
+                            <g class="st0">
+	<path class="st2" d="M878.4,107.2c7.4-1,21.9-1,29.3,0v34c-7.4,1-21.9,1-29.3,0V107.2z"/>
+</g>
+                            <g class="st0">
+	<path class="st1" d="M970.1,2.9c8.8-0.8,21.5-0.8,29.9,0v138.3c-8.4,0.8-21.1,0.8-29.9,0V2.9z"/>
+                                <path class="st1" d="M1176.4,110.7c0,23.9-22.7,32.9-60.4,32.9c-15.3,0-34.8-0.8-52.6-3.3c-1.2-6.8-1.2-17.8,0-24.8
+		c20.3,2.3,36.8,3.3,52.2,3.3c17.2,0,31.3-1.6,31.3-12.7v-7.2c0-7.6-3.3-8.2-19.9-12.3l-35.6-8.6c-17-4.1-28.4-11.5-28.4-31.9V32.9
+		c0-24.1,25-32.9,61.2-32.9c16.8,0,31.3,0.8,50.8,4.3c1.2,6.8,1.2,17.2,0,23.9c-20.1-2.7-33.6-3.5-49.9-3.5
+		c-18.8,0-32.5,1.4-32.5,12.5v5.5c0,8,4.9,9.8,24.6,14.7l31.1,7.6c17.8,4.5,28.2,10,28.2,30.7V110.7z"/>
+</g>
+                            <g class="st0">
+	<path class="st2" d="M1339.1,83.7h-69v57.5c-8.4,0.8-21.1,0.8-29.9,0V2.9c9.2-0.8,21.3-0.8,29.9,0v54.6h69V2.9
+		c8.6-0.8,21.5-0.8,29.9,0v138.3c-8.4,0.8-20.9,0.8-29.9,0V83.7z"/>
+                                <path class="st2" d="M1565,104.6c0,29.3-26.2,39.1-65.5,39.1c-39.5,0-65.5-9.8-65.5-39.1V39.1C1434,10,1460,0,1499.5,0
+		c39.3,0,65.5,10,65.5,39.1V104.6z M1535.1,44.8c0-17.8-16-19.9-35.6-19.9s-35.6,2-35.6,19.9v53.6c0,17.6,16,19.9,35.6,19.9
+		s35.6-2.3,35.6-19.9V44.8z"/>
+                                <path class="st2" d="M1610.3,2.9c9-0.8,22.3-0.8,31.1,0l39.9,100.3l39.3-100.3c8.6-0.8,21.9-0.8,30.1,0l-55.5,138.3
+		c-8.8,0.8-19.4,0.8-28,0L1610.3,2.9z"/>
+                                <path class="st2"
+                                      d="M1800.8,2.9c8.8-0.8,21.5-0.8,29.9,0v138.3c-8.4,0.8-21.1,0.8-29.9,0V2.9z"/>
+                                <path class="st2" d="M1896.8,38.5c0-29.1,26.2-38.5,66.5-38.5c15.3,0,30.1,1,47.9,3.9c1,6.8,1,17,0,23.7c-15.1-1.8-28.7-2.7-43-2.7
+		c-23.5,0-41.8,1.4-41.8,19.6v54c0,18,18.2,19.6,41.8,19.6c14.1,0,29.9-2,43.4-4.5c1.8,7.2,2.7,15.8,2.7,23.7
+		c-18.4,4.1-37,6.1-51,6.1c-40.3,0-66.5-9.2-66.5-38.3V38.5z"/>
+                                <path class="st2" d="M2175.9,83.7h-69v57.5c-8.4,0.8-21.1,0.8-29.9,0V2.9c9.2-0.8,21.3-0.8,29.9,0v54.6h69V2.9
+		c8.6-0.8,21.5-0.8,29.9,0v138.3c-8.4,0.8-20.9,0.8-29.9,0V83.7z"/>
+</g>
+</svg>
+                        </div>
+                        <svg id="home__site-logo-mark" xmlns="http://www.w3.org/2000/svg"
+                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+                             y="0px"
+                             viewBox="0 0 2265.2 864" style="enable-background:new 0 0 2265.2 864;"
+                             xml:space="preserve">
+                    <polygon class="st0" points="1023.2,0 663.2,0 924.2,864 1132.9,363.1 "/>
+                            <polygon class="st0" points="1644.2,0 1435.5,500.9 1545.2,864 1753.9,363.1 "/>
+                            <path class="st0" d="M569.6,391.7c26.6-40,42.2-87.9,42.2-139.6C611.8,113,499.1,0.3,360,0.2V0H0v864h96h264h96v-0.4
+	c135.1-4.6,243.2-115.5,243.2-251.7C699.2,517.2,646.9,434.7,569.6,391.7z M304.1,718C245.5,718,198,670.5,198,611.9
+	s47.5-106.1,106.1-106.1s106.1,47.5,106.1,106.1S362.7,718,304.1,718z M410.2,252.1c0,58.6-47.5,106.1-106.1,106.1
+	c-58.6,0-106.1-47.5-106.1-106.1c0-58.6,47.5-106.1,106.1-106.1C362.7,146,410.2,193.5,410.2,252.1z"/>
+                            <ellipse transform="matrix(0.9979 -6.525722e-02 6.525722e-02 0.9979 -39.284 21.1501)"
+                                     class="st1"
+                                     cx="304.1" cy="611.9" rx="106.1" ry="106.1"/>
+                            <ellipse class="st1" cx="304.1" cy="252.1" rx="106.1" ry="106.1"/>
+                            <polygon class="st1" points="1905.2,0 1753.9,363.1 1545.2,864 1905.2,864 2265.2,0 "/>
+                            <polygon class="st1"
+                                     points="1284.2,0 1132.9,363.1 924.2,864 1284.2,864 1435.5,500.9 1644.2,0 "/>
+</svg>
+                    </div>
+                </div>
+
+                <div id="home__about">
+                    <div id="home__about-body">
+                        <div id="home__about-rule"></div>
+                        <div id="home__about-layout">
+                            <div id="home__about-summary">
+                                Software Engineer<br>
+                                Full Stack Web Developer<br>
+                                Runner<br>
+
+                                Rust<br>
+                                Typescript<br>
+                                WASM<br>
+                                Python<br>
+                                React<br>
+                                Svelte<br>
+                            </div>
+                            <div id="home__about-pagination">
+                                <a class="button" href="/about.html">About</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="home__blog">
+
+                    <div id="home__blog-layout">
+                        <div id="home__blog-posts-wrapper">
+                            <div id="home__blog-posts">
+                                <a class="post-card" href="#">
+                                    <img class="post-card__underlay" src="https://imgix.ranker.com/user_node_img/50026/1000514859/original/young-christopher-walken-in-a-checkered-jacket-photo-u1?auto=format&q=60&fit=crop&fm=pjpg&dpr=2&w=650" />
+                                    <div class="post-card__layout">
+
+                                        <h3 class="post-card__heading">How I Improved MY Rust Compile Times - Part
+                                            2</h3>
+                                        <p class="post-card__meta">2023-11-17</p>
+                                    </div>
+                                </a>
+                                <a class="post-card" href="#">
+                                    <img class="post-card__underlay" src="https://imgix.ranker.com/user_node_img/50026/1000514859/original/young-christopher-walken-in-a-checkered-jacket-photo-u1?auto=format&q=60&fit=crop&fm=pjpg&dpr=2&w=650" />
+                                    <div class="post-card__layout">
+                                        <h3 class="post-card__heading">How I Improved MY Rust Compile Times - Part
+                                            2</h3>
+                                        <p class="post-card__meta">2023-11-17</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div id="home__blog-pagination">
+                            <a class="button" href="/blog.html">Blog</a>
+                        </div>
+                    </div>
+                    <div id="home__blog-rule"></div>
+                </div>
+
+                <div id="home__portfolio">
+                    <div id="home__portfolio-rule"></div>
+                    <div id="home__portfolio-layout">
+
+                        <div id="home__portfolio-posts">
+                            <a class="post-card" href="#">
+                                <div class="post-card__layout">
+                                    <h3 class="post-card__heading">Praxis cycles</h3>
+                                    <p class="post-card__meta">RUST</p>
+                                </div>
+                            </a>
+                            <a class="post-card" href="#">
+                                <div class="post-card__layout">
+                                    <h3 class="post-card__heading">Praxis cycles</h3>
+                                    <p class="post-card__meta">RUST</p>
+                                </div>
+                            </a>
+                            <a class="post-card" href="#">
+                                <div class="post-card__layout">
+                                    <h3 class="post-card__heading">Praxis cycles</h3>
+                                    <p class="post-card__meta">RUST</p>
+                                </div>
+                            </a>
+                            <a class="post-card" href="#">
+                                <div class="post-card__layout">
+                                    <h3 class="post-card__heading">Praxis cycles</h3>
+                                    <p class="post-card__meta">RUST</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div id="home__portfolio-pagination">
+                            <a class="button" href="/portfolio.html">Portfolio</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="page">
+                <div id="page__header">
+                    <h1 id="page__heading">
+                        This is the main heading of a post
+                    </h1>
+                    <p id="page__meta">
+                        This is header information about the post
+                    </p>
+                </div>
+                <div id="page__layout">
+                    <div id="page__body">
+                        <div id="page__toc">
+                            <div id="page__toc-sticky">
+                                <div class="page__sidebar-section">
+                                    <h2 class="page__sidebar-section-heading">Contents</h2>
+                                    <ul id="page__nav">
+                                        <li class="page__nav-item">
+                                            <a class="page__nav-link" href="#">
+                                                This is an example of a link to a section in the article
+                                            </a>
+                                        </li>
+                                        <li class="page__nav-item">
+                                            <a class="page__nav-link" href="#">
+                                                a link to a section in the article
+                                            </a>
+                                        </li>
+                                        <li class="page__nav-item">
+                                            <a class="page__nav-link" href="#">
+                                                five dozen liquor jugs
+                                            </a>
+                                        </li>
+                                        <li class="page__nav-item">
+                                            <a class="page__nav-link" href="#">
+                                                Monkeys ate my orange soup cans and now I'm a soggy wheatabix.
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="page__content" class="content">
+                            <p>
+                            <img src="https://benwis.imgix.net/matthieu-comoy-british-pub.jpg?auto=format&auto=compress">
+                            </p>
+
+
+                                <article>
+                                    <p>This paragraph is nested inside an article. It contains many different, sometimes
+                                        useful, <a href="https://www.w3schools.com/tags/">HTML5 tags</a>. Of course
+                                        there
+                                        are classics like <em>emphasis</em>, <strong>strong</strong>, and
+                                        <small>small</small> but there are many others as well. Hover the following text
+                                        for
+                                        abbreviation tag: <abbr title="abbreviation">abbr</abbr>. Similarly, you can use
+                                        acronym tag like this: <acronym title="For The Win">ftw</acronym>. You can
+                                        define
+                                        <del>deleted text</del>
+                                        which often gets replaced with
+                                        <ins>inserted</ins>
+                                        text.
+                                    </p>
+                                    <h1>h1 HTML5 Kitchen Sink</h1>
+                                    <h2>h2 Back in my quaint <a href='#'>garden</a></h2>
+                                    <h3>h3 Jaunty <a href='#'>zinnias</a> vie with flaunting phlox</h3>
+                                    <h4>h4 Five or six big jet planes zoomed quickly by the new tower.</h4>
+                                    <h5>h5 Expect skilled signwriters to use many jazzy, quaint old alphabets
+                                        effectively.</h5>
+                                    <h6>h6 Pack my box with five dozen liquor jugs.</h6>
+                                    <hr>
+                                    <p>You can also use <kbd>keyboard text</kbd>, which sometimes is styled similarly to
+                                        the
+                                        <code>&lt;code&gt;</code> or <samp>samp</samp> tags. Even more specifically,
+                                        there
+                                        is a tag just for <var>variables</var>. Not to be mistaken with blockquotes
+                                        below, the quote tag lets you denote something as <q>quoted text</q>. Lastly
+                                        don't
+                                        forget the sub (H<sub>2</sub>O) and sup (E = MC<sup>2</sup>) tags. </p>
+                                </article>
+
+                            <hr>
+                            <section>
+                                <blockquote>
+                                    <p>Blockquote: I quickly explained that many big jobs involve few hazards</p>
+                                </blockquote>
+                                <blockquote>
+                                    <p>This is a mult-line blockquote with a cite reference. People think focus means
+                                        saying
+                                        yes to the thing you’ve got to focus on. But that’s not what it means at all. It
+                                        means saying no to the hundred other good ideas that there are. You have to pick
+                                        carefully. I’m actually as proud of the things we haven’tdone as the things I
+                                        have
+                                        done. Innovation is saying no to 1,000 things.
+                                        <cite>Steve Jobs – Apple Worldwide Developers’ Conference, 1997</cite>
+                                    </p>
+                                </blockquote>
+                            </section>
+                            <hr>
+
+                            <section>
+                                <table>
+                                    <caption>Tables can have captions now.</caption>
+                                    <tbody>
+                                    <tr>
+                                        <th>Person</th>
+                                        <th>Number</th>
+                                        <th>Third Column</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Someone Lastname</td>
+                                        <td>900</td>
+                                        <td>Nullam quis risus eget urna mollis ornare vel eu leo.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#">Person Name</a></td>
+                                        <td>1200</td>
+                                        <td>Vestibulum id ligula porta felis euismod semper. Donec ullamcorper nulla non
+                                            metus auctor fringilla.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Another Person</td>
+                                        <td>1500</td>
+                                        <td>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
+                                            Nullam id
+                                            dolor id nibh ultricies vehicula ut id elit.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Last One</td>
+                                        <td>2800</td>
+                                        <td>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis
+                                            consectetur purus sit amet fermentum.
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </section>
+                            <hr>
+                            <section>
+                                <dl>
+                                    <dt>Definition List Title</dt>
+                                    <dd>Definition list division.</dd>
+                                    <dt>Kitchen Sink</dt>
+                                    <dd>Used in expressions to describe work in which all conceivable (and some
+                                        inconceivable) sources have been mined. In this case, a bunch of markup.
+                                    </dd>
+                                    <dt>aside</dt>
+                                    <dd>Defines content aside from the page content</dd>
+                                    <dt>blockquote</dt>
+                                    <dd>Defines a section that is quoted from another source</dd>
+                                </dl>
+                            </section>
+                            <hr>
+                            <section>
+                                <ul>
+                                    <li>Unordered List item one
+                                        <ul>
+                                            <li>Nested list item
+                                                <ul>
+                                                    <li>Level 3, item one</li>
+                                                    <li>Level 3, item two</li>
+                                                    <li>Level 3, item three</li>
+                                                    <li>Level 3, item four</li>
+                                                </ul>
+                                            </li>
+                                            <li>List item two</li>
+                                            <li>List item three</li>
+                                            <li>List item four</li>
+                                        </ul>
+                                    </li>
+                                    <li>List item two</li>
+                                    <li>List item three</li>
+                                    <li>List item four</li>
+                                </ul>
+                                <hr>
+                                <ol>
+                                    <li>List item one
+                                        <ol>
+                                            <li>List item one
+                                                <ol>
+                                                    <li>List item one</li>
+                                                    <li>List item two</li>
+                                                    <li>List item three</li>
+                                                    <li>List item four</li>
+                                                </ol>
+                                            </li>
+                                            <li>List item two</li>
+                                            <li>List item three</li>
+                                            <li>List item four</li>
+                                        </ol>
+                                    </li>
+                                    <li>List item two</li>
+                                    <li>List item three</li>
+                                    <li>List item four</li>
+                                </ol>
+                            </section>
+                            <hr>
+                            <section>
+                                <address>1 Infinite Loop<br>
+                                    Cupertino, CA 95014<br>
+                                    United States
+                                </address>
+                            </section>
+                            <hr>
+                            <section>
+        <pre>
+    pre {
+      display: block;
+      padding: 7px;
+      background-color: #F5F5F5;
+      border: 1px solid #E1E1E8;
+      border-radius: 3px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      font-family: Menlo, Monaco;
+      line-height: 160%;
+    }</pre>
+
+                            </section>
+                            <hr/>
+
+                            <figure>
+                                <img src="https://www.fillmurray.com/505/314">
+                                <figcaption>Fig1. A picture of Bill Murray from <a href="https://www.fillmurray.com/">fillmurray.com</a>
+                                </figcaption>
+                            </figure>
+
+                            <hr>
+                            <section>
+
+                                <form>
+                                    <p>
+                                        <label for="example-input-email">Email address</label>
+                                        <input type="email" id="example-input-email" placeholder="Enter email">
+                                    </p>
+                                    <p>
+                                        <label for="example-input-password1">Number</label>
+                                        <input type="number" id="example-input-number" placeholder="Number">
+                                    </p>
+                                    <p>
+                                        <label for="example-input-password">Password</label>
+                                        <input type="password" id="example-input-password" placeholder="Password">
+                                    </p>
+                                    <p>
+                                        <label for="example-input-search">Search</label>
+                                        <input type="search" id="example-input-serach" placeholder="Search ..">
+                                    </p>
+                                    <p>
+                                        <label for="example-input-tel">Telephone number</label>
+                                        <input type="tel" id="example-input-tel" placeholder="Telephone number">
+                                    </p>
+
+                                    <p>
+                                        <label for="example-input-text">Text</label>
+                                        <input type="text" id="example-input-text" placeholder="Enter some text here">
+                                    </p>
+                                    <p>
+                                        <label for="example-input-url">Url</label>
+                                        <input type="url" id="example-input-url" placeholder="Enter a url here">
+                                    </p>
+                                    <p>
+                                        <label for="example-input-color">Color</label>
+                                        <input type="color" id="example-inupt-color" placeholder="#fff">
+                                    </p>
+                                    <p>
+                                        <label for="example-input-date">Date</label>
+                                        <input type="date" id="example-input-date" placeholder="date">
+                                    </p>
+                                    <p>
+                                        <label for="example-input-date-time">Date / Time</label>
+                                        <input type="datetime" id="example-input-date-time" placeholder="date / time">
+                                    </p>
+                                    <p>
+                                        <label for="example-input-date-time-local">Date / Time local</label>
+                                        <input type="datetime-local" id="example-input-date-time-local"
+                                               placeholder="date / time local">
+                                    </p>
+                                    <p>
+                                        <label for="example-input-month">Month</label>
+                                        <input type="month" id="example-input-month" placeholder="Month">
+                                    </p>
+                                    <p>
+                                        <label for="example-input-week">Week</label>
+                                        <input type="week" id="example-input-week" placeholder="Week">
+                                    </p>
+                                    <p>
+                                        <label for="example-input-time">Time</label>
+                                        <input type="time" id="example-input-time" placeholder="Time">
+                                    </p>
+                                    <p>
+                                        <label for="example-select1">Example select</label>
+                                        <select id="example-select1">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                            <option>5</option>
+                                        </select>
+                                    </p>
+                                    <p>
+                                        <label for="example-select2">Example multiple select</label>
+                                        <select multiple id="example-select2">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                            <option>5</option>
+                                        </select>
+                                    </p>
+                                    <p>
+                                        <label for="example-textarea">Example textarea</label>
+                                        <textarea id="example-textarea" rows="3"></textarea>
+                                    </p>
+                                    <p>
+                                        <label for="example-input-file">File input</label>
+                                        <input type="file" id="example-input-file">
+                                    </p>
+                                    <fieldset>
+                                        <legend>I am legend</legend>
+                                        <div>
+                                            <label>
+                                                <input type="radio" name="options-radios" id="optionsR-radios1"
+                                                       value="option1" checked> Option one is this and that&mdash;be
+                                                sure to
+                                                include why it's great
+                                            </label>
+                                        </div>
+
+                                        <div>
+                                            <label>
+                                                <input type="radio" name="options-radios" id="options-radios2"
+                                                       value="option2"> Option two can be something else and selecting
+                                                it
+                                                will deselect option one
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <label>
+                                                <input type="radio" name="optionsRadios" id="options-radios3"
+                                                       value="option3" disabled> Option three is disabled
+                                            </label>
+                                        </div>
+                                    </fieldset>
+
+                                    <fieldset>
+                                        <legend>I am also legend</legend>
+                                        <input type="checkbox"> Check me out
+                                        <input type="checkbox"> Or check me out
+                                    </fieldset>
+                                    <p>
+                                        <button type="button" name="button">Button</button>
+                                        <input type="button" name="input" value="Input Button">
+                                        <input type="submit" name="submit" value="Submit Button">
+                                        <input type="reset" name="reset" value="Reset Button">
+                                    </p>
+                                </form>
+                            </section>
+                            </main>
+
+                        </div>
+                    </div>
+                    <div id="page__sidebar">
+                        <div id="page__sidebar-sticky">
+                            <div id="page__sidebar-layout">
+                                <div class="page__sidebar-section">
+                                    <h2 class="page__sidebar-section-heading">Previous</h2>
+                                    <a class="post-card" href="#">
+
+                                        <img class="post-card__image" src="https://placehold.co/600x400">
+                                        <div class="post-card__text">
+                                            <h2 class="post-card__heading">This is a post heading</h2>
+                                            <p class="post-card__meta">Post time/date, etc</p>
+                                            <p class="post-card__excerpt">This is a brief description or summary of the
+                                                post that should
+                                                entice
+                                                people to click in.</p>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="page__sidebar-section">
+                                    <h2 class="page__sidebar-section-heading">Next</h2>
+                                    <a class="post-card" href="#">
+
+                                        <img class="post-card__image" src="https://placehold.co/600x400">
+                                        <div class="post-card__text">
+                                            <h2 class="post-card__heading">This is a post heading</h2>
+                                            <p class="post-card__meta">Post time/date, etc</p>
+                                            <p class="post-card__excerpt">This is a brief description or summary of the
+                                                post that should
+                                                entice
+                                                people to click in.</p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="archive">
+                <div id="archive-background">
+
+                </div>
+                <div id="archive__header">
+                    <div id="archive__header-prev" class="archive__pagination">
+                        <a class="archive__pagination-link" href="">
+                            <svg class="archive__pagination-icon" clip-rule="evenodd" fill-rule="evenodd"
+                                 stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="m9.474 5.209s-4.501 4.505-6.254 6.259c-.147.146-.22.338-.22.53s.073.384.22.53c1.752 1.754 6.252 6.257 6.252 6.257.145.145.336.217.527.217.191-.001.383-.074.53-.221.293-.293.294-.766.004-1.057l-4.976-4.976h14.692c.414 0 .75-.336.75-.75s-.336-.75-.75-.75h-14.692l4.978-4.979c.289-.289.287-.761-.006-1.054-.147-.147-.339-.221-.53-.221-.191-.001-.38.071-.525.215z"
+                                      fill-rule="nonzero"/>
+                            </svg>
+                            1
+                        </a>
+                    </div>
+                    <h1 id="archive__heading">
+                        This is my archive heading
+                    </h1>
+                    <div id="archive__header-next" class="archive__pagination">
+                        <a href="" class="archive__pagination-link">
+                            3
+                            <svg class="archive__pagination-icon" clip-rule="evenodd" fill-rule="evenodd"
+                                 stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="m14.523 18.787s4.501-4.505 6.255-6.26c.146-.146.219-.338.219-.53s-.073-.383-.219-.53c-1.753-1.754-6.255-6.258-6.255-6.258-.144-.145-.334-.217-.524-.217-.193 0-.385.074-.532.221-.293.292-.295.766-.004 1.056l4.978 4.978h-14.692c-.414 0-.75.336-.75.75s.336.75.75.75h14.692l-4.979 4.979c-.289.289-.286.762.006 1.054.148.148.341.222.533.222.19 0 .378-.072.522-.215z"
+                                      fill-rule="nonzero"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="archive__posts">
+
+                    <a class="post-card" href="#">
+
+                        <img class="post-card__image" src="https://placehold.co/600x400">
+                        <div class="post-card__text">
+                            <h2 class="post-card__heading">This is a post heading</h2>
+                            <p class="post-card__meta">Post time/date, etc</p>
+                            <p class="post-card__excerpt">This is a brief description or summary of the post that should
+                                entice
+                                people to click in.</p>
+                        </div>
+                    </a>
+
+                    <a class="post-card" href="#">
+
+                        <img class="post-card__image" src="https://placehold.co/600x400">
+                        <div class="post-card__text">
+                            <h2 class="post-card__heading">This is a post heading</h2>
+                            <p class="post-card__meta">Post time/date, etc</p>
+                            <p class="post-card__excerpt">This is a brief description or summary of the post that should
+                                entice
+                                people to click in.</p>
+                        </div>
+                    </a>
+
+                    <a class="post-card" href="#">
+
+                        <img class="post-card__image" src="https://placehold.co/600x400">
+                        <div class="post-card__text">
+                            <h2 class="post-card__heading">This is a post heading</h2>
+                            <p class="post-card__meta">Post time/date, etc</p>
+                            <p class="post-card__excerpt">This is a brief description or summary of the post that should
+                                entice
+                                people to click in.</p>
+                        </div>
+                    </a>
+
+                    <a class="post-card" href="#">
+
+                        <img class="post-card__image" src="https://placehold.co/600x400">
+                        <div class="post-card__text">
+                            <h2 class="post-card__heading">This is a post heading</h2>
+                            <p class="post-card__meta">Post time/date, etc</p>
+                            <p class="post-card__excerpt">This is a brief description or summary of the post that should
+                                entice
+                                people to click in.</p>
+                        </div>
+                    </a>
+
+                    <a class="post-card" href="#">
+
+                        <img class="post-card__image" src="https://placehold.co/600x400">
+                        <div class="post-card__text">
+                            <h2 class="post-card__heading">This is a post heading</h2>
+                            <p class="post-card__meta">Post time/date, etc</p>
+                            <p class="post-card__excerpt">This is a brief description or summary of the post that should
+                                entice
+                                people to click in.</p>
+                        </div>
+                    </a>
+
+                    <a class="post-card" href="#">
+
+                        <img class="post-card__image" src="https://placehold.co/600x400">
+                        <div class="post-card__text">
+                            <h2 class="post-card__heading">This is a post heading</h2>
+                            <p class="post-card__meta">Post time/date, etc</p>
+                            <p class="post-card__excerpt">This is a brief description or summary of the post that should
+                                entice
+                                people to click in.</p>
+                        </div>
+                    </a>
+
+                    <a class="post-card" href="#">
+
+                        <img class="post-card__image" src="https://placehold.co/600x400">
+                        <div class="post-card__text">
+                            <h2 class="post-card__heading">This is a post heading</h2>
+                            <p class="post-card__meta">Post time/date, etc</p>
+                            <p class="post-card__excerpt">This is a brief description or summary of the post that should
+                                entice
+                                people to click in.</p>
+                        </div>
+                    </a>
+
+                    <a class="post-card" href="#">
+
+                        <img class="post-card__image" src="https://placehold.co/600x400">
+                        <div class="post-card__text">
+                            <h2 class="post-card__heading">This is a post heading</h2>
+                            <p class="post-card__meta">Post time/date, etc</p>
+                            <p class="post-card__excerpt">This is a brief description or summary of the post that should
+                                entice
+                                people to click in.</p>
+                        </div>
+                    </a>
+                </div>
+                <div id="archive__footer">
+                    <div id="archive__footer-prev" class="archive__pagination">
+                        <a class="archive__pagination-link" href="">
+                            <svg class="archive__pagination-icon" clip-rule="evenodd" fill-rule="evenodd"
+                                 stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="m9.474 5.209s-4.501 4.505-6.254 6.259c-.147.146-.22.338-.22.53s.073.384.22.53c1.752 1.754 6.252 6.257 6.252 6.257.145.145.336.217.527.217.191-.001.383-.074.53-.221.293-.293.294-.766.004-1.057l-4.976-4.976h14.692c.414 0 .75-.336.75-.75s-.336-.75-.75-.75h-14.692l4.978-4.979c.289-.289.287-.761-.006-1.054-.147-.147-.339-.221-.53-.221-.191-.001-.38.071-.525.215z"
+                                      fill-rule="nonzero"/>
+                            </svg>
+
+                        </a>
+                    </div>
+                    <div id="archive__footer-numbers">
+                        <a href="" class="archive__pagination-page-link">1</a>
+                        <a href="" class="archive__pagination-page-link">2</a>
+                        <a href="" class="archive__pagination-page-link">3</a>
+                        <a href="" class="archive__pagination-page-link">4</a>
+                    </div>
+                    <div id="archive__footer-next" class="archive__pagination">
+                        <a href="" class="archive__pagination-link">
+
+                            <svg class="archive__pagination-icon" clip-rule="evenodd" fill-rule="evenodd"
+                                 stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="m14.523 18.787s4.501-4.505 6.255-6.26c.146-.146.219-.338.219-.53s-.073-.383-.219-.53c-1.753-1.754-6.255-6.258-6.255-6.258-.144-.145-.334-.217-.524-.217-.193 0-.385.074-.532.221-.293.292-.295.766-.004 1.056l4.978 4.978h-14.692c-.414 0-.75.336-.75.75s.336.75.75.75h14.692l-4.979 4.979c-.289.289-.286.762.006 1.054.148.148.341.222.533.222.19 0 .378-.072.522-.215z"
+                                      fill-rule="nonzero"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="site-footer">
+            <div id="site-footer__row">
+                <ul id="site-footer__details">
+                    <li class="site-footer__detail">&copy; 2023 Ben Wishovich</li>
+                    <li class="site-footer__detail">Built with <a href="https://leptos.dev">Leptos</a> v3</li>
+                    <li class="site-footer__detail">Design by <a href="https://underscorefunk.com">Underscorefunk
+                        Design</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

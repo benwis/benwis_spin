@@ -57,37 +57,19 @@ pub fn Footer() -> impl IntoView {
     });
 
     view! {
-      <footer class="bg-white dark:bg-gray-900 mt-auto">
-        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 md:flex md:items-center md:justify-between lg:px-8">
-          <div class="flex justify-center space-x-6 md:order-2">
-            {navigation
-                .into_iter()
-                .map(|link| {
-                    view! {
-                      <a
-                        key=link.name
-                        href=link.href
-                        rel=link.rel
-                        class="text-gray-400 dark:text-white hover:text-gray-500"
-                      >
-                        <span class="sr-only">{link.name}</span>
-                        <div inner_html=link.icon></div>
-                      </a>
-                    }
-                })
-                .collect::<Vec<_>>()}
-          </div>
-          <div class="mt-8 md:mt-0 md:order-1">
-            <p class="text-center text-base text-gray-400 dark:text-white">
-              "© 2024 Ben Wishovich | Built with "
-              <a href="https://leptos.dev">"Leptos"</a>
-              <span>
-                " and hosted on "
-                <a href="https://www.fermyon.com/">"Fermyon "</a>
-              </span> <span>"| v4"</span>
-            </p>
-          </div>
+        <div id="site-footer">
+            <div id="site-footer__row">
+                <ul id="site-footer__details">
+                    <li class="site-footer__detail">"© 2024 Ben Wishovich"</li>
+                    <li class="site-footer__detail">
+                        "Built with " <a href="https://leptos.dev">"Leptos "</a> "v3"
+                    </li>
+                    <li class="site-footer__detail">
+                        "Design by "
+                        <a href="https://underscorefunk.com">"Underscorefunk Design"</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-      </footer>
     }
 }

@@ -1,7 +1,7 @@
 spin_manifest_version = 2
 
 [application]
-name = "benwis-leptos"
+name = "benwis-leptos-beta"
 version = "0.1.0"
 authors = ["benwis <ben@celcyon.com>"]
 description = ""
@@ -28,7 +28,7 @@ sqlite_databases = ["default"]
 
 [component.benwis-leptos.build]
 command = "LEPTOS_BIN_TARGET_TRIPLE=wasm32-wasi cargo leptos build --release"
-watch = ["src/**/*.rs", "Cargo.toml"]
+watch = ["src/**/*.rs","styles/input.css", "Cargo.toml"]
 
 [[trigger.http]]
 route = "/pkg/..."

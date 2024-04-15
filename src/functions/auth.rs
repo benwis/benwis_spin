@@ -41,13 +41,14 @@ if #[cfg(feature = "ssr")] {
     pub async fn auth_user(name: &str, password: &str, con: &Arc<Connection>) -> Result<User, BenwisAppError>{
         // Does the user exist
         let Ok(Some(user)) = User::get_from_username(name, con).await else{
+            leptos::logging::log!("User: {name} not found!");
             return Err(BenwisAppError::AuthError);
         };
 
         // Check that password is correct
         match verify_password(password, &user.password){
             Ok(_) => Ok(user),
-            Err(e) => {println!("Verify Failed: {e}"); Err(BenwisAppError::AuthError)},
+            Err(e) => {leptos::logging::log!("Verify Failed: {e}"); Err(BenwisAppError::AuthError)},
         }
     }
     pub fn get_session_cookie_value(req_parts: &RequestParts)-> Result<Option<String>, BenwisAppError>{

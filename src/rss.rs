@@ -97,8 +97,10 @@ pub async fn rss_page(resp_out: ResponseOutparam,con: &Arc<Connection>) {
         &posts,
     );
 
-    let headers = Headers::new(&[("Cache-Control".to_string(), "private, max-age=3600".as_bytes().to_vec())]);
-  let og = OutgoingResponse::new(200, &headers);
+    let headers = Headers::new();
+        headers.append(&String::from("Cache-Control"), &"private, max-age=3600".as_bytes().to_vec()).expect("Failed to append header for RSS");
+
+  let og = OutgoingResponse::new(headers);
             let mut ogbod = og.take_body();
             resp_out.set(og);
             ogbod.send(rss.into()).await.unwrap();

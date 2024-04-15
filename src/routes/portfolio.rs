@@ -29,6 +29,36 @@ pub fn Portfolio() -> impl IntoView {
                     role="list"
                     class="space-y-12 no-underline sm:grid sm:grid-cols-1 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 lg:grid-cols-2 lg:gap-x-8"
                 >
+
+                    <PortfolioCard
+                        heading="Leptos".to_string()
+                        sub_heading="Full Stack Rust Web Framework".to_string()
+                        href="https://github.com/leptos-rs/leptos".to_string()
+                        img="https://benwis.imgix.net/leptos_dev.png?auto=format&auto=compress"
+                            .to_string()
+                        description="S full-stack web framework that lets you leverage the power of Rust and fine-grained reactivity to deliver interactive, stable, and powerful web applications"
+                            .to_string()
+                    />
+                    <PortfolioCard
+                        heading="tower-governor".to_string()
+                        sub_heading="Tower Middleware to Rate Limit APIs".to_string()
+                        href="https://crates.io/crates/tower_governor".to_string()
+                        img="https://benwis.imgix.net/tower-governor.png?auto=format&auto=compress"
+                            .to_string()
+                        description="A Rust crate implementing a Tower middleware that rate limits APIs based on the Generic Cell Rate Algorithm. Can use a wide variety of keys, including IP or user ID"
+                            .to_string()
+                    />
+
+                    <PortfolioCard
+                        heading="Femark".to_string()
+                        sub_heading="Fastest Rust and Webassembly Markdown to HTML Compiler with Syntax Highlighting"
+                            .to_string()
+                        href="https://crates.io/crates/femark".to_string()
+                        img="https://benwis.imgix.net/femark.png?auto=format&auto=compress"
+                            .to_string()
+                        description="Blazingly fast Markdown to HTML compiler with syntax highlighting for a variety of languages. Runs in the browser and on the server"
+                            .to_string()
+                    />
                     <PortfolioCard
                         heading="Praxis Cycles".to_string()
                         sub_heading="Ecommerce Store".to_string()

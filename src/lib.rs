@@ -6,6 +6,7 @@ mod layouts;
 mod models;
 mod providers;
 mod routes;
+#[allow(dead_code)]
 mod session;
 
 #[cfg(feature = "ssr")]
