@@ -681,6 +681,8 @@ leptos-island{
         #site-layout {
             display: flex;
             flex-direction: column;
+            align-items: stretch;
+            justify-content: space-between;
             min-height: 100vh;
             width: 100%;
         }
@@ -795,13 +797,9 @@ leptos-island{
             letter-spacing: var(--heading-small-letter-spacing);
         }
 
-
-        #site-nav__dark-mode-toggle-input {
-            display: none;
-        }
-
-        #site-nav__dark-mode-toggle-label:hover {
-            cursor: pointer;
+        #site-nav__dark-mode-toggle-trigger {
+            border: 0;
+            background: none;
         }
 
         #site-nav__dark-mode-toggle-light {
@@ -902,10 +900,11 @@ leptos-island{
         .post-card {
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
+            justify-content: flex-start;
             width: 100%;
             position: relative;
         }
+
         .post-card__underlay {
             position: absolute;
             top: 0;
@@ -984,6 +983,7 @@ leptos-island{
 
         #home {
             display: grid;
+            width: 100%;
         }
 
         @media screen and (min-width: 768px) {
@@ -1177,13 +1177,21 @@ leptos-island{
             display: flex;
             align-items: stretch;
         }
-
+        #home__blog-posts-wrapper{
+            display: flex;
+            width: 100%;
+        }
         @media screen and (max-width: 1023px) {
             #home__blog-posts-wrapper {
                 background-color: var(--brand-color-2);
                 display: flex;
                 height: 100%;
                 align-items: flex-start;
+            }
+        }
+        @media screen and (max-width: 1024px) {
+            #home__blog-posts-wrapper{
+                max-width: 40vw
             }
         }
 
@@ -1315,12 +1323,14 @@ leptos-island{
             flex-direction: column;
             position: relative;
             overflow: hidden;
+            background-color: var(--accent-color-1);
         }
 
         @media screen and (min-width: 640px) {
             #home__portfolio-layout {
                 flex-direction: row;
                 align-items: flex-start;
+                background-color: transparent;
 
             }
         }
@@ -1379,11 +1389,12 @@ leptos-island{
             display: flex;
             flex-direction: column;
             justify-items: center;
+            flex-grow: 1;
             gap: var(--frame-padding);
             max-width: var(--max-content-width);
             padding: 0 var(--frame-padding);
             margin: 0 auto;
-            flex: 1;
+
         }
 
         #page__header {
@@ -1560,6 +1571,7 @@ leptos-island{
             display: flex;
             flex-direction: column;
             justify-items: center;
+            flex-grow: 1;
             gap: var(--frame-padding);
             max-width: var(--max-content-width);
             padding: 0 var(--frame-padding);
