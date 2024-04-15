@@ -28,7 +28,16 @@ pub fn Default(children: Children) -> impl IntoView {
             href="https://benw.is/rss.xml"
             title="benwis Blog"
         />
-
+        <Link rel="preconnect" href="https://fonts.googleapis.com"/>
+        <Link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+        <Link
+            href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
+            rel="stylesheet"
+        />
+        <Link
+            href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Orbitron:wght@400..900&display=swap"
+            rel="stylesheet"
+        />
         // Fathom - beautiful, simple website analytics
         <script
             nonce=use_nonce()
