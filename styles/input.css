@@ -983,6 +983,7 @@ leptos-island{
 
         #home {
             display: grid;
+            width: 100%;
         }
 
         @media screen and (min-width: 768px) {
@@ -1176,13 +1177,21 @@ leptos-island{
             display: flex;
             align-items: stretch;
         }
-
+        #home__blog-posts-wrapper{
+            display: flex;
+            width: 100%;
+        }
         @media screen and (max-width: 1023px) {
             #home__blog-posts-wrapper {
                 background-color: var(--brand-color-2);
                 display: flex;
                 height: 100%;
                 align-items: flex-start;
+            }
+        }
+        @media screen and (max-width: 1024px) {
+            #home__blog-posts-wrapper{
+                max-width: 40vw
             }
         }
 
@@ -1314,12 +1323,14 @@ leptos-island{
             flex-direction: column;
             position: relative;
             overflow: hidden;
+            background-color: var(--accent-color-1);
         }
 
         @media screen and (min-width: 640px) {
             #home__portfolio-layout {
                 flex-direction: row;
                 align-items: flex-start;
+                background-color: transparent;
 
             }
         }
