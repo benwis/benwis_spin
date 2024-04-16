@@ -68,11 +68,11 @@ pub fn PostContent(post: post::Post) -> impl IntoView {
         {(post.preview || post.published)
             .then(|| {
                 view! {
+                <div id="page">
                     <div id="page__header">
                         <h1 id="page__heading">{post.title}</h1>
                         <p id="page__meta">{post.created_at.to_string()}</p>
                     </div>
-                    <hr/>
                     <div id="page__layout">
                         <div id="page__body">
                             <div id="page__toc">
@@ -147,6 +147,7 @@ pub fn PostContent(post: post::Post) -> impl IntoView {
                             </div>
                         </div>
                     </div>
+                </div>
                 }
             })}
     }
