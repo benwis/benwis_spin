@@ -21,10 +21,11 @@ pub fn Join(action: Action<Signup, Result<(), ServerFnError>>) -> impl IntoView 
               </h1>
           </div>
           <div class="auth__body content">
-            <ActionForm id="auth__signup-form" action=action>
-              <div>
+            <ActionForm id="auth__signup-form" class="auth__form" action=action>
+              <div class="auth__form-field-set">
                 <label
                   for="email"
+                  class="auth__form-label"
                 >
                   "Username"
                 </label>
@@ -37,9 +38,10 @@ pub fn Join(action: Action<Signup, Result<(), ServerFnError>>) -> impl IntoView 
                     aria-describedby="username-error"
                   />
               </div>
-              <div>
+              <div class="auth__form-field-set">
                 <label
                   for="email"
+                  class="auth__form-label"
                 >
                   "Displayed Name"
                 </label>
@@ -52,9 +54,10 @@ pub fn Join(action: Action<Signup, Result<(), ServerFnError>>) -> impl IntoView 
                     aria-describedby="display_name-error"
                   />
               </div>
-              <div>
+              <div class="auth__form-field-set">
                 <label
                   for="password"
+                  class="auth__form-label"
                 >
                   "Password"
                 </label>
@@ -66,9 +69,10 @@ pub fn Join(action: Action<Signup, Result<(), ServerFnError>>) -> impl IntoView 
                   aria-describedby="password-error"
                 />
               </div>
-              <div>
+              <div class="auth__form-field-set">
                 <label
                   for="password_confirmation"
+                  class="auth__form-label"
                 >
                   "Confirm Password"
                 </label>

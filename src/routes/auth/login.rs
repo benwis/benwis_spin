@@ -16,9 +16,9 @@ pub fn Login(action: Action<functions::auth::Login, Result<(), ServerFnError>>) 
                 <h1 class="auth__heading">"Login"</h1>
             </div>
             <div class="auth__body content">
-                <ActionForm id="auth__login-form" action=action>
-                    <div>
-                        <label for="username" class="auth__login-form-label">
+                <ActionForm id="auth__login-form" class="auth__form" action=action>
+                    <div class="auth__form-field-set">
+                        <label for="username" class="auth__form-label">
                             "Username"
                         </label>
                         <input
@@ -29,8 +29,8 @@ pub fn Login(action: Action<functions::auth::Login, Result<(), ServerFnError>>) 
                             aria-describedby="username-error"
                         />
                     </div>
-                    <div>
-                        <label for="password" class="auth__login-form-label">
+                    <div class="auth__form-field-set">
+                        <label for="password" class="auth__form-label">
                             "Password"
                         </label>
                         <input
