@@ -21,12 +21,17 @@
         #home {
             display: none !important;
         }
+
         #page {
-             /* display: none !important; */
+            display: none !important;
+        }
+
+        #auth {
+            display: none !important;
         }
 
         #archive {
-             display: none !important;
+            display: none !important;
         }
 
         :root {
@@ -139,7 +144,7 @@
         body {
             margin: 0;
             padding: 0;
-            width: 100vw;
+            overflow-y: hidden;
             display: flex;
 
             align-items: center;
@@ -258,6 +263,7 @@
             width: 100%;
             height: 100%;
         }
+
         .content img {
             max-width: 100%;
             height: auto;
@@ -265,6 +271,7 @@
 
         .content input[type="email"],
         .content input[type="number"],
+        .content input[type="username"],
         .content input[type="password"],
         .content input[type="search"],
         .content input[type="tel"],
@@ -335,6 +342,7 @@
         .content tr {
             overflow: hidden;
         }
+
         .content th {
             color: var(--brand-color-1);
             font-family: var(--heading-small-font-family);
@@ -342,17 +350,19 @@
             font-weight: var(--heading-small-font-weight);
             letter-spacing: var(--heading-small-letter-spacing);
         }
+
         .content td {
             position: relative;
             border-top: 1px solid var(--framework-color);
             padding: var(--spacing-small);
         }
-        .content tr:nth-child(odd) td:before{
+
+        .content tr:nth-child(odd) td:before {
 
             position: absolute;
             opacity: 0.325;
             background-color: var(--framework-color);
-            width: calc( 100% + (var(--spacing-small) * 2));
+            width: calc(100% + (var(--spacing-small) * 2));
             height: 100%;
             content: "";
             top: 0;
@@ -371,7 +381,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-width: 100vw;
             width: 100%;
             min-height: 100vh;
             justify-content: center;
@@ -606,6 +615,7 @@
             width: 100%;
             position: relative;
         }
+
         .post-card__underlay {
             position: absolute;
             top: 0;
@@ -617,6 +627,7 @@
             opacity: 0.25;
             object-fit: cover;
         }
+
         .post-card__layout {
             padding: var(--frame-padding);
             display: flex;
@@ -733,6 +744,7 @@
             align-items: flex-end;
             justify-content: flex-end;
         }
+
         @media screen and (max-width: 1023px) {
             #home__header {
                 display: none;
@@ -814,9 +826,11 @@
             justify-content: flex-end;
             position: relative;
         }
+
         #home__about-body {
             width: 100%;
         }
+
         @media screen and (min-width: 1024px) {
             #home__about-body {
                 width: 325px;
@@ -830,38 +844,45 @@
             background-color: var(--brand-color-1);
             position: absolute;
         }
+
         @media screen and (min-width: 1024px) {
             #home__about-rule {
                 width: 75%;
             }
         }
+
         #home__about-layout {
             padding: var(--frame-padding);
             display: flex;
             flex-direction: column;
             gap: var(--frame-padding);
-            align-items:flex-end;
+            align-items: flex-end;
         }
-        @media screen and (min-width:640px) {
+
+        @media screen and (min-width: 640px) {
             #home__about-layout {
                 flex-direction: row;
-                align-items:flex-start;
+                align-items: flex-start;
             }
         }
+
         @media screen and (min-width: 1280px) {
             #home__about-layout {
                 flex-direction: column;
-                }
+            }
         }
+
         #home__about-summary {
             flex-grow: 1;
             width: 100%;
         }
+
         #home__about-pagination {
 
             display: flex;
             justify-content: flex-end;
         }
+
         @media (min-width: 640px) and (max-width: 1279px) {
             #home__about-pagination .button {
                 writing-mode: vertical-lr;
@@ -902,6 +923,7 @@
             top: 0;
             left: 0;
         }
+
         @media screen and (min-width: 1024px) {
             #home__blog-rule {
                 display: none;
@@ -1229,6 +1251,81 @@
         }
 
         /**
+         * Auth
+         * ----------------------------------------------------------------
+         */
+        #auth {
+            min-height: 50vh;
+            display: flex;
+            flex-direction: column;
+            gap: var(--frame-padding);
+            max-width: var(--max-content-width);
+            padding: 0 var(--frame-padding);
+            margin: 0 auto;
+            align-content: center;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /**
+         * Editor
+         * ----------------------------------------------------------------
+         */
+        #editor {
+            position: relative;
+        }
+
+        #editor__meta {
+            padding: var(--frame-padding);
+            gap: var(--spacing-regular);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .editor__meta-row {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-tiny);
+        }
+        @media screen and (min-width: 768px) {
+            .editor__meta-row {
+                flex-direction: row;
+            }
+        }
+        .editor__meta-row label {
+            max-width: 10rem;
+            width: 10rem;
+        }
+        .editor__meta-row input {
+            flex-grow: 1;
+        }
+        #editor__body {
+            display: grid;
+            min-height: 500px;
+            padding: var(--frame-padding);
+            gap: var(--frame-padding);
+        }
+        @media screen and (min-width: 1024px) {
+            #editor__body {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        #editor__body-raw {
+            border: 1px solid var(--framework-color);
+            padding: var(--frame-padding);
+            height: calc(100vh - (var(--frame-padding) * 2));
+            overflow-y: scroll;
+        }
+
+        #editor__body-formatted {
+            border: 1px solid var(--framework-color);
+            padding: var(--frame-padding);
+            height: calc(100vh - (var(--frame-padding) * 2));
+            overflow-y: scroll;
+        }
+
+        /**
          * Archive
          * ----------------------------------------------------------------
          */
@@ -1401,7 +1498,8 @@
 
     </style>
 </head>
-<body id="home-template">
+<!-- conditionally add id="home-template" to trigger removal of redundant header logo on the home page -->
+<body>
 
 <div id="site-viewport">
 
@@ -1507,10 +1605,10 @@
                 <div id="home__header">
                     <div id="home__header-body">
                         <div id="home__site-logo-type-wrap">
-                        <svg id="home__site-logo-type" xmlns="http://www.w3.org/2000/svg"
-                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                             viewBox="0 0 2205.8 143.7" style="enable-background:new 0 0 2205.8 143.7;"
-                             xml:space="preserve">
+                            <svg id="home__site-logo-type" xmlns="http://www.w3.org/2000/svg"
+                                 xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                 viewBox="0 0 2205.8 143.7" style="enable-background:new 0 0 2205.8 143.7;"
+                                 xml:space="preserve">
 
                         <g class="st0">
 	<path class="st1" d="M121.6,107.9c0,23.7-18.8,33.4-47.7,33.4H0V2.9h68.8c29.7,0,48.7,9.4,48.7,32.3v8.4c0,13.9-7.2,22.1-19.4,26.2
@@ -1523,30 +1621,30 @@
                             <path class="st1" d="M739.4,41.3l-31.3,99.9c-9.2,0.8-20.3,0.8-29.3,0.4l-45-138.8c8.6-0.8,22.3-0.8,30.5,0l29.9,99.9l29.1-99.9
 		c8.8-0.8,24.6-0.8,32.9,0l28.7,99.5l30.3-99.5c8.6-0.8,21.3-0.8,29.7,0l-45.2,138.3c-9,0.8-19.9,0.8-28.9,0L739.4,41.3z"/>
 </g>
-                            <g class="st0">
+                                <g class="st0">
 	<path class="st2" d="M878.4,107.2c7.4-1,21.9-1,29.3,0v34c-7.4,1-21.9,1-29.3,0V107.2z"/>
 </g>
-                            <g class="st0">
+                                <g class="st0">
 	<path class="st1" d="M970.1,2.9c8.8-0.8,21.5-0.8,29.9,0v138.3c-8.4,0.8-21.1,0.8-29.9,0V2.9z"/>
-                                <path class="st1" d="M1176.4,110.7c0,23.9-22.7,32.9-60.4,32.9c-15.3,0-34.8-0.8-52.6-3.3c-1.2-6.8-1.2-17.8,0-24.8
+                                    <path class="st1" d="M1176.4,110.7c0,23.9-22.7,32.9-60.4,32.9c-15.3,0-34.8-0.8-52.6-3.3c-1.2-6.8-1.2-17.8,0-24.8
 		c20.3,2.3,36.8,3.3,52.2,3.3c17.2,0,31.3-1.6,31.3-12.7v-7.2c0-7.6-3.3-8.2-19.9-12.3l-35.6-8.6c-17-4.1-28.4-11.5-28.4-31.9V32.9
 		c0-24.1,25-32.9,61.2-32.9c16.8,0,31.3,0.8,50.8,4.3c1.2,6.8,1.2,17.2,0,23.9c-20.1-2.7-33.6-3.5-49.9-3.5
 		c-18.8,0-32.5,1.4-32.5,12.5v5.5c0,8,4.9,9.8,24.6,14.7l31.1,7.6c17.8,4.5,28.2,10,28.2,30.7V110.7z"/>
 </g>
-                            <g class="st0">
+                                <g class="st0">
 	<path class="st2" d="M1339.1,83.7h-69v57.5c-8.4,0.8-21.1,0.8-29.9,0V2.9c9.2-0.8,21.3-0.8,29.9,0v54.6h69V2.9
 		c8.6-0.8,21.5-0.8,29.9,0v138.3c-8.4,0.8-20.9,0.8-29.9,0V83.7z"/>
-                                <path class="st2" d="M1565,104.6c0,29.3-26.2,39.1-65.5,39.1c-39.5,0-65.5-9.8-65.5-39.1V39.1C1434,10,1460,0,1499.5,0
+                                    <path class="st2" d="M1565,104.6c0,29.3-26.2,39.1-65.5,39.1c-39.5,0-65.5-9.8-65.5-39.1V39.1C1434,10,1460,0,1499.5,0
 		c39.3,0,65.5,10,65.5,39.1V104.6z M1535.1,44.8c0-17.8-16-19.9-35.6-19.9s-35.6,2-35.6,19.9v53.6c0,17.6,16,19.9,35.6,19.9
 		s35.6-2.3,35.6-19.9V44.8z"/>
-                                <path class="st2" d="M1610.3,2.9c9-0.8,22.3-0.8,31.1,0l39.9,100.3l39.3-100.3c8.6-0.8,21.9-0.8,30.1,0l-55.5,138.3
+                                    <path class="st2" d="M1610.3,2.9c9-0.8,22.3-0.8,31.1,0l39.9,100.3l39.3-100.3c8.6-0.8,21.9-0.8,30.1,0l-55.5,138.3
 		c-8.8,0.8-19.4,0.8-28,0L1610.3,2.9z"/>
-                                <path class="st2"
-                                      d="M1800.8,2.9c8.8-0.8,21.5-0.8,29.9,0v138.3c-8.4,0.8-21.1,0.8-29.9,0V2.9z"/>
-                                <path class="st2" d="M1896.8,38.5c0-29.1,26.2-38.5,66.5-38.5c15.3,0,30.1,1,47.9,3.9c1,6.8,1,17,0,23.7c-15.1-1.8-28.7-2.7-43-2.7
+                                    <path class="st2"
+                                          d="M1800.8,2.9c8.8-0.8,21.5-0.8,29.9,0v138.3c-8.4,0.8-21.1,0.8-29.9,0V2.9z"/>
+                                    <path class="st2" d="M1896.8,38.5c0-29.1,26.2-38.5,66.5-38.5c15.3,0,30.1,1,47.9,3.9c1,6.8,1,17,0,23.7c-15.1-1.8-28.7-2.7-43-2.7
 		c-23.5,0-41.8,1.4-41.8,19.6v54c0,18,18.2,19.6,41.8,19.6c14.1,0,29.9-2,43.4-4.5c1.8,7.2,2.7,15.8,2.7,23.7
 		c-18.4,4.1-37,6.1-51,6.1c-40.3,0-66.5-9.2-66.5-38.3V38.5z"/>
-                                <path class="st2" d="M2175.9,83.7h-69v57.5c-8.4,0.8-21.1,0.8-29.9,0V2.9c9.2-0.8,21.3-0.8,29.9,0v54.6h69V2.9
+                                    <path class="st2" d="M2175.9,83.7h-69v57.5c-8.4,0.8-21.1,0.8-29.9,0V2.9c9.2-0.8,21.3-0.8,29.9,0v54.6h69V2.9
 		c8.6-0.8,21.5-0.8,29.9,0v138.3c-8.4,0.8-20.9,0.8-29.9,0V83.7z"/>
 </g>
 </svg>
@@ -1602,7 +1700,8 @@
                         <div id="home__blog-posts-wrapper">
                             <div id="home__blog-posts">
                                 <a class="post-card" href="#">
-                                    <img class="post-card__underlay" src="https://imgix.ranker.com/user_node_img/50026/1000514859/original/young-christopher-walken-in-a-checkered-jacket-photo-u1?auto=format&q=60&fit=crop&fm=pjpg&dpr=2&w=650" />
+                                    <img class="post-card__underlay"
+                                         src="https://imgix.ranker.com/user_node_img/50026/1000514859/original/young-christopher-walken-in-a-checkered-jacket-photo-u1?auto=format&q=60&fit=crop&fm=pjpg&dpr=2&w=650"/>
                                     <div class="post-card__layout">
 
                                         <h3 class="post-card__heading">How I Improved MY Rust Compile Times - Part
@@ -1611,7 +1710,8 @@
                                     </div>
                                 </a>
                                 <a class="post-card" href="#">
-                                    <img class="post-card__underlay" src="https://imgix.ranker.com/user_node_img/50026/1000514859/original/young-christopher-walken-in-a-checkered-jacket-photo-u1?auto=format&q=60&fit=crop&fm=pjpg&dpr=2&w=650" />
+                                    <img class="post-card__underlay"
+                                         src="https://imgix.ranker.com/user_node_img/50026/1000514859/original/young-christopher-walken-in-a-checkered-jacket-photo-u1?auto=format&q=60&fit=crop&fm=pjpg&dpr=2&w=650"/>
                                     <div class="post-card__layout">
                                         <h3 class="post-card__heading">How I Improved MY Rust Compile Times - Part
                                             2</h3>
@@ -1707,42 +1807,42 @@
                         </div>
                         <div id="page__content" class="content">
                             <p>
-                            <img src="https://benwis.imgix.net/matthieu-comoy-british-pub.jpg?auto=format&auto=compress">
+                                <img src="https://benwis.imgix.net/matthieu-comoy-british-pub.jpg?auto=format&auto=compress">
                             </p>
 
 
-                                <article>
-                                    <p>This paragraph is nested inside an article. It contains many different, sometimes
-                                        useful, <a href="https://www.w3schools.com/tags/">HTML5 tags</a>. Of course
-                                        there
-                                        are classics like <em>emphasis</em>, <strong>strong</strong>, and
-                                        <small>small</small> but there are many others as well. Hover the following text
-                                        for
-                                        abbreviation tag: <abbr title="abbreviation">abbr</abbr>. Similarly, you can use
-                                        acronym tag like this: <acronym title="For The Win">ftw</acronym>. You can
-                                        define
-                                        <del>deleted text</del>
-                                        which often gets replaced with
-                                        <ins>inserted</ins>
-                                        text.
-                                    </p>
-                                    <h1>h1 HTML5 Kitchen Sink</h1>
-                                    <h2>h2 Back in my quaint <a href='#'>garden</a></h2>
-                                    <h3>h3 Jaunty <a href='#'>zinnias</a> vie with flaunting phlox</h3>
-                                    <h4>h4 Five or six big jet planes zoomed quickly by the new tower.</h4>
-                                    <h5>h5 Expect skilled signwriters to use many jazzy, quaint old alphabets
-                                        effectively.</h5>
-                                    <h6>h6 Pack my box with five dozen liquor jugs.</h6>
-                                    <hr>
-                                    <p>You can also use <kbd>keyboard text</kbd>, which sometimes is styled similarly to
-                                        the
-                                        <code>&lt;code&gt;</code> or <samp>samp</samp> tags. Even more specifically,
-                                        there
-                                        is a tag just for <var>variables</var>. Not to be mistaken with blockquotes
-                                        below, the quote tag lets you denote something as <q>quoted text</q>. Lastly
-                                        don't
-                                        forget the sub (H<sub>2</sub>O) and sup (E = MC<sup>2</sup>) tags. </p>
-                                </article>
+                            <article>
+                                <p>This paragraph is nested inside an article. It contains many different, sometimes
+                                    useful, <a href="https://www.w3schools.com/tags/">HTML5 tags</a>. Of course
+                                    there
+                                    are classics like <em>emphasis</em>, <strong>strong</strong>, and
+                                    <small>small</small> but there are many others as well. Hover the following text
+                                    for
+                                    abbreviation tag: <abbr title="abbreviation">abbr</abbr>. Similarly, you can use
+                                    acronym tag like this: <acronym title="For The Win">ftw</acronym>. You can
+                                    define
+                                    <del>deleted text</del>
+                                    which often gets replaced with
+                                    <ins>inserted</ins>
+                                    text.
+                                </p>
+                                <h1>h1 HTML5 Kitchen Sink</h1>
+                                <h2>h2 Back in my quaint <a href='#'>garden</a></h2>
+                                <h3>h3 Jaunty <a href='#'>zinnias</a> vie with flaunting phlox</h3>
+                                <h4>h4 Five or six big jet planes zoomed quickly by the new tower.</h4>
+                                <h5>h5 Expect skilled signwriters to use many jazzy, quaint old alphabets
+                                    effectively.</h5>
+                                <h6>h6 Pack my box with five dozen liquor jugs.</h6>
+                                <hr>
+                                <p>You can also use <kbd>keyboard text</kbd>, which sometimes is styled similarly to
+                                    the
+                                    <code>&lt;code&gt;</code> or <samp>samp</samp> tags. Even more specifically,
+                                    there
+                                    is a tag just for <var>variables</var>. Not to be mistaken with blockquotes
+                                    below, the quote tag lets you denote something as <q>quoted text</q>. Lastly
+                                    don't
+                                    forget the sub (H<sub>2</sub>O) and sup (E = MC<sup>2</sup>) tags. </p>
+                            </article>
 
                             <hr>
                             <section>
@@ -2065,6 +2165,84 @@
                 </div>
             </div>
 
+
+            <div id="editor">
+                <div id="editor__meta" class="content">
+                    <div class="editor__meta-row">
+                        <label for="example-field">Example Field</label>
+                        <input id="example-field" type="text" />
+                    </div>
+                    <div class="editor__meta-row">
+                        <label for="example-select">Something</label>
+                        <select id="example-select">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+                    <input type="submit" value="save">
+                </div>
+                <div id="editor__body">
+                    <textarea id="editor__body-raw">
+                        ```toml
+                        title="Easy Leptos Editor"
+                        slug = "easy-leptos-editor"
+                        hero="https://benwis.imgix.net/leptos_editor.pnh?auto=format&auto=compress"
+                        hero_alt="Neovim window editing a Leptos file with autocompletion, intellisense, and all the goodies"
+                        hero_caption="An editor window with Leptos showing all the goodies"
+                        created_at ="2024-04-12 10:00:00-08:00"
+                        updated_at = "2024-04-12 10:00:00-08:00"
+                        published=true
+                        preview=true
+                        excerpt = ""
+                        tags = ["Leptos", "Rust", "lunarvim", "neovim", "treesitter"]
+                        ```
+                        # YAY!
+                    </textarea>
+                    <div id="editor__body-formatted" class="content">
+                        <h1>YAY!</h1>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="auth">
+                <div id="auth__header">
+                    <h1 id="auth__heading">
+                        Login
+                    </h1>
+                </div>
+                <div id="auth__body" class="content">
+                    <form action="/api/login9978471455928331438" method="post" class="space-y-6">
+                        <div><label for="username" class="block text-sm font-medium text-gray-700 dark:text-white">Username</label>
+                            <div class="mt-1"><input id="username" required="" name="username" type="username"
+                                                     aria-describedby="username-error"
+                                                     class="w-full rounded border border-gray-500 px-2 py-1 text-lg">
+                            </div>
+                        </div>
+                        <div><label for="password" class="block text-sm font-medium text-gray-700 dark:text-white">Password</label>
+                            <div class="mt-1"><input id="password" name="password" type="password"
+                                                     autocomplete="current-password" aria-describedby="password-error"
+                                                     class="w-full rounded border border-gray-500 px-2 py-1 text-lg">
+                            </div>
+                        </div>
+                        <button type="submit"
+                                class="w-full rounded bg-yellow-400 py-2 px-4 text-white dark:text-gray-700 hover:bg-yellow-600 focus:bg-yellow-400">
+                            Log in
+                        </button>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center"><input id="remember" name="remember" type="checkbox"
+                                                                  class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"><label
+                                    for="remember" class="ml-2 block text-sm text-gray-900 dark:text-white">Remember
+                                me</label></div>
+                            <div class="text-center text-sm text-gray-500">Don't have an account?<a
+                                    class="text-blue-500 underline" href="">Sign up</a></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
             <div id="archive">
                 <div id="archive-background">

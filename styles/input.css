@@ -441,6 +441,7 @@ leptos-island{
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow-y: hidden;
 
         }
 
@@ -670,7 +671,6 @@ leptos-island{
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-width: 100vw;
             width: 100%;
             min-height: 100vh;
             justify-content: center;
@@ -932,8 +932,6 @@ leptos-island{
             width: 100%;
             height: 100%;
             z-index: -0;
-            mix-blend-mode: luminosity;
-            opacity: 0.25;
             object-fit: cover;
         }
         .post-card__layout {
@@ -1004,6 +1002,10 @@ leptos-island{
         #home {
             display: grid;
             width: 100%;
+        }
+
+        #home .post-card {
+            justify-content: flex-end;
         }
 
         @media screen and (min-width: 768px) {
@@ -1200,6 +1202,9 @@ leptos-island{
         #home__blog-posts-wrapper{
             display: flex;
             width: 100%;
+        }
+        #home__blog-posts-wrapper .post-card__layout {
+            background-color: var(--brand-color-2);
         }
         @media screen and (max-width: 1023px) {
             #home__blog-posts-wrapper {
@@ -1914,6 +1919,65 @@ leptos-island{
             #archive__posts .post-card:nth-child(8) {
                 margin-top: var(--spacing-medium);
             }
+        }
+
+        /**
+         * Editor
+         * ----------------------------------------------------------------
+         */
+        #editor {
+            position: relative;
+        }
+
+        #editor__meta {
+            padding: var(--frame-padding);
+            gap: var(--spacing-regular);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .editor__meta-row {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-tiny);
+        }
+        @media screen and (min-width: 768px) {
+            .editor__meta-row {
+                flex-direction: row;
+            }
+        }
+        .editor__meta-row label {
+            max-width: 10rem;
+            width: 10rem;
+        }
+        .editor__meta-row input {
+            flex-grow: 1;
+        }
+        #editor__body {
+            display: grid;
+            min-height: 500px;
+            padding: var(--frame-padding);
+            gap: var(--frame-padding);
+        }
+        @media screen and (min-width: 1024px) {
+            #editor__body {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        #editor__body-raw {
+            border: 1px solid var(--framework-color);
+            padding: var(--frame-padding);
+            height: calc(100vh - (var(--frame-padding) * 2));
+        }
+        @media screen and (min-width: 1024px) {
+            #editor__body-raw {
+                max-height: none;
+            }
+        }
+        #editor__body-formatted {
+            border: 1px solid var(--framework-color);
+            padding: var(--frame-padding);
         }
 
 /**
