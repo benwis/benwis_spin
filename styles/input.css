@@ -1400,6 +1400,7 @@ leptos-island{
 
         #home__portfolio-pagination {
             margin: var(--frame-padding);
+            display: flex;
         }
 
         @media (max-width: 639px) {
