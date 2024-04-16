@@ -840,9 +840,26 @@ leptos-island{
             width: 100%;
             max-width: var(--max-content-width);
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: var(--frame-padding);
+            gap: 1rem;
+        }
+
+        #site-footer__platform-links {
+            gap: var(--spacing-small);
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display:flex;
+            flex-direction: row;
+        }
+
+        .site-footer__platform-link svg {
+            width: 1.5em;
+            height: 1.5em;
+            fill: currentColor;
         }
 
         #site-footer__details {
