@@ -438,9 +438,7 @@ leptos-island{
         body {
             margin: 0;
             padding: 0;
-            width: 100vw;
             display: flex;
-
             align-items: center;
             justify-content: center;
 
@@ -1211,7 +1209,7 @@ leptos-island{
                 align-items: flex-start;
             }
         }
-        @media screen and (max-width: 1024px) {
+        @media screen and (min-width: 1024px) {
             #home__blog-posts-wrapper{
                 max-width: 40vw
             }
