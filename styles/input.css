@@ -1586,10 +1586,10 @@ leptos-island{
         }
 
         /**
-        * Page - Auth
+        * Auth
         * ----------------------------------------------------------------
         */
-        #auth {
+        .auth {
             min-height: 50vh;
             display: flex;
             flex-direction: column;
@@ -1602,27 +1602,27 @@ leptos-island{
             align-items: center;
         }
 
-        #auth__login-form label {
+        .auth label {
             font-family: var(--heading-tiny-font-family);
             font-size: var(--heading-tiny-font-size);
             font-weight: var(--heading-tiny-font-weight);
             letter-spacing: var(--heading-tiny-letter-spacing);
         }
 
-        #auth__login-form input[type="username"],
-        #auth__login-form input[type="password"],
-        #auth__login-form input[type="submit"]{
+        .auth input[type="username"],
+        .auth input[type="password"],
+        .auth input[type="submit"]{
             width: 100%;
         }
-        #auth__login-form-submit:hover {
+        .auth input[type="submit"]:hover {
             cursor: pointer;
         }
-        #auth__login-form-aside {
+        .auth__form-aside {
             display: flex;
             flex-direction: column;
             gap: var(--spacing-tiny);
         }
-        .auth__login-form-side-row {
+        .auth__form-aside-row {
             display: flex;
             gap: var(--spacing-tiny);
         }

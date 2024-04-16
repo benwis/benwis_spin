@@ -14,14 +14,14 @@ pub fn Login(action: Action<functions::auth::Login, Result<(), ServerFnError>>) 
         property="og:image"
         content="https://benwis.imgix.net/pictureofMe.jpeg"
       />
-       <div id="auth">
-          <div id="auth__header">
-              <h1 id="auth__heading">
+       <div class="auth">
+          <div class="auth__header">
+              <h1 class="auth__heading">
                 "Login"
               </h1>
           </div>
-          <div id="auth__body" class="content">
-            <ActionForm id="auth__login-form" action=action class="space-y-6">
+          <div class="auth__body content">
+            <ActionForm id="auth__login-form" action=action>
               <div>
                 <label
                   for="username"
@@ -55,20 +55,26 @@ pub fn Login(action: Action<functions::auth::Login, Result<(), ServerFnError>>) 
               <button type="submit" id="auth__login-form-submit">
                 "Log in"
               </button>
-              <div id="auth__login-form-aside">
+
+              <div id="auth__form-aside">
                 <div class="auth__login-form_aside_row">
                   <input
                     id="remember"
                     name="remember"
                     type="checkbox"
                   />
-                  <label for="remember" >"Remember me"</label>
+                  <label
+                    for="remember"
+                  >
+                    "Remember me"
+                  </label>
                 </div>
-                <div class="auth__login-form_aside_row">
+                <div class="auth__form_aside_row">
                   "Don't have an account?"
                   <a href="">"Sign up"</a>
                 </div>
               </div>
+
             </ActionForm>
         </div>
       </div>
