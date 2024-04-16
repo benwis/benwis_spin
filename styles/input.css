@@ -1617,7 +1617,18 @@ leptos-island{
             align-items: center;
         }
 
-        .auth label {
+        .auth__form {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-regular);
+        }
+        .auth__form-field-set {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-tiny);
+        }
+        .auth__form-label,
+        .auth__form_aside_row{
             font-family: var(--heading-tiny-font-family);
             font-size: var(--heading-tiny-font-size);
             font-weight: var(--heading-tiny-font-weight);

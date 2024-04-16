@@ -12,7 +12,7 @@ pub fn PortfolioCard(
         <a class="post-card" href=href>
             <img class="post-card__image" src=img alt=""/>
             <div class="post-card__text">
-                <h2 class="post-card__heading">{heading}</h3>
+                <h2 class="post-card__heading">{heading}</h2>
                 <p class="post-card__excerpt">{description}</p>
             </div>
         </a>
