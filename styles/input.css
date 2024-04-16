@@ -800,6 +800,7 @@ leptos-island{
         #site-nav__dark-mode-toggle-trigger {
             border: 0;
             background: none;
+            padding: 0;
         }
 
         #site-nav__dark-mode-toggle-light {
