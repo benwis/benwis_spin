@@ -5,7 +5,7 @@ use leptos::*;
 use leptos_meta::*;
 
 #[component]
-pub fn Default(children: Children) -> impl IntoView {
+pub fn Home(children: Children) -> impl IntoView {
     let color_scheme = use_context::<ColorScheme>().expect("Failed to find ColorScheme");
     view! {
         <Html
@@ -20,7 +20,7 @@ pub fn Default(children: Children) -> impl IntoView {
             }
         />
 
-        <Body/>
+        <Body id="home-template"/>
         <Link rel="shortcut icon" type_="image/ico" href="/favicon.ico"/>
         <Link
             rel="alternate"
