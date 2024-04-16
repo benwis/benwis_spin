@@ -1,3 +1,4 @@
+use crate::providers::AuthContext;
 use leptos::*;
 
 pub struct FooterLink<'a> {
@@ -115,48 +116,48 @@ pub fn Footer() -> impl IntoView {
                         <a href="https://underscorefunk.com">"Underscorefunk Design"</a>
                     </li>
 
-                         <Transition fallback=move || ()>
-                            {move || {
-                                let user = move || match auth_context.user.get() {
-                                    Some(Ok(Some(user))) => Some(user),
-                                    Some(Ok(None)) => None,
-                                    Some(Err(_)) => None,
-                                    None => None,
-                                };
-                                view! {
-                                    // logging::log!("USER: {:#?}", user());
-                                    <Show
-                                        when=move || user().is_some()
-                                        fallback=|| {
-                                            view! {
-                                                 <li class="site-footer__detail">
-                                                    <a href="/signup">"Signup"</a>
-                                                </li>
-                                            }
+                    <Transition fallback=move || ()>
+                        {move || {
+                            let user = move || match auth_context.user.get() {
+                                Some(Ok(Some(user))) => Some(user),
+                                Some(Ok(None)) => None,
+                                Some(Err(_)) => None,
+                                None => None,
+                            };
+                            view! {
+                                // logging::log!("USER: {:#?}", user());
+                                <Show
+                                    when=move || user().is_some()
+                                    fallback=|| {
+                                        view! {
+                                            <li class="site-footer__detail">
+                                                <a href="/signup">"Signup"</a>
+                                            </li>
                                         }
-                                    >
+                                    }
+                                >
 
-                                        {|| ()}
-                                    </Show>
-                                    <Show
-                                        when=move || user().is_some()
-                                        fallback=|| {
-                                            view! {
-                                                <li class="site-footer__detail">
-                                                    <a href="/login">"Login"</a>
-                                                </li>
-                                            }
+                                    {|| ()}
+                                </Show>
+                                <Show
+                                    when=move || user().is_some()
+                                    fallback=|| {
+                                        view! {
+                                            <li class="site-footer__detail">
+                                                <a href="/login">"Login"</a>
+                                            </li>
                                         }
-                                    >
+                                    }
+                                >
 
-                                        <li class="site-footer__detail">
-                                            <a href="/logout">"Logout"</a>
-                                        </li>
-                                    </Show>
-                                }
-                            }}
+                                    <li class="site-footer__detail">
+                                        <a href="/logout">"Logout"</a>
+                                    </li>
+                                </Show>
+                            }
+                        }}
 
-                        </Transition>
+                    </Transition>
                 </ul>
             </div>
         </div>
