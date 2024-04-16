@@ -4,7 +4,6 @@ use leptos::*;
 
 #[component]
 pub fn Nav() -> impl IntoView {
-    let auth_context = use_context::<AuthContext>().expect("Failed to get AuthContext");
     view! {
         <div id="site-header">
             <div id="site-header__row">
@@ -161,48 +160,6 @@ pub fn Nav() -> impl IntoView {
                                 Portfolio
                             </a>
                         </li>
-                        <Transition fallback=move || ()>
-                            {move || {
-                                let user = move || match auth_context.user.get() {
-                                    Some(Ok(Some(user))) => Some(user),
-                                    Some(Ok(None)) => None,
-                                    Some(Err(_)) => None,
-                                    None => None,
-                                };
-                                view! {
-                                    // logging::log!("USER: {:#?}", user());
-                                    <Show
-                                        when=move || user().is_some()
-                                        fallback=|| {
-                                            view! {
-                                                <li class="site-nav__link">
-                                                    <a href="/signup">"Signup"</a>
-                                                </li>
-                                            }
-                                        }
-                                    >
-
-                                        {|| ()}
-                                    </Show>
-                                    <Show
-                                        when=move || user().is_some()
-                                        fallback=|| {
-                                            view! {
-                                                <li class="site-nav__link">
-                                                    <a href="/login">"Login"</a>
-                                                </li>
-                                            }
-                                        }
-                                    >
-
-                                        <li class="site-nav__link">
-                                            <a href="/logout">"Logout"</a>
-                                        </li>
-                                    </Show>
-                                }
-                            }}
-
-                        </Transition>
                         <DarkModeToggle/>
                         <li>
                             <a class="site-nav__link" href="/rss">
