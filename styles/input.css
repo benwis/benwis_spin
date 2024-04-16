@@ -822,6 +822,9 @@ leptos-island{
             }
         }
 
+        #site-nav__rss-icon {
+            fill: var(--link-color);
+        }
 
         /**
          * Site Footer
