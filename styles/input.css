@@ -390,8 +390,8 @@ leptos-island{
 
         @media (prefers-color-scheme: dark) {
             :root {
-                --brand-color-1: #64a6b1;
-                --brand-color-2: white;
+                --brand-color-1: white;
+                --brand-color-2: #64a6b1;
                 --accent-color-1: #000030;
                 --accent-color-2: #ebd119;
                 --framework-color: #151520;
@@ -1007,6 +1007,14 @@ leptos-island{
         #home .post-card {
             justify-content: flex-end;
         }
+        #home .post-card__layout {
+            margin-top: 50%;
+        }
+        @media screen and (min-width: 1024px) {
+            #home .post-card__layout {
+                margin-top: 30%;
+            }
+        }
 
         @media screen and (min-width: 768px) {
             #home {
@@ -1214,7 +1222,7 @@ leptos-island{
                 align-items: flex-start;
             }
         }
-        @media screen and (min-width: 1024px) {
+        @media screen and (min-width: 1280px) {
             #home__blog-posts-wrapper{
                 max-width: 40vw
             }
