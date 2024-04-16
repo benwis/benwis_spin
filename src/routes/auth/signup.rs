@@ -14,101 +14,88 @@ pub fn Join(action: Action<Signup, Result<(), ServerFnError>>) -> impl IntoView 
         property="og:image"
         content="https://benwis.imgix.net/pictureofMe.jpeg"
       />
-      <div class="flex min-h-full flex-col justify-center">
-        <div class="mx-auto w-full max-w-md px-8">
-          <h1 class="mb-4 text-3xl text-center font-bold tracking-tight text-black dark:text-white md:text-5xl">
-            "Join"
-          </h1>
-          <ActionForm action=action class="space-y-6">
-            <div>
-              <label
-                for="email"
-                class="block text-sm font-medium text-gray-700 dark:text-white"
-              >
-                "Username"
-              </label>
-              <div class="mt-1">
+       <div class="auth">
+          <div class="auth__header">
+              <h1 class="auth__heading">
+                "Join"
+              </h1>
+          </div>
+          <div class="auth__body content">
+            <ActionForm id="auth__signup-form" action=action>
+              <div>
+                <label
+                  for="email"
+                >
+                  "Username"
+                </label>
                 <input
-                  id="username"
-                  required
-                  name="username"
-                  type="text"
-                  autoComplete="username"
-                  aria-describedby="username-error"
-                  class="w-full rounded border border-gray-500 px-2 py-1 text-lg"
-                />
+                    id="username"
+                    required
+                    name="username"
+                    type="text"
+                    autoComplete="username"
+                    aria-describedby="username-error"
+                  />
               </div>
-            </div>
-            <div>
-              <label
-                for="email"
-                class="block text-sm font-medium text-gray-700 dark:text-white"
-              >
-                "Diplayed Name"
-              </label>
-              <div class="mt-1">
-                <input
-                  id="display_name"
-                  required
-                  name="display_name"
-                  type="text"
-                  autoComplete="dipslay_name"
-                  aria-describedby="display_name-error"
-                  class="w-full rounded border border-gray-500 px-2 py-1 text-lg"
-                />
+              <div>
+                <label
+                  for="email"
+                >
+                  "Displayed Name"
+                </label>
+                  <input
+                    id="display_name"
+                    required
+                    name="display_name"
+                    type="text"
+                    autoComplete="display_name"
+                    aria-describedby="display_name-error"
+                  />
               </div>
-            </div>
-            <div>
-              <label
-                for="password"
-                class="block text-sm font-medium text-gray-700 dark:text-white"
-              >
-                "Password"
-              </label>
-              <div class="mt-1">
+              <div>
+                <label
+                  for="password"
+                >
+                  "Password"
+                </label>
                 <input
                   id="password"
                   name="password"
                   type="password"
                   autoComplete="new-password"
                   aria-describedby="password-error"
-                  class="w-full rounded border border-gray-500 px-2 py-1 text-lg"
                 />
               </div>
-            </div>
-            <div>
-              <label
-                for="password_confirmation"
-                class="block text-sm font-medium text-gray-700 dark:text-white"
+              <div>
+                <label
+                  for="password_confirmation"
+                >
+                  "Confirm Password"
+                </label>
+                  <input
+                    id="password_confirmation"
+                    name="password_confirmation"
+                    type="password"
+                    autoComplete="password_confirmation"
+                    aria-describedby="password_confirmation_error"
+                  />
+              </div>
+              <button
+                type="submit"
               >
-                "Confirm Password"
-              </label>
-              <div class="mt-1">
-                <input
-                  id="password_confirmation"
-                  name="password_confirmation"
-                  type="password"
-                  autoComplete="password_confirmation"
-                  aria-describedby="password_confirmation_error"
-                  class="w-full rounded border border-gray-500 px-2 py-1 text-lg"
-                />
+                "Create Account"
+              </button>
+
+              <div class="auth__form-aside">
+                <div class="auth__form_aside_row">
+                  "Already have an account?"
+                  <a href="/signup">
+                    "Log in"
+                  </a>
+                </div>
               </div>
-            </div>
-            <button
-              type="submit"
-              class="w-full rounded bg-yellow-400  py-2 px-4 text-white dark:text-gray-700 hover:bg-yellow-600 focus:bg-yellow-500"
-            >
-              "Create Account"
-            </button>
-            <div class="flex items-center justify-center">
-              <div class="text-center text-sm text-gray-500">
-                "Already have an account?"
-                <a class="text-blue-500 underline" href="/signup">
-                  "Log in"
-                </a>
-              </div>
-            </div>
-          </ActionForm>
+
+            </ActionForm>
         </div>
       </div>
     }
