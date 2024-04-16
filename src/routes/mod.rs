@@ -14,7 +14,7 @@ pub use auth::*;
 pub use nedry::*;
 
 use crate::error_template::ErrorTemplate;
-use crate::layouts::Default;
+use crate::layouts::{Default, Home};
 use crate::providers::{provide_auth, provide_color_scheme, AuthContext};
 use crate::routes::Blog;
 use leptos::*;
@@ -30,114 +30,130 @@ pub fn AppRouter() -> impl IntoView {
     _ = provide_color_scheme();
 
     view! {
-      <Stylesheet id="leptos" href="/benwis-leptos.css"/>
+        <Stylesheet id="leptos" href="/benwis-leptos.css"/>
 
-      // content for this welcome page
-      <Router>
-        <Routes>
-          <Route
-            path="minimal"
-            view=move || {
-                view! { <Index/> }
-            }
-          />
+        // content for this welcome page
+        <Router>
+            <Routes>
+                <Route
+                    path=""
+                    view=|| {
+                        view! {
+                            <Home>
+                                <ErrorBoundary fallback=|errors| {
+                                    view! { <ErrorTemplate errors=errors/> }
+                                }>
+                                    <Outlet/>
+                                </ErrorBoundary>
+                            </Home>
+                        }
+                    }
+                >
 
-          <Route
-            path=""
-            view=|| {
-                view! {
-                  <Default>
-                    <ErrorBoundary fallback=|errors| {
-                        view! { <ErrorTemplate errors=errors/> }
-                    }>
-                      <Outlet/>
-                    </ErrorBoundary>
-                  </Default>
-                }
-            }
-          >
+                    <Route
+                        path=""
+                        view=move || {
+                            view! { <Index/> }
+                        }
+                    />
 
-            <Route
-              path=""
-              view=move || {
-                  view! { <Index/> }
-              }
-            />
+                </Route>
+                <Route
+                    path="/*"
+                    view=|| {
+                        view! {
+                            <Default>
+                                <ErrorBoundary fallback=|errors| {
+                                    view! { <ErrorTemplate errors=errors/> }
+                                }>
+                                    <Outlet/>
+                                </ErrorBoundary>
+                            </Default>
+                        }
+                    }
+                >
 
-            <Route
-              path="about"
-              view=move || {
-                  view! { <About/> }
-              }
-            />
+                    <Route
+                        path=""
+                        view=move || {
+                            view! { <Index/> }
+                        }
+                    />
 
-            <Route
-              path="portfolio"
-              view=move || {
-                  view! { <Portfolio/> }
-              }
-            />
+                    <Route
+                        path="about"
+                        view=move || {
+                            view! { <About/> }
+                        }
+                    />
 
-            <Route
-              path="posts"
-              view=move || {
-                  view! { <Blog/> }
-              }
-            />
+                    <Route
+                        path="portfolio"
+                        view=move || {
+                            view! { <Portfolio/> }
+                        }
+                    />
 
-            <Route
-              path="posts/:slug"
-              view=move || {
-                  view! { <Post/> }
-              }
+                    <Route
+                        path="posts"
+                        view=move || {
+                            view! { <Blog/> }
+                        }
+                    />
 
-              ssr=SsrMode::Async
-            />
-            <Route
-              path="posts/add"
-              view=move || {
-                  view! { <AddPost/> }
-              }
-            />
+                    <Route
+                        path="posts/:slug"
+                        view=move || {
+                            view! { <Post/> }
+                        }
 
-            <Route
-              path="posts/:slug/edit"
-              view=move || {
-                  view! { <EditPost/> }
-              }
-            />
+                        ssr=SsrMode::Async
+                    />
+                    <Route
+                        path="posts/add"
+                        view=move || {
+                            view! { <AddPost/> }
+                        }
+                    />
 
-            <Route
-              path="nedry"
-              view=move || {
-                  view! { <Nedry/> }
-              }
-            />
+                    <Route
+                        path="posts/:slug/edit"
+                        view=move || {
+                            view! { <EditPost/> }
+                        }
+                    />
 
-            <Route
-              path="signup"
-              view=move || {
-                  view! { <Join action=auth_context.signup/> }
-              }
-            />
+                    <Route
+                        path="nedry"
+                        view=move || {
+                            view! { <Nedry/> }
+                        }
+                    />
 
-            <Route
-              path="login"
-              view=move || {
-                  view! { <Login action=auth_context.login/> }
-              }
-            />
+                    <Route
+                        path="signup"
+                        view=move || {
+                            view! { <Join action=auth_context.signup/> }
+                        }
+                    />
 
-            <Route
-              path="logout"
-              view=move || {
-                  view! { <Logout action=auth_context.logout/> }
-              }
-            />
+                    <Route
+                        path="login"
+                        view=move || {
+                            view! { <Login action=auth_context.login/> }
+                        }
+                    />
 
-            <Route path="/*any" view=NotFound/>
-          </Route>
-        </Routes>
-      </Router>
+                    <Route
+                        path="logout"
+                        view=move || {
+                            view! { <Logout action=auth_context.logout/> }
+                        }
+                    />
+
+                    <Route path="/*any" view=NotFound/>
+                </Route>
+            </Routes>
+        </Router>
     }
 }
