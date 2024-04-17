@@ -68,11 +68,11 @@ pub fn PostContent(post: post::Post) -> impl IntoView {
         {(post.preview || post.published)
             .then(|| {
                 view! {
+                <div id="page">
                     <div id="page__header">
                         <h1 id="page__heading">{post.title}</h1>
                         <p id="page__meta">{post.created_at.to_string()}</p>
                     </div>
-                    <hr/>
                     <div id="page__layout">
                         <div id="page__body">
                             <div id="page__toc">
@@ -85,17 +85,12 @@ pub fn PostContent(post: post::Post) -> impl IntoView {
                                 </div>
                             </div>
                             <main id="page__content" class="content">
-
                                 <div class="post__hero">
                                     <img id="post__image" src=post.hero alt=post.hero_alt/>
                                     <caption>{post.hero_caption}</caption>
                                 </div>
                                 <hr/>
-                                <div
-                                    id="page__content"
-                                    class="content"
-                                    inner_html=post.content
-                                ></div>
+                                <div inner_html=post.content></div>
                             </main>
                         </div>
                         // Insert Sidebar
@@ -147,6 +142,7 @@ pub fn PostContent(post: post::Post) -> impl IntoView {
                             </div>
                         </div>
                     </div>
+                </div>
                 }
             })}
     }

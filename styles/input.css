@@ -564,6 +564,10 @@ leptos-island{
             max-width: 100%;
             height: auto;
         }
+        .content video,
+        .content iframe {
+            max-width: 100%;
+        }
 
         .content input[type="email"],
         .content input[type="number"],
@@ -661,8 +665,10 @@ leptos-island{
             top: 0;
             left: 0;
             z-index: -1;
+        }
 
-
+        .content .code-block {
+            overflow-x: scroll;
         }
 
         /**
@@ -1423,15 +1429,20 @@ leptos-island{
          * ----------------------------------------------------------------
          */
         #page {
-            display: flex;
-            flex-direction: column;
-            justify-items: center;
-            flex-grow: 1;
-            gap: var(--frame-padding);
+            display: block;
+            width: 100%;
             max-width: var(--max-content-width);
             padding: 0 var(--frame-padding);
             margin: 0 auto;
-
+        }
+        @media screen and (min-width: 960px) {
+            #page {
+                display: flex;
+                flex-direction: column;
+                justify-items: center;
+                flex-grow: 1;
+                gap: var(--frame-padding);
+            }
         }
 
         #page__header {
@@ -1457,6 +1468,7 @@ leptos-island{
         }
 
         #page__body {
+            width: 100%;
             display: flex;
             flex-direction: column;
             gap: var(--frame-padding);
@@ -1467,6 +1479,7 @@ leptos-island{
                 display: flex;
                 flex-direction: row;
                 gap: var(--frame-padding);
+                width: calc( 100% - var(--sidebar-width) - var(--frame-padding));
             }
         }
 
@@ -1540,6 +1553,7 @@ leptos-island{
 
 
         #page__layout {
+            width: 100%;
             display: flex;
             flex-direction: column;
             gap: var(--frame-padding);
@@ -1553,6 +1567,14 @@ leptos-island{
             }
         }
 
+        #page__content {
+            width: 100%;
+        }
+        @media screen and (min-width: 1280px) {
+            #page__content {
+                width: calc(100% - var(--sidebar-width) - var(--frame-padding));
+            }
+        }
         @media screen and (max-width: 1279px) {
             #page__sidebar {
                 border-top: 2px solid var(--framework-color);
@@ -1599,6 +1621,8 @@ leptos-island{
             font-weight: var(--heading-small-font-weight);
             letter-spacing: var(--heading-small-letter-spacing);
         }
+
+
 
         /**
         * Auth
