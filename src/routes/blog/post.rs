@@ -85,17 +85,12 @@ pub fn PostContent(post: post::Post) -> impl IntoView {
                                 </div>
                             </div>
                             <main id="page__content" class="content">
-
                                 <div class="post__hero">
                                     <img id="post__image" src=post.hero alt=post.hero_alt/>
                                     <caption>{post.hero_caption}</caption>
                                 </div>
                                 <hr/>
-                                <div
-                                    id="page__content"
-                                    class="content"
-                                    inner_html=post.content
-                                ></div>
+                                <div inner_html=post.content></div>
                             </main>
                         </div>
                         // Insert Sidebar
