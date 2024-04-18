@@ -387,32 +387,33 @@ leptos-island{
             --paper-color: #FFFFFF;
         }
 
-
-             :root {
-                --brand-color-1: white;
-                --brand-color-2: #64a6b1;
+        /** We change the brand colours if dark mode is enabled */
+        @media (prefers-color-scheme: dark) {
+            html {
+                --brand-color-1: #64a6b1;
+                --brand-color-2: white;
                 --accent-color-1: #000030;
                 --accent-color-2: #ebd119;
                 --framework-color: #151520;
                 --paper-color: #1f2433;
             }
+        }
 
-        /** mappings **/
+        /** Or if the html element has a dark class */
+        html.dark {
+            --brand-color-1: #64a6b1;
+            --brand-color-2: white;
+            --accent-color-1: #000030;
+            --accent-color-2: #ebd119;
+            --framework-color: #151520;
+            --paper-color: #1f2433;
+        }
+
         html {
             --heading-color: var(--brand-color-2);
             --link-color: var(--brand-color-1);
             --meta-color: var(--brand-color-2);
             --text-color: var(--brand-color-2);
-
-        }
-
-        html.dark {
-            html {
-                --heading-color: white;
-                --link-color: var(--brand-color-1);
-                --meta-color: white;
-                --text-color: #a8c5ce;
-            }
         }
 
         /**
