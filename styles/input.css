@@ -808,6 +808,7 @@ leptos-island{
             border: 0;
             background: none;
             padding: 0;
+            cursor: pointer;
         }
 
         #site-nav__dark-mode-toggle-light {
