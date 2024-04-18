@@ -288,9 +288,16 @@ WHERE rn = (SELECT rn - 1 FROM first_post);", &[Value::Text(slug.to_owned())]).m
     }
 
     pub fn get_count(con: &Arc<Connection>) -> Result<i64, BenwisAppError>{
-        let rowset = con.execute("SELECT COUNT(*) FROM posts;", &[]).map_err(|_| BenwisAppError::NotFound)?;
+        let rowset = con.execute("SELECT COUNT (*) FROM posts;", &[]).map_err(|e| {
+                    println!("SQL ERROR: {e}");
+                    BenwisAppError::NotFound
+        })?;
         let count = rowset.rows().nth(0).map(|row| {
-            row.get::<i64>("COUNT(*)").unwrap().to_owned()
+            match row.get::<i64>("COUNT(*)"){
+                    Some(c)=> c,
+                    None => row.get::<i64>("COUNT (*)").unwrap_or(0)
+
+                    }
        }).unwrap_or(0);
        Ok(count)
     }

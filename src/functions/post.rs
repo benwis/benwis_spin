@@ -46,7 +46,6 @@ pub async fn get_posts_paginated() -> Result<Vec<Post>, ServerFnError<BenwisAppE
     let con = con()?;
     let queries = use_query::<PostQuery>();
     let page = queries.get().expect("Failed to get Queries").p.unwrap_or(1);
-    println!("Page: {page}");
     let posts = Post::get_posts_paginated(page, 5, &con)?;
 
     // Set Cache-Control headers
@@ -177,7 +176,6 @@ pub async fn add_post(slug: String, title: String, author_id: String, created_at
     "false" => false,
     _ => return Err(BenwisAppError::BadRequest("Invalid string for bool conversion".to_string()).into())
     };
-    println!("CREATED AT: {created_at_pretty}");
     let created_at: DateTime<Utc> = {
         if !created_at_pretty.is_empty() {
             match DateTime::parse_from_rfc3339(&created_at_pretty){
