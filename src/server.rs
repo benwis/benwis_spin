@@ -30,6 +30,7 @@ async fn handle_benwis_leptos(req: IncomingRequest, resp_out: ResponseOutparam) 
     register_explicit::<crate::functions::post::UpdatePost>();
     register_explicit::<crate::functions::post::DeletePost>();
     register_explicit::<crate::functions::post::GetPost>();
+    register_explicit::<crate::functions::post::GetPostWithSiblings>();
     register_explicit::<crate::functions::auth::Login>();
     register_explicit::<crate::functions::auth::Logout>();
     register_explicit::<crate::functions::auth::Signup>();

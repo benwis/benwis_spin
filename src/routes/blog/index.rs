@@ -18,7 +18,7 @@ pub fn Blog() -> impl IntoView {
                 delete_post.version().get(),
             )
         },
-        move |_| get_posts(Some(5)),
+        move |_| get_posts(None),
     );
 
     let auth_context = use_context::<AuthContext>().expect("Failed to get AuthContext");

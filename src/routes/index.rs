@@ -265,28 +265,34 @@ pub fn Index() -> impl IntoView {
                     <div id="home__portfolio-layout">
 
                         <div id="home__portfolio-posts">
-                            <a class="post-card" href="#">
+                            <a class="post-card" href="https://github.com/leptos-rs/leptos">
                                 <div class="post-card__layout">
-                                    <h3 class="post-card__heading">Praxis cycles</h3>
-                                    <p class="post-card__meta">RUST</p>
+                                    <h3 class="post-card__heading">Leptos</h3>
+                                    <p class="post-card__meta">
+                                        Lead Maintainer Rust full-stack web framework
+                                    </p>
                                 </div>
                             </a>
-                            <a class="post-card" href="#">
+                            <a class="post-card" href="https://github.com/benwis/tower-governor>">
                                 <div class="post-card__layout">
-                                    <h3 class="post-card__heading">Praxis cycles</h3>
-                                    <p class="post-card__meta">RUST</p>
+                                    <h3 class="post-card__heading">tower-governor</h3>
+                                    <p class="post-card__meta">"Rust API rate limiting crate"</p>
                                 </div>
                             </a>
-                            <a class="post-card" href="#">
+                            <a class="post-card" href="https://github.com/benwis/femark">
                                 <div class="post-card__layout">
-                                    <h3 class="post-card__heading">Praxis cycles</h3>
-                                    <p class="post-card__meta">RUST</p>
+                                    <h3 class="post-card__heading">femark</h3>
+                                    <p class="post-card__meta">
+                                        "Rust Markdown to HTML compiler crate with syntax highlighting"
+                                    </p>
                                 </div>
                             </a>
-                            <a class="post-card" href="#">
+                            <a class="post-card" href="https://praxiscycles.com">
                                 <div class="post-card__layout">
-                                    <h3 class="post-card__heading">Praxis cycles</h3>
-                                    <p class="post-card__meta">RUST</p>
+                                    <h3 class="post-card__heading">Praxis Cycles</h3>
+                                    <p class="post-card__meta">
+                                        "Custom ecommerce store built on Wordpress"
+                                    </p>
                                 </div>
                             </a>
                         </div>

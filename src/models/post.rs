@@ -42,6 +42,38 @@ pub struct NewPost {
     pub preview: bool,
     pub tags: Vec<String>,
 }
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct PostTriad {
+    pub previous: Option<Post>,
+    pub post: Post,
+    pub next: Option<Post>,
+}
+
+impl PostTriad {
+    pub fn from_triad_posts(input: Vec<TriadPost>) -> PostTriad {
+        let mut post = None;
+        let mut previous = None;
+        let mut next = None;
+        for tp in input {
+            if tp.which == "current" {
+                post = Some(tp.into())
+            } else if tp.which == "previous" {
+                previous = Some(tp.into())
+            } else if tp.which == "next" {
+                next = Some(tp.into())
+            } else {
+                panic!("Impossible post triad");
+            }
+        }
+        PostTriad {
+            next,
+            post: post.unwrap(),
+            previous,
+        }
+    }
+}
+
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Post {
     pub id: i64,
@@ -62,12 +94,56 @@ pub struct Post {
     pub tags: Vec<String>,
 }
 
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct TriadPost {
+    pub id: i64,
+    pub title: String,
+    pub slug: String,
+    pub author_id: i64,
+    pub hero: Option<String>,
+    pub hero_caption: Option<String>,
+    pub hero_alt: Option<String>,
+    pub excerpt: Option<String>,
+    pub raw_content: String,
+    pub content: String,
+    pub toc: Option<String>,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
+    pub published: bool,
+    pub preview: bool,
+    pub tags: Vec<String>,
+    pub which: String,
+}
+impl From<TriadPost> for Post {
+    fn from(tp: TriadPost) -> Self {
+        Self {
+            id: tp.id,
+
+            title: tp.title,
+            slug: tp.slug,
+            author_id: tp.author_id,
+            hero: tp.hero,
+            hero_caption: tp.hero_caption,
+            hero_alt: tp.hero_alt,
+            excerpt: tp.excerpt,
+            raw_content: tp.raw_content,
+            content: tp.content,
+            toc: tp.toc,
+            created_at: tp.created_at,
+            updated_at: tp.updated_at,
+            published: tp.published,
+            preview: tp.preview,
+            tags: tp.tags,
+        }
+    }
+}
+
 cfg_if! {
 if #[cfg(feature = "ssr")] {
     impl Post {
     pub fn get_posts(con: &Arc<Connection>) -> Result<Vec<Post>, BenwisAppError>{
-        let rowset = con.execute("SELECT * from posts", &[]).map_err( |_| BenwisAppError::InternalServerError)?;
-        let mut posts:Vec<Post> = rowset.rows().map(|row| {
+        let rowset = con.execute("SELECT * from posts ORDER BY created_at DESC", &[]).map_err( |_| BenwisAppError::InternalServerError)?;
+        let posts:Vec<Post> = rowset.rows().map(|row| {
         Post{
 
             id: row.get::<i64>("id").unwrap().to_owned(),
@@ -89,8 +165,46 @@ if #[cfg(feature = "ssr")] {
         }
         }).collect();
 
-        posts.sort_unstable_by(|a, b| b.created_at.partial_cmp(&a.created_at).unwrap());
+        //posts.sort_unstable_by(|a, b| b.created_at.partial_cmp(&a.created_at).unwrap());
         Ok(posts)
+    }
+
+    pub fn get_post_with_siblings(slug: &str, con: &Arc<Connection>) -> Result<Option<PostTriad>, BenwisAppError>{
+        let rowset = con.execute("WITH ordered_posts AS (SELECT ROW_NUMBER() OVER (ORDER BY created_at DESC) as rn, * FROM posts),
+     first_post AS (SELECT * FROM ordered_posts WHERE slug = ?)
+SELECT 'current' as which, *
+FROM first_post
+UNION
+SELECT 'previous', *
+FROM ordered_posts
+WHERE rn = (SELECT rn + 1 FROM first_post)
+UNION
+SELECT 'next', *
+FROM ordered_posts
+WHERE rn = (SELECT rn - 1 FROM first_post);", &[Value::Text(slug.to_owned())]).map_err( |_| BenwisAppError::InternalServerError)?;
+        let posts: Vec<TriadPost> = rowset.rows().map(|row| {
+        TriadPost{
+
+            id: row.get::<i64>("id").unwrap().to_owned(),
+            author_id: row.get::<i64>("author_id").unwrap().to_owned(),
+            slug: row.get::<&str>("slug").unwrap().to_owned(),
+            which: row.get::<&str>("which").unwrap().to_owned(),
+            title: row.get::<&str>("title").unwrap().to_owned(),
+            excerpt: row.get::<&str>("excerpt").map(str::to_string),
+            toc: row.get::<&str>("toc").map(str::to_string),
+            raw_content: row.get::<&str>("raw_content").unwrap().to_owned(),
+            content: row.get::<&str>("content").unwrap().to_owned(),
+            created_at: DateTime::from_timestamp(row.get::<i64>("created_at").unwrap_or(0), 0).expect("Failed to create time"),
+            updated_at: DateTime::from_timestamp(row.get::<i64>("updated_at").unwrap_or(0), 0).expect("Failed to create time"),
+            hero: row.get::<&str>("hero").map(str::to_string),
+            hero_alt: row.get::<&str>("hero_alt").map(str::to_string),
+            hero_caption: row.get::<&str>("hero_caption").map(str::to_string),
+            tags: serde_json::from_str(row.get::<&str>("tags").unwrap_or_default()).unwrap_or_default(),
+            preview: row.get::<bool>("preview").unwrap_or_default(),
+            published: row.get::<bool>("published").unwrap_or_default(),
+        }
+        }).collect();
+        Ok(Some(PostTriad::from_triad_posts(posts)))
     }
     pub fn get_post(slug: &str, con: &Arc<Connection>) -> Result<Option<Post>, BenwisAppError>{
         let rowset = con.execute("SELECT * FROM posts WHERE slug = ? ", &[Value::Text(slug.to_owned())]).map_err(|_| BenwisAppError::NotFound)?;

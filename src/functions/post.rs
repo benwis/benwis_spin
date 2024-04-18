@@ -1,5 +1,5 @@
 use crate::{errors::BenwisAppError, models::NewPost};
-use crate::models::Post;
+use crate::models::{Post, PostTriad};
 use cfg_if::cfg_if;
 use chrono::Duration;
 use indexmap::IndexMap;
@@ -47,6 +47,17 @@ pub async fn get_post(slug: String) -> Result<Option<Post>, ServerFnError<Benwis
 }
 
 
+#[tracing::instrument(level = "info", fields(error), err)]
+#[server(GetPostWithSiblings, "/api", "GetJson")]
+pub async fn get_post_with_siblings(slug: String) -> Result<Option<PostTriad>, ServerFnError<BenwisAppError>> {
+    let con = con()?;
+
+    let post_triad = Post::get_post_with_siblings(&slug, &con)?;
+    // Set Cache-Control headers
+    let res = expect_context::<ResponseOptions>();
+    res.append_header("Cache-Control", "private, max-age=3600".as_bytes());
+    Ok(post_triad)
+}
 #[serde_as]
 #[derive(Deserialize, Serialize, Debug, PartialEq, Clone)]
 struct AddPostParams {
