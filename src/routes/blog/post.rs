@@ -120,7 +120,7 @@ pub fn PostContent(triad: post::PostTriad) -> impl IntoView {
                                             view! {
                                                 <div class="page__sidebar-section">
                                                     <h2 class="page__sidebar-section-heading">Previous</h2>
-                                                    <a class="post-card" href="#">
+                                                    <a class="post-card" href=format!("/posts/{}", prev.slug)>
 
                                                         <img
                                                             class="post-card__image"
@@ -148,7 +148,7 @@ pub fn PostContent(triad: post::PostTriad) -> impl IntoView {
                                             view! {
                                                 <div class="page__sidebar-section">
                                                     <h2 class="page__sidebar-section-heading">Next</h2>
-                                                    <a class="post-card" href="#">
+                                                    <a class="post-card" href=format!("/posts/{}", next.slug)>
 
                                                         <img
                                                             class="post-card__image"
