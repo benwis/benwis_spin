@@ -8,7 +8,8 @@ use serde::{Serialize, Deserialize};
 use serde_with::{serde_as, DisplayFromStr};
 use super::user::get_user;
 use chrono::{DateTime, Utc};
-use leptos::server;
+use leptos::{SignalGet, server, Params as QueryParams};
+use leptos_router::{use_query, Params};
 
 cfg_if! {
 if #[cfg(feature = "ssr")] {
@@ -33,6 +34,39 @@ pub async fn get_posts(num: Option<usize>) -> Result<Vec<Post>, ServerFnError<Be
     res.append_header("Cache-Control", "private, max-age=3600".as_bytes());
     Ok(posts)
 }
+
+#[derive(Clone, Default, Debug, PartialEq, QueryParams)]
+pub struct PostQuery{
+    pub p: Option<i64>,
+}
+
+#[tracing::instrument(level = "info", fields(error), err)]
+#[server(GetPostsPaginated, "/api", "GetJson")]
+pub async fn get_posts_paginated() -> Result<Vec<Post>, ServerFnError<BenwisAppError>> {
+    let con = con()?;
+    let queries = use_query::<PostQuery>();
+    let page = queries.get().expect("Failed to get Queries").p.unwrap_or(1);
+    println!("Page: {page}");
+    let posts = Post::get_posts_paginated(page, 5, &con)?;
+
+    // Set Cache-Control headers
+    let res = expect_context::<ResponseOptions>();
+    res.append_header("Cache-Control", "private, max-age=3600".as_bytes());
+    Ok(posts)
+}
+
+#[tracing::instrument(level = "info", fields(error), err)]
+#[server(GetPostCount, "/api", "GetJson")]
+pub async fn get_post_count()-> Result<i64, ServerFnError>{
+    let con = con()?;
+    let count = Post::get_count(&con)?;
+
+    // Set Cache-Control headers
+    let res = expect_context::<ResponseOptions>();
+    res.append_header("Cache-Control", "private, max-age=3600".as_bytes());
+    Ok(count)
+} 
+
 
 #[tracing::instrument(level = "info", fields(error), err)]
 #[server(GetPost, "/api", "GetJson")]

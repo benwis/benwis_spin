@@ -30,6 +30,7 @@ async fn handle_benwis_leptos(req: IncomingRequest, resp_out: ResponseOutparam) 
     register_explicit::<crate::functions::post::UpdatePost>();
     register_explicit::<crate::functions::post::DeletePost>();
     register_explicit::<crate::functions::post::GetPost>();
+    register_explicit::<crate::functions::post::GetPostCount>();
     register_explicit::<crate::functions::post::GetPostWithSiblings>();
     register_explicit::<crate::functions::auth::Login>();
     register_explicit::<crate::functions::auth::Logout>();
@@ -37,6 +38,8 @@ async fn handle_benwis_leptos(req: IncomingRequest, resp_out: ResponseOutparam) 
     register_explicit::<crate::functions::user::GetUser>();
     register_explicit::<crate::functions::user::GetSafeUser>();
     register_explicit::<crate::functions::post::GetPosts>();
+
+    register_explicit::<crate::functions::post::GetPostsPaginated>();
     register_explicit::<crate::functions::dark_mode::ToggleDarkMode>();
     
     // Render the rss.xml file page here because it's not handled by Leptos

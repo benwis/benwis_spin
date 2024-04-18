@@ -169,6 +169,37 @@ if #[cfg(feature = "ssr")] {
         Ok(posts)
     }
 
+    pub fn get_posts_paginated(page: i64, limit: i64, con: &Arc<Connection>) -> Result<Vec<Post>, BenwisAppError>{
+
+        let offset = (page-1)*limit;
+
+        let rowset = con.execute("SELECT * from posts ORDER BY created_at DESC LIMIT ? OFFSET ?;", &[Value::Integer(limit), Value::Integer(offset)]).map_err( |e| {println!("Query Error: {e:#?}");BenwisAppError::InternalServerError})?;
+        let posts:Vec<Post> = rowset.rows().map(|row| {
+        Post{
+
+            id: row.get::<i64>("id").unwrap().to_owned(),
+            author_id: row.get::<i64>("author_id").unwrap().to_owned(),
+            slug: row.get::<&str>("slug").unwrap().to_owned(),
+            title: row.get::<&str>("title").unwrap().to_owned(),
+            excerpt: row.get::<&str>("excerpt").map(str::to_string),
+            toc: row.get::<&str>("toc").map(str::to_string),
+            raw_content: row.get::<&str>("raw_content").unwrap().to_owned(),
+            content: row.get::<&str>("content").unwrap().to_owned(),
+            created_at: DateTime::from_timestamp(row.get::<i64>("created_at").unwrap_or(0), 0).expect("Failed to create time"),
+            updated_at: DateTime::from_timestamp(row.get::<i64>("updated_at").unwrap_or(0), 0).expect("Failed to create time"),
+            hero: row.get::<&str>("hero").map(str::to_string),
+            hero_alt: row.get::<&str>("hero_alt").map(str::to_string),
+            hero_caption: row.get::<&str>("hero_caption").map(str::to_string),
+            tags: serde_json::from_str(row.get::<&str>("tags").unwrap_or_default()).unwrap_or_default(),
+            preview: row.get::<bool>("preview").unwrap_or_default(),
+            published: row.get::<bool>("published").unwrap_or_default(),
+        }
+        }).collect();
+
+        //posts.sort_unstable_by(|a, b| b.created_at.partial_cmp(&a.created_at).unwrap());
+        Ok(posts)
+    }
+
     pub fn get_post_with_siblings(slug: &str, con: &Arc<Connection>) -> Result<Option<PostTriad>, BenwisAppError>{
         let rowset = con.execute("WITH ordered_posts AS (SELECT ROW_NUMBER() OVER (ORDER BY created_at DESC) as rn, * FROM posts),
      first_post AS (SELECT * FROM ordered_posts WHERE slug = ?)
@@ -254,6 +285,14 @@ WHERE rn = (SELECT rn - 1 FROM first_post);", &[Value::Text(slug.to_owned())]).m
         }
        });
        Ok(post)
+    }
+
+    pub fn get_count(con: &Arc<Connection>) -> Result<i64, BenwisAppError>{
+        let rowset = con.execute("SELECT COUNT(*) FROM posts;", &[]).map_err(|_| BenwisAppError::NotFound)?;
+        let count = rowset.rows().nth(0).map(|row| {
+            row.get::<i64>("COUNT(*)").unwrap().to_owned()
+       }).unwrap_or(0);
+       Ok(count)
     }
 pub async fn add_post(
     post: NewPost,

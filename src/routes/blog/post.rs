@@ -24,7 +24,6 @@ pub fn Post() -> impl IntoView {
                 triad
                     .get()
                     .map(|t| {
-                        leptos::logging::log!("PostTriad: {:#?}", triad.get());
                         match t {
                             Ok(Some(triad)) => view! { <PostContent triad=triad/> }.into_view(),
                             Ok(None) => view! { <p>"Post Not Found"</p> }.into_view(),
