@@ -273,7 +273,7 @@ pub fn Index() -> impl IntoView {
                                     </p>
                                 </div>
                             </a>
-                            <a class="post-card" href="https://github.com/benwis/tower-governor>">
+                            <a class="post-card" href="https://github.com/benwis/tower-governor">
                                 <div class="post-card__layout">
                                     <h3 class="post-card__heading">tower-governor</h3>
                                     <p class="post-card__meta">"Rust API rate limiting crate"</p>
