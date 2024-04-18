@@ -1,5 +1,4 @@
 use crate::components::DarkModeToggle;
-use crate::providers::AuthContext;
 use leptos::*;
 
 #[component]

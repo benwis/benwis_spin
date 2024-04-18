@@ -39,6 +39,7 @@ pub fn Post() -> impl IntoView {
 
 #[component]
 pub fn PostContent(triad: post::PostTriad) -> impl IntoView {
+    let triad_store = store_value(triad.clone());
     view! {
         <Meta property="og:title" content=triad.post.title.clone()/>
         <Meta property="og:description" content=triad.post.excerpt.clone().unwrap_or_default()/>
@@ -80,14 +81,11 @@ pub fn PostContent(triad: post::PostTriad) -> impl IntoView {
 
         {(triad.post.preview || triad.post.published)
             .then(move || {
-                let post = triad.post.clone();
-                let next = triad.next.clone();
-                let prev = triad.previous.clone();
                 view! {
                     <div id="page">
                         <div id="page__header">
-                            <h1 id="page__heading">{post.title}</h1>
-                            <p id="page__meta">{post.created_at.to_string()}</p>
+                            <h1 id="page__heading">{triad.post.title}</h1>
+                            <p id="page__meta">{triad.post.created_at.to_string()}</p>
                         </div>
                         <div id="page__layout">
                             <div id="page__body">
@@ -95,71 +93,80 @@ pub fn PostContent(triad: post::PostTriad) -> impl IntoView {
                                     <div id="page__toc-sticky">
                                         <div class="page__sidebar-section">
                                             <h2 class="page__sidebar-section-heading">Contents</h2>
-
-                                            {post.toc}
+                                            {triad.post.toc}
                                         </div>
                                     </div>
                                 </div>
                                 <main id="page__content" class="content">
                                     <div class="post__hero">
-                                        <img id="post__image" src=post.hero alt=post.hero_alt/>
-                                        <caption>{post.hero_caption}</caption>
+                                        <img
+                                            id="post__image"
+                                            src=triad.post.hero
+                                            alt=triad.post.hero_alt
+                                        />
+                                        <caption>{triad.post.hero_caption}</caption>
                                     </div>
                                     <hr/>
-                                    <div inner_html=post.content></div>
+                                    <div inner_html=triad.post.content></div>
                                 </main>
                             </div>
-                            // Insert Sidebar
-
                             <div id="page__sidebar">
                                 <div id="page__sidebar-sticky">
-                                    <div id="page__sidebar-layout">
-                                        <Show when=move || prev.is_some()>
-                                            <div class="page__sidebar-section">
-                                                <h2 class="page__sidebar-section-heading">Previous</h2>
-                                                <a class="post-card" href="#">
+                                    <Show when=move || {
+                                        triad_store.get_value().previous.is_some()
+                                    }>
 
-                                                    <img
-                                                        class="post-card__image"
-                                                        src="https://placehold.co/600x400"
-                                                    />
-                                                    <div class="post-card__text">
-                                                        <h2 class="post-card__heading">This is a post heading</h2>
-                                                        <p class="post-card__meta">Post time/date, etc</p>
-                                                        <p class="post-card__excerpt">
-                                                            This is a brief description or summary of the
-                                                            post that should
-                                                            entice
-                                                            people to click in.
-                                                        </p>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </Show>
-                                        <Show when=move || {
-                                            (&next).is_some()
-                                        }>
-                                            {next
-                                                .clone()
-                                                .map(move |n| {
-                                                    view! {
-                                                        <div class="page__sidebar-section">
-                                                            <h2 class="page__sidebar-section-heading">Next</h2>
-                                                            <a class="post-card" href="#">
+                                        {
+                                            let prev = triad.previous.clone().unwrap_or_default();
+                                            view! {
+                                                <div class="page__sidebar-section">
+                                                    <h2 class="page__sidebar-section-heading">Previous</h2>
+                                                    <a class="post-card" href="#">
 
-                                                                <img class="post-card__image" alt=n.hero_alt src=n.hero/>
-                                                                <div class="post-card__text">
-                                                                    <h2 class="post-card__heading">{n.title}</h2>
-                                                                    <p class="post-card__meta">{n.created_at.to_string()}</p>
-                                                                    <p class="post-card__excerpt">{n.excerpt}</p>
-                                                                </div>
-                                                            </a>
+                                                        <img
+                                                            class="post-card__image"
+                                                            src=prev.hero
+                                                            alt=prev.hero_alt
+                                                        />
+                                                        <div class="post-card__text">
+                                                            <h2 class="post-card__heading">{prev.title}</h2>
+                                                            <p class="post-card__meta">{prev.created_at.to_string()}</p>
+                                                            <p class="post-card__excerpt">{prev.excerpt}</p>
                                                         </div>
-                                                    }
-                                                })}
+                                                    </a>
+                                                </div>
+                                            }
+                                        }
 
-                                        </Show>
-                                    </div>
+                                    </Show>
+
+                                    <Show when=move || {
+                                        triad_store.get_value().next.is_some()
+                                    }>
+
+                                        {
+                                            let next = triad.next.clone().unwrap_or_default();
+                                            view! {
+                                                <div class="page__sidebar-section">
+                                                    <h2 class="page__sidebar-section-heading">Next</h2>
+                                                    <a class="post-card" href="#">
+
+                                                        <img
+                                                            class="post-card__image"
+                                                            src=next.hero
+                                                            alt=next.hero_alt
+                                                        />
+                                                        <div class="post-card__text">
+                                                            <h2 class="post-card__heading">{next.title}</h2>
+                                                            <p class="post-card__meta">{next.created_at.to_string()}</p>
+                                                            <p class="post-card__excerpt">{next.excerpt}</p>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            }
+                                        }
+
+                                    </Show>
                                 </div>
                             </div>
                         </div>

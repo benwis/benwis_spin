@@ -74,7 +74,7 @@ impl PostTriad {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Clone, Default, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Post {
     pub id: i64,
     pub title: String,
