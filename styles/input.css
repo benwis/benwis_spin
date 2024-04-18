@@ -1390,6 +1390,10 @@ leptos-island{
             #home__portfolio-posts .post-card {
                 aspect-ratio: unset;
             }
+
+            #home__portfolio-posts .post-card__layout {
+                margin: 0;
+            }
         }
 
         #home__portfolio-pagination {
