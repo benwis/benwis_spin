@@ -244,7 +244,6 @@ pub fn Blog() -> impl IntoView {
 
                                 {move || {
                                     (1..=last_page)
-                                        .into_iter()
                                         .map(|i| {
                                             view! {
                                                 <a
