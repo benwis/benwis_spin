@@ -151,6 +151,7 @@ pub fn Blog() -> impl IntoView {
                                                         let post_slug: StoredValue<String> = store_value(
                                                             post.slug.clone(),
                                                         );
+                                                        leptos::logging::log!("{post:#?}");
                                                         view! {
                                                             <a class="post-card" href=format!("/posts/{}", post.slug)>
                                                                 <img class="post-card__image" src=post.hero/>
@@ -202,7 +203,10 @@ pub fn Blog() -> impl IntoView {
                 <div id="archive__footer-prev" class="archive__pagination">
 
                     <Show when=move || { page.unwrap_or(1) > 1 }>
-                        <a class="archive__pagination-link" href="">
+                        <a
+                            class="archive__pagination-link"
+                            href=format!("/posts?p={}", page.unwrap_or(1) - 1)
+                        >
                             <svg
                                 class="archive__pagination-icon"
                                 clip-rule="evenodd"
